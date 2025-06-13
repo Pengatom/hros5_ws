@@ -2,8 +2,10 @@
 <package format="3">
   <name>hros5_description</name>
   <version>0.0.0</version>
-  <description>The hros5_description package</description>
-  <maintainer email="user@example.com">Your Name</maintainer>
+  <description>Contains the robot description files that define the physical
+    aspects of a robot, including its geometry, kinematics, dynamics, and
+    visual aspects.</description>
+  <maintainer email="pengatom@example.com">Your Name</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclcpp</depend>
