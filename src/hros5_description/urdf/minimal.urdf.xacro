@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="test_bot">
-  <xacro:include filename="base/base.xacro"/>
+  <xacro:include filename="torso/torso.xacro"/>
   <xacro:include filename="head/head_debug.xacro"/>
   <xacro:include filename="arms/left_arm_debug.xacro"/>
   <xacro:include filename="arms/right_arm_debug.xacro"/>
