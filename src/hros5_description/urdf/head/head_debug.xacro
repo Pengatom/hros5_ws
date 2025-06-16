@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Head link -->
+  <link name="head">
+    <visual>
+      <geometry>
+        <box size="0.15 0.15 0.15"/>
+      </geometry>
+      <origin xyz="0 0 0.075" rpy="0 0 0"/>
+      <material name="blue">
+        <color rgba="0.1 0.1 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.15 0.15 0.15"/>
+      </geometry>
+      <origin xyz="0 0 0.075" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0.075"/>
+      <mass value="0.3"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0"
+               iyy="0.01" iyz="0.0"
+               izz="0.01"/>
+    </inertial>
+  </link>
+
+  <!-- Joint connecting torso to head -->
+  <joint name="torso_to_head" type="fixed">
+    <parent link="torso"/>
+    <child link="head"/>
+    <origin xyz="0 0 0.6" rpy="0 0 0"/>
+  </joint>
+
+</robot>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="right_arm">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <material name="right_arm_mat">
+        <color rgba="0.8 0.1 0.1 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0.05"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+  </link>
+
+  <joint name="torso_to_right_arm" type="fixed">
+    <parent link="torso"/>
+    <child link="right_arm"/>
+    <origin xyz="-0.3 0.2 0.4" rpy="0 0 0"/>
+  </joint>
+</robot>
