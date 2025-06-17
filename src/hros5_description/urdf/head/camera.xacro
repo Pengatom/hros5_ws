@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="camera_link">
+    <visual><geometry><box size="0.05 0.05 0.05"/></geometry><material name="Hros5Grey"/></visual>
+  </link>
+  <xacro:fixed_joint parent="head_link" child="camera_link"/>
+</robot>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot name="hros5" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="common/macros.xacro"/>
+  <xacro:include filename="common/materials.xacro"/>
+  <xacro:include filename="base/base.xacro"/>
+  <xacro:include filename="base/imu.xacro"/>
+  <xacro:include filename="head/head.xacro"/>
+  <xacro:include filename="head/camera.xacro"/>
+  <xacro:include filename="arms/left_arm.xacro"/>
+  <xacro:include filename="arms/right_arm.xacro"/>
+  <xacro:include filename="legs/left_leg.xacro"/>
+  <xacro:include filename="legs/right_leg.xacro"/>
+</robot>
+

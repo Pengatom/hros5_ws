@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>hros5_demos</name>
+  <version>0.1.0</version>
+  <description>Component-level testing for hros5 robot (e.g., Dynamixel servo)</description>
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>MIT</license>
+
+  <!-- REQUIRED for Ament-based ROS 2 packages -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Runtime dependencies -->
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>ros2_control</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>dynamixel_hardware</exec_depend>
+</package>
+

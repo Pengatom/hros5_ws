@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- LowerHead -->
+  <link name="LowerHead">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/LowerHead.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/LowerHead.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2e-5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
+    </inertial>
+  </link>
+
+  <!-- UpperHeadBase -->
+  <joint name="HeadPitch" type="revolute">
+    <parent link="LowerHead"/>
+    <child link="UpperHeadBase"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="UpperHeadBase">
+    <visual>
+      <origin xyz="0 0 0.0375" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadBase.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.0375" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadBase.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2e-5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
+    </inertial>
+  </link>
+
+  <!-- UpperHeadMotor -->
+  <joint name="HeadYaw" type="revolute">
+    <parent link="UpperHeadBase"/>
+    <child link="UpperHeadMotor"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <link name="UpperHeadMotor">
+    <visual>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadMotor.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.03" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadMotor.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2e-5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
+    </inertial>
+  </link>
+
+  <!-- UpperHeadBack -->
+  <joint name="HeadPitchDummy2" type="continuous">
+    <parent link="LowerHead"/>
+    <child link="UpperHeadBack"/>
+    <origin xyz="-0.0525 0 0.021" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <mimic joint="HeadPitch" multiplier="0.65"/>
+  </joint>
+
+  <link name="UpperHeadBack">
+    <visual>
+      <origin xyz="0.001 0 0.0375" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/visual/UpperHeadBack.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.001 0 0.0375" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadBack.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.2e-5"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
+    </inertial>
+  </link>
+
+</robot>
+

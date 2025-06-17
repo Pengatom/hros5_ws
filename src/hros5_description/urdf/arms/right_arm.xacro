@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="right_shoulder_link"/><link name="right_arm_link"/>
+  <xacro:fixed_joint parent="base_link" child="right_shoulder_link"/>
+  <xacro:fixed_joint parent="right_shoulder_link" child="right_arm_link"/>
+  <xacro:macro name="arm_joints_transmissions" params="side">
+		<transmission name="${side}ShoulderPitch_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}ShoulderPitch">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}ShoulderPitch_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}ShoulderRoll_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}ShoulderRoll">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}ShoulderRoll_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}ElbowPitch_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}ElbowPitch">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}ElbowPitch_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+	</xacro:macro>
+  <xacro:arm_joints_transmissions side="R"/>
+</robot>

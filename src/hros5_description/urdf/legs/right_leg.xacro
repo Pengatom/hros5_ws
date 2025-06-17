@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="right_hip_link"/><link name="right_leg_link"/>
+  <xacro:fixed_joint parent="base_link" child="right_hip_link"/>
+  <xacro:fixed_joint parent="right_hip_link" child="right_leg_link"/>
+  <xacro:macro name="leg_joints_transmissions" params="side">
+		<transmission name="${side}HipYaw_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}HipYaw">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}HipYaw_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}HipRoll_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}HipRoll">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}HipRoll_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}HipPitch_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}HipPitch">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}HipPitch_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}KneePitch_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}KneePitch">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}KneePitch_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}AnklePitch_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}AnklePitch">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}AnklePitch_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+		<transmission name="${side}AnkleRoll_Transmission">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="${side}AnkleRoll">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="${side}AnkleRoll_Motor">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+		</transmission>
+	</xacro:macro>
+  <xacro:leg_joints_transmissions side="R"/>
+</robot>

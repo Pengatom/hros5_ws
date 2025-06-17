@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<rviz version="1.0">
+  <display name="RobotModel" type="rviz/RobotModel">
+    <enabled>true</enabled>
+    <robot_description>robot_description</robot_description>
+  </display>
+</rviz>
