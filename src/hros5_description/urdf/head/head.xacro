@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="LowerHead">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/head/LowerHead.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="HeadYaw" type="revolute">
+    <parent link="torso"/>
+    <child link="LowerHead"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="1.0" velocity="1.0"/>
+  </joint>
+
+  <link name="UpperHeadBase">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/head/UpperHeadBase.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="HeadPitch" type="revolute">
+    <parent link="LowerHead"/>
+    <child link="UpperHeadBase"/>
+    <origin xyz="0 0 0.04" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.8" upper="0.8" effort="1.0" velocity="1.0"/>
+  </joint>
+
+  <link name="UpperHeadMotor">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/head/UpperHeadMotor.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="UpperHeadFixed" type="fixed">
+    <parent link="UpperHeadBase"/>
+    <child link="UpperHeadMotor"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="UpperHeadBack">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/head/UpperHeadBack.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="UpperBackFixed" type="fixed">
+    <parent link="UpperHeadBase"/>
+    <child link="UpperHeadBack"/>
+    <origin xyz="0 0 -0.01" rpy="0 0 0"/>
+  </joint>
+
+</robot>
+
