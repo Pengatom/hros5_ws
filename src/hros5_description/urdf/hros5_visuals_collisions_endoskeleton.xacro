@@ -6,13 +6,13 @@
 		<visual>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/torso.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/torso/torso.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/torso.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/torso/torso.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -23,13 +23,13 @@
 		<visual>
 			<origin xyz="-0.03 0 0.033" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/LowerHead.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/LowerHead.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="-0.03 0 0.033" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/LowerHead.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/LowerHead.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -39,13 +39,13 @@
 		<visual>
 			<origin xyz="0.0075 -0.0045 0.0275" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/UpperHeadBase.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/UpperHeadBase.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.0075 -0.0045 0.0275" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadBase.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/UpperHeadBase.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -53,13 +53,13 @@
 		<visual>
 			<origin xyz="-0.03 0 0.00075" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/UpperHeadMotor.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/UpperHeadMotor.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="-0.03 0 0.00075" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadMotor.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/UpperHeadMotor.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -67,13 +67,13 @@
 		<visual>
 			<origin xyz="0.001 0 0.0375" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/UpperHeadBack.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/UpperHeadBack.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.001 0 0.0375" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/UpperHeadBack.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/head/UpperHeadBack.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -84,13 +84,13 @@
 		<visual>
 			<origin xyz="0 ${reflect*0.0122} -0.0125" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/${side}Shoulder.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/arms/${side}Shoulder.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0 ${reflect*0.0122} -0.0125" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/${side}Shoulder.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/arms/${side}Shoulder.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -100,13 +100,13 @@
 		<visual>
 			<origin xyz="0 -0.0005 -0.0395" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/${side}UpperArm.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/arms/${side}UpperArm.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0 ${reflect*-0.00025} -0.0395" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/${side}UpperArm.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/arms/${side}UpperArm.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -116,13 +116,13 @@
 		<visual>
 			<origin xyz="0 ${reflect*-0.003} -0.0204" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/${side}LowerArm.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/arms/${side}LowerArm.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0 ${reflect*-0.003} -0.0204" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/${side}LowerArm.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/arms/${side}LowerArm.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -133,13 +133,13 @@
 		<visual>
 			<origin xyz="-0.01605 0 -0.008931" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/Hip.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Hip.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="-0.01605 0 -0.008931" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/Hip.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Hip.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -149,13 +149,13 @@
 		<visual>
 			<origin xyz="0.077 -0.0052 -0.0041" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/HipMotors.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/HipMotors.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.077 -0.0052 -0.0041" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/HipMotors.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/HipMotors.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -165,13 +165,13 @@
 		<visual>
 			<origin xyz="0.001 -0.0095 -0.095" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/Thigh.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Thigh.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.001 -0.0095 -0.095" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/Thigh.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Thigh.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -181,13 +181,13 @@
 		<visual>
 			<origin xyz="0.004 0 -0.059" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/Tibia.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Tibia.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.004 0 -0.059" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/Tibia.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Tibia.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -197,13 +197,13 @@
 		<visual>
 			<origin xyz="0.00625 0.00525 0.0042" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/Ankle.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Ankle.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.00625 0.00525 0.0042" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/Ankle.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/Ankle.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
@@ -213,13 +213,13 @@
 		<visual>
 			<origin xyz="0.0565 ${reflect*0.007} -0.031" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/visual/${side}Foot.dae" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/${side}Foot.dae" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0.0565 ${reflect*0.007} -0.031" rpy="0 0 0"/>
 			<geometry>
-				<mesh filename="package://hros5_description/meshes/endoskeleton/collision/${side}Foot.stl" scale="${scale} ${scale} ${scale}"/>
+				<mesh filename="package://hros5_description/meshes/legs/${side}Foot.stl" scale="${scale} ${scale} ${scale}"/>
 			</geometry>
 		</collision>
 	</xacro:macro>
