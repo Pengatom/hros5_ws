@@ -8,12 +8,12 @@
 
 	<xacro:include filename="$(arg meshes_xacro_filename)" />
 
-	<!-- Load xacro modules/parts of the robot -->
-	<xacro:include filename="$(find hros5_description)/urdf/modules/torso.xacro" />
-	<xacro:include filename="$(find hros5_description)/urdf/modules/head.xacro" />
-	<xacro:include filename="$(find hros5_description)/urdf/modules/arms.xacro" />
-	<!-- <xacro:include filename="$(find hros5_description)/urdf/modules/hands.xacro" /> -->
-	<xacro:include filename="$(find hros5_description)/urdf/modules/legs.xacro" />
+	<!-- Load xacro subparts of the robot -->
+	<xacro:include filename="$(find hros5_description)/urdf/torso/torso.xacro" />
+	<xacro:include filename="$(find hros5_description)/urdf/head/head.xacro" />
+	<xacro:include filename="$(find hros5_description)/urdf/arms/arms.xacro" />
+	<!-- <xacro:include filename="$(find hros5_description)/urdf/hands/hands.xacro" /> -->
+	<xacro:include filename="$(find hros5_description)/urdf/legs/legs.xacro" />
 	<!-- <xacro:include filename="$(find hros5_description)/urdf/modules/imu.xacro" />
 	<xacro:include filename="$(find hros5_description)/urdf/modules/cameras.xacro" /> -->
 

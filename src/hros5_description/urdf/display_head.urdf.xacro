@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="test_head">
-  <xacro:include filename="head/head.xacro"/>
-
-  <!-- Minimal stub for parent link -->
-  <link name="torso"/>
-</robot>
-
