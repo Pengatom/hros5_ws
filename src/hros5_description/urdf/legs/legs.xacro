@@ -219,6 +219,65 @@
   </ros2_control>
 
 
+  <ros2_control name="DynamixelHardware" type="system">
+    <hardware>
+      <plugin>ros2_control_dynamixel/DynamixelSystemHardware</plugin>
+    </hardware>
+
+    <!-- LEFT LEG -->
+    <joint name="left_hip_yaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="left_hip_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="left_hip_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="left_knee">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="left_ankle_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="left_ankle_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+
+    <!-- RIGHT LEG -->
+    <joint name="right_hip_yaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="right_hip_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="right_hip_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="right_knee">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="right_ankle_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+    <joint name="right_ankle_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+    </joint>
+  </ros2_control>
+
+
   <transmission name="left_hip_yaw_trans">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="left_hip_yaw">
@@ -350,3 +409,4 @@
     </actuator>
   </transmission>
 </robot>
+

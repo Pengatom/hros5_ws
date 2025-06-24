@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration, Command
+from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 from launch_ros.parameter_descriptions import ParameterValue
@@ -12,11 +13,11 @@ def generate_launch_description():
 
     # Launch arguments
     meshes_xacro = LaunchConfiguration('meshes_xacro')
-    use_gui = LaunchConfiguration('gui')
+    use_gui = 'false' #LaunchConfiguration('gui') # fix this to use joint_state_publisher_gui
 
     default_meshes_path = os.path.join(pkg_share, 'urdf', 'hros5_visuals_collisions_endoskeleton.xacro')
     xacro_file = os.path.join(pkg_share, 'urdf', 'hros5.xacro')
-    rviz_config_file = os.path.join(pkg_share, 'config', 'hros5.rviz')
+    rviz_config_file = os.path.join(pkg_share, 'rviz', 'hros5.rviz')
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -48,8 +49,17 @@ def generate_launch_description():
         ),
 
         Node(
-            package='joint_state_publisher_gui' if use_gui == 'true' else 'joint_state_publisher',
-            executable='joint_state_publisher_gui' if use_gui == 'true' else 'joint_state_publisher',
+            condition=IfCondition(use_gui),
+            package='joint_state_publisher_gui',
+            executable='joint_state_publisher_gui',
+            name='joint_state_publisher',
+            output='screen'
+        ),
+
+        Node(
+            condition=UnlessCondition(use_gui),
+            package='joint_state_publisher',
+            executable='joint_state_publisher',
             name='joint_state_publisher',
             output='screen'
         ),
