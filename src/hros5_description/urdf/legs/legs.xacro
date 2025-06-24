@@ -126,4 +126,227 @@
 		<origin xyz="0.0565 -0.007 -0.04" rpy="0 0 0"/>
 	</joint>
 	<link name="r_sole"/>
+
+  <ros2_control name="HROS5DynamixelSystem" type="system">
+    <hardware>
+      <plugin>ros2_control_dynamixel_hardware/DynamixelSystemHardware</plugin>
+    </hardware>
+    <!-- Each joint used in the legs should have a control interface -->
+    
+    <joint name="left_hip_yaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="left_hip_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="left_hip_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="left_knee">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="left_ankle_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="left_ankle_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_hip_yaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_hip_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_hip_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_knee">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_ankle_pitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+
+    <joint name="right_ankle_roll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+  </ros2_control>
+
+
+  <transmission name="left_hip_yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_hip_yaw">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_hip_yaw_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="left_hip_roll_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_hip_roll">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_hip_roll_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="left_hip_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_hip_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_hip_pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="left_knee_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_knee">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_knee_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="left_ankle_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_ankle_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_ankle_pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="left_ankle_roll_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_ankle_roll">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_ankle_roll_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_hip_yaw_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_hip_yaw">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_hip_yaw_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_hip_roll_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_hip_roll">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_hip_roll_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_hip_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_hip_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_hip_pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_knee_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_knee">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_knee_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_ankle_pitch_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_ankle_pitch">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_ankle_pitch_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+
+
+  <transmission name="right_ankle_roll_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_ankle_roll">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_ankle_roll_motor">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
 </robot>

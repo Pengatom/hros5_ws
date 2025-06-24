@@ -1,0 +1,16 @@
+controller_manager:
+  ros__parameters:
+    left_leg_controller:
+      command_interfaces:
+      - position
+      joints:
+      - left_hip_yaw
+      - left_hip_roll
+      - left_hip_pitch
+      - left_knee
+      - left_ankle_pitch
+      - left_ankle_roll
+      state_interfaces:
+      - position
+      - velocity
+      type: joint_trajectory_controller/JointTrajectoryController

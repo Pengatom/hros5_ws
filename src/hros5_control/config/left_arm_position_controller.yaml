@@ -1,0 +1,8 @@
+controller_manager:
+  ros__parameters:
+    left_arm_position_controller:
+      joints:
+      - left_shoulder_pitch
+      - left_shoulder_roll
+      - left_elbow
+      type: position_controllers/JointGroupPositionController
