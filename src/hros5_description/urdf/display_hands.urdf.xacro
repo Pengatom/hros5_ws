@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hros5_hands_test">
+
+  <xacro:include filename="$(find hros5_description)/urdf/hands/hands.xacro"/>
+  <xacro:include filename="$(find hros5_description)/urdf/hands/hands_control.xacro"/>
+
+  <!-- Dummy base structure -->
+  <link name="base_link"/>
+  <link name="l_forearm_link"/>
+  <joint name="base_to_forearm" type="fixed">
+    <parent link="base_link"/>
+    <child link="l_forearm_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Inject hand geometry -->
+  <xacro:hands/>
+
+  <!-- Control interfaces for LHand + LGripper -->
+  <xacro:hands_control/>
+
+</robot>

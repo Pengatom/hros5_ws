@@ -1,14 +1,15 @@
+---
 dynamixel_hardware:
   ros__parameters:
     use_dummy: false
-    serial_port: /dev/ttyUSB0
-    baud_rate: 57600
+    serial_port: /dev/ttyACM0
+    baud_rate: 1000000
     dxl_protocol_version: 2.0
     joints:
-      - id: 1
-        name: head_pan
+      - id: 22
+        name: LHand
         model: MX-28
-      - id: 2
-        name: head_tilt
+      - id: 24
+        name: LGripper
         model: MX-28
 

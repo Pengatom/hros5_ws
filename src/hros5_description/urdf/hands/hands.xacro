@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="hands" params="">
+    <!-- Links -->
+    <link name="l_hand_link"/>
+    <link name="l_gripper_link"/>
+
+    <!-- Joints -->
+
+    <!-- LHand joint -->
+    <joint name="LHand" type="revolute">
+      <parent link="l_forearm_link"/>
+      <child link="l_hand_link"/>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
+    </joint>
+
+    <!-- LGripper joint -->
+    <joint name="LGripper" type="revolute">
+      <parent link="l_hand_link"/>
+      <child link="l_gripper_link"/>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+      <limit lower="0.0" upper="1.0" effort="1.0" velocity="1.0"/>
+    </joint>
+  </xacro:macro>
+</robot>
+
