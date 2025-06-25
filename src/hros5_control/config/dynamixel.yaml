@@ -1,11 +1,14 @@
 dynamixel_hardware:
   ros__parameters:
-    serial_port: "/dev/ttyUSB0"
-    baud_rate: 1000000
-    joint_ids:
-      left_hip_yaw: 1
-      left_hip_roll: 2
-      left_hip_pitch: 3
-      left_knee: 4
-      left_ankle_pitch: 5
-      left_ankle_roll: 6
+    use_dummy: false
+    serial_port: /dev/ttyUSB0
+    baud_rate: 57600
+    dxl_protocol_version: 2.0
+    joints:
+      - id: 1
+        name: head_pan
+        model: MX-28
+      - id: 2
+        name: head_tilt
+        model: MX-28
+
