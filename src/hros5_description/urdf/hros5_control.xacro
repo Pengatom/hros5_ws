@@ -6,20 +6,20 @@
 		<transmission name="HeadYaw_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="HeadYaw">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="HeadYaw_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="HeadPitch_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="HeadPitch">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="HeadPitch_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
@@ -33,30 +33,30 @@
 		<transmission name="${side}ShoulderPitch_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}ShoulderPitch">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}ShoulderPitch_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}ShoulderRoll_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}ShoulderRoll">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}ShoulderRoll_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}ElbowPitch_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}ElbowPitch">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}ElbowPitch_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
@@ -71,60 +71,60 @@
 		<transmission name="${side}HipYaw_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}HipYaw">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}HipYaw_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}HipRoll_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}HipRoll">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}HipRoll_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}HipPitch_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}HipPitch">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}HipPitch_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}KneePitch_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}KneePitch">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}KneePitch_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}AnklePitch_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}AnklePitch">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}AnklePitch_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
 		<transmission name="${side}AnkleRoll_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="${side}AnkleRoll">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 			</joint>
 			<actuator name="${side}AnkleRoll_Motor">
-				<hardwareInterface>EffortJointInterface</hardwareInterface>
+				<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
 				<mechanicalReduction>1</mechanicalReduction>
 			</actuator>
 		</transmission>
@@ -133,4 +133,61 @@
 	<xacro:leg_joints_transmissions side="L"/>
 	<xacro:leg_joints_transmissions side="R"/>
 
+	<!-- ROS 2 Control System Configuration -->
+	<ros2_control name="DynamixelHardware" type="system">
+	  <hardware>
+		<plugin>dynamixel_hardware/DynamixelHardware</plugin>
+	  </hardware>
+
+	  <joint name="LHipYaw">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LHipRoll">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LHipPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LKneePitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LAnklePitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LAnkleRoll">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+
+	  <joint name="RHipYaw">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RHipRoll">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RHipPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RKneePitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RAnklePitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RAnkleRoll">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	</ros2_control>
 </robot>
+

@@ -13,6 +13,11 @@
   <depend>nav_msgs</depend>
   <depend>std_msgs</depend>
   
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>ros2_control_dynamixel</exec_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>

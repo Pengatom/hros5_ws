@@ -3,7 +3,7 @@
 
 	<xacro:include filename="$(find hros5_description)/urdf/hros5_control.xacro" />
 
-	<xacro:include filename="$(find hros5_description)/urdf/hros5_gazebo.xacro" />
+	<!--xacro:include filename="$(find hros5_description)/urdf/hros5_gazebo.xacro" /-->
 
 	<xacro:include filename="$(find hros5_description)/urdf/robot/robot.xacro" />
 
