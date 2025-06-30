@@ -134,10 +134,11 @@
 	<xacro:leg_joints_transmissions side="R"/>
 
 	<!-- ROS 2 Control System Configuration -->
+
 	<ros2_control name="DynamixelHardware" type="system">
-	  <hardware>
-		<plugin>dynamixel_hardware/DynamixelHardware</plugin>
-	  </hardware>
+    <hardware>
+      <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+    </hardware>
 
 	  <joint name="LHipYaw">
 		<command_interface name="position"/>

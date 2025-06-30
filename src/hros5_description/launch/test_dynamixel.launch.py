@@ -38,9 +38,7 @@ def generate_launch_description():
         Node(
             package="controller_manager",
             executable="ros2_control_node",
-            parameters=[{
-                LaunchConfiguration("dynamixel_config"): LaunchConfiguration("dynamixel_config")
-            }],
+            parameters=[LaunchConfiguration("dynamixel_config")],
             output="screen"
         ),
 
