@@ -1,0 +1,19 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    hand_position_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      joints:
+        - LHand
+        - LGripper
+      interface_name: position
+
+    hand_slider_controller:
+      type: position_controllers/JointGroupPositionController
+      joints:
+        - LHand
+        - LGripper

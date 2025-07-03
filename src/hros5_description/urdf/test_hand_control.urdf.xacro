@@ -1,0 +1,10 @@
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="hros5_test_hand">
+  <xacro:include filename="$(find hros5_description)/urdf/hands/hands.xacro"/>
+  <xacro:include filename="$(find hros5_description)/urdf/hros5_control.xacro"/>
+
+  <!-- Only load the left hand -->
+  <xacro:hands side="left"/>
+
+  <!-- Add ros2_control interfaces for the hand -->
+  <xacro:hros5_control joints="LHand LGripper"/>
+</robot>
