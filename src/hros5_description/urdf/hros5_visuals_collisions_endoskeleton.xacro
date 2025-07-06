@@ -127,6 +127,54 @@
 		</collision>
 	</xacro:macro>
 
+	 <!-- Meshes for the forearm, wrist, hand, and gripper -->
+  <xacro:macro name="visuals_collisions_hand_section" params="side reflect">
+
+    <!-- Forearm mesh (lower part, if different from existing lower arm) -->
+    <visual>
+      <origin xyz="0 ${reflect*-0.003} -0.0204" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Forearm.stl" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 ${reflect*-0.003} -0.0204" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Forearm.stl" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </collision>
+
+    <!-- Hand -->
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Hand.stl" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Hand.stl" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </collision>
+
+    <!-- Gripper -->
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Gripper.stl" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Gripper.stl" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </collision>
+
+  </xacro:macro>
+
+
 <!-- LEGS VISUALS/COLLISIONS -->
 	<!-- HIP VISUALS/COLLISIONS -->
 	<xacro:macro name="visuals_collisions_hip" params="side">
