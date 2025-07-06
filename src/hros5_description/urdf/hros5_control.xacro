@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 <!-- HEAD -->
 	<!-- XACRO -->
-	<xacro:macro name="head_trasmissions">
+	<xacro:macro name="head_transmissions">
 		<transmission name="HeadYaw_Transmission">
 			<type>transmission_interface/SimpleTransmission</type>
 			<joint name="HeadYaw">
@@ -25,7 +25,7 @@
 		</transmission>
 	</xacro:macro>
 
-	<xacro:head_trasmissions/>
+	<xacro:head_transmissions/>
 
 <!-- ARMS -->
 	<!-- XACRO -->
