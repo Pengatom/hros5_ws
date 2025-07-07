@@ -13,7 +13,16 @@
 	<xacro:include filename="$(arg meshes_xacro_filename)" />
 
 	<!-- Load xacro subparts of the robot -->
-	<xacro:include filename="$(find hros5_description)/urdf/torso/torso.xacro" />
+	<!--xacro:include filename="$(find hros5_description)/urdf/torso/torso.xacro" /-->
   <xacro:include filename="$(find hros5_description)/urdf/arms/arms.xacro"/>
+
+	<!-- Anchor link -->
+  <link name="base_link"/>
+  <link name="torso"/>
+  <joint name="base_to_torso" type="fixed">
+    <parent link="base_link"/>
+    <child link="torso"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
 
 </robot>

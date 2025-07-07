@@ -55,7 +55,7 @@ def generate_launch_description():
         arguments=["-d", PathJoinSubstitution([
             FindPackageShare("hros5_description"),
             "rviz",
-            "left_hand.rviz"
+            "arms.rviz"
         ])]
     )
 
