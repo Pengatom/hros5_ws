@@ -62,29 +62,54 @@ Visualization Manager:
         Value: /robot_description
       Enabled: true
       Links:
-        All Links Enabled:
-          {}
+        All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        LForearm:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        LGripper:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        LHand:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         LLowerArm:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+          Value: true
+        LShoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LUpperArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         Link Tree Style: Links in Alphabetic Order
+        RLowerArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RShoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RUpperArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        l_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        r_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        torso:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -97,36 +122,21 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        LForearm:
-          Value: true
-        LGripper:
-          Value: true
-        LHand:
-          Value: true
-        LLowerArm:
-          Value: true
-        base_link:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        base_link:
-          LLowerArm:
-            LForearm:
-              LHand:
-                LGripper:
-                  {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -173,7 +183,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 6.996328353881836
+      Distance: 0.7007420659065247
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
