@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="test_bot">
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <link name="base_link"/>
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1.0" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+  <link name="link1"/>
+
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1.0" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+  <link name="link2"/>
+
+  <ros2_control name="DynamixelTestSystem" type="system">
+    <hardware>
+      <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
+      <param name="serial_port">/dev/ttyACM0</param>
+      <param name="baud_rate">1000000</param>
+      <param name="protocol_version">2.0</param>
+    </hardware>
+
+    <joint name="joint1">
+      <param name="id">1</param>
+    </joint>
+    <joint name="joint2">
+      <param name="id">2</param>
+    </joint>
+  </ros2_control>
+</robot>

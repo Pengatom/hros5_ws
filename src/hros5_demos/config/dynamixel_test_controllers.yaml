@@ -1,0 +1,22 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    position_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      joints:
+        - LHand
+        - LGripper
+      interface_name: position
+
+    # hardware parameters must be top-level, not nested
+    number_of_joints: 2
+    joint_ids: [22, 24]
+    joint_names: [LHand, LGripper]
+    serial_port: /dev/ttyACM0
+    baud_rate: 1000000
+    dxl_protocol_version: 2.0
+    use_dummy: false
