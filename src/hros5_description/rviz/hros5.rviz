@@ -9,7 +9,7 @@ Panels:
         - /RobotModel1
         - /RobotModel1/Description Topic1
       Splitter Ratio: 0.5382353067398071
-    Tree Height: 542
+    Tree Height: 879
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -66,7 +66,154 @@ Visualization Manager:
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
-        Link Tree Style: ""
+        LAnkle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LFoot:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LHip:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LHipMotors:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LLowerArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LShoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LThigh:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LTibia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LUpperArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        Link Tree Style: Links in Alphabetic Order
+        LowerHead:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RAnkle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RFoot:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RHip:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RHipMotors:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RLowerArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RShoulder:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RThigh:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RTibia:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        RUpperArm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        UpperHeadBack:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        UpperHeadBase:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        UpperHeadMotor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        gaze:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        l_ankle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        l_sole:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        l_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        r_ankle:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        r_sole:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        r_wrist:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        torso:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -121,16 +268,16 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 10
+      Distance: 0.8650057315826416
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 0.023958412930369377
+        Y: 0.018980922177433968
+        Z: -0.030362695455551147
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
@@ -144,10 +291,10 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 846
+  Height: 1176
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000156000002acfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003f000002ac000000cc00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000002acfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003f000002ac000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000050f0000003efc0100000002fb0000000800540069006d006501000000000000050f0000026f00fffffffb0000000800540069006d006501000000000000045000000000000000000000029e000002ac00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000156000003fafc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000003fa000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000010f000003fafc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003d000003fa000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005cb0000003efc0100000002fb0000000800540069006d00650100000000000005cb0000026f00fffffffb0000000800540069006d006501000000000000045000000000000000000000035a000003fa00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -156,6 +303,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1295
+  Width: 1483
   X: 66
   Y: 60

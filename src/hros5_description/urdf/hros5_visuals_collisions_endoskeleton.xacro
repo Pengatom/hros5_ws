@@ -131,13 +131,13 @@
   <!-- FOREARM VISUALS/COLLISIONS -->
   <xacro:macro name="visuals_collisions_forearm" params="side reflect">
     <visual>
-      <origin xyz="0 ${reflect*-0.003} -0.0204" rpy="1.5708 -1.5708 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://hros5_description/meshes/hands/${side}Forearm.stl" scale="${scale} ${scale} ${scale}"/>
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 ${reflect*-0.003} -0.0204" rpy="1.5708 -1.5708 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://hros5_description/meshes/hands/${side}Forearm.stl" scale="${scale} ${scale} ${scale}"/>
       </geometry>
@@ -147,13 +147,13 @@
   <!-- HAND VISUALS/COLLISIONS -->
   <xacro:macro name="visuals_collisions_hand" params="side reflect">
     <visual>
-      <origin xyz="0 0 0.05" rpy="1.5708 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://hros5_description/meshes/hands/${side}Hand.stl" scale="${scale} ${scale} ${scale}"/>
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0.05" rpy="1.5708 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://hros5_description/meshes/hands/${side}Hand.stl" scale="${scale} ${scale} ${scale}"/>
       </geometry>
@@ -163,13 +163,13 @@
   <!-- GRIPPER VISUALS/COLLISIONS -->
   <xacro:macro name="visuals_collisions_gripper" params="side reflect">
     <visual>
-      <origin xyz="0 0 0.05" rpy="1.5708 0 -1.5708"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://hros5_description/meshes/hands/${side}Gripper.stl" scale="${scale} ${scale} ${scale}"/>
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0.05" rpy="1.5708 0 -1.5708"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://hros5_description/meshes/hands/${side}Gripper.stl" scale="${scale} ${scale} ${scale}"/>
       </geometry>

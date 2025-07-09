@@ -7,7 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
-        - /RobotModel1/Status1
+        - /TF1
       Splitter Ratio: 0.5
     Tree Height: 696
   - Class: rviz_common/Selection
@@ -66,50 +66,27 @@ Visualization Manager:
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
+        LForearm:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LGripper:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        LHand:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         LLowerArm:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
-        LShoulder:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        LUpperArm:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         Link Tree Style: Links in Alphabetic Order
-        RLowerArm:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        RShoulder:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        RUpperArm:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        l_wrist:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        r_wrist:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        torso:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -122,21 +99,36 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
-      Enabled: false
+      Enabled: true
       Filter (blacklist): ""
       Filter (whitelist): ""
       Frame Timeout: 15
       Frames:
         All Enabled: true
-      Marker Scale: 1
+        LForearm:
+          Value: true
+        LGripper:
+          Value: true
+        LHand:
+          Value: true
+        LLowerArm:
+          Value: true
+        base_link:
+          Value: true
+      Marker Scale: 0.25
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        {}
+        base_link:
+          LLowerArm:
+            LForearm:
+              LHand:
+                LGripper:
+                  {}
       Update Interval: 0
-      Value: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -183,25 +175,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 0.7007420659065247
+      Distance: 0.4071120023727417
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: 0.044551216065883636
+        Y: -0.004935024306178093
+        Z: -0.0015956551069393754
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.785398006439209
+      Pitch: 0.6147966384887695
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.785398006439209
+      Yaw: 0.9454049468040466
     Saved: ~
 Window Geometry:
   Displays:

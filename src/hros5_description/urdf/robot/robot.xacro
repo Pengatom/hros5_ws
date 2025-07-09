@@ -17,7 +17,7 @@
 	<xacro:include filename="$(find hros5_description)/urdf/torso/torso.xacro" />
 	<xacro:include filename="$(find hros5_description)/urdf/head/head.xacro" />
 	<xacro:include filename="$(find hros5_description)/urdf/arms/arms.xacro" />
-	<!-- <xacro:include filename="$(find hros5_description)/urdf/hands/hands.xacro" /> -->
+	<xacro:include filename="$(find hros5_description)/urdf/hands/hands.xacro" />
 	<xacro:include filename="$(find hros5_description)/urdf/legs/legs.xacro" />
 	<!-- <xacro:include filename="$(find hros5_description)/urdf/modules/imu.xacro" />
 	<xacro:include filename="$(find hros5_description)/urdf/modules/cameras.xacro" /> -->

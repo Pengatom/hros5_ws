@@ -15,6 +15,7 @@
 	<!-- Load xacro subparts of the robot -->
 	<!--xacro:include filename="$(find hros5_description)/urdf/torso/torso.xacro" /-->
   <xacro:include filename="$(find hros5_description)/urdf/arms/arms.xacro"/>
+	<xacro:include filename="$(find hros5_description)/urdf/hands/hands.xacro" />
 
 	<!-- Anchor link -->
   <link name="base_link"/>

@@ -22,12 +22,12 @@
   <joint name="base_to_llowerarm" type="fixed">
     <parent link="base_link"/>
     <child link="LLowerArm"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0.075" rpy="0.0 -1.5708 0"/>
   </joint>
   <!--link name="RLowerArm"/>
   <joint name="base_to_rlowerarm" type="fixed">
     <parent link="base_link"/>
     <child link="RLowerArm"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin xyz="0 0 0.075" rpy="0.0 -1.5708 0"/>
   </joint-->
 </robot>
