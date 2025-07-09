@@ -39,7 +39,7 @@
 
   <!-- Direct test instantiation -->
   <xacro:hands_links_joints reflect="1" side="L"/>
-  <!--xacro:hands_links_joints reflect="-1" side="R"/-->
+  <xacro:hands_links_joints reflect="-1" side="R"/>
 
   <joint name="LWrist" type="revolute">
     <parent link="LForearm"/>
@@ -49,13 +49,13 @@
     <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
   </joint>
 
-  <!--joint name="RWrist" type="revolute">
+  <joint name="RWrist" type="revolute">
     <parent link="RForearm"/>
     <child link="RHand"/>
     <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
     <axis xyz="1 0 0"/>
     <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
-  </joint-->
+  </joint>
 
   <joint name="LGripper" type="revolute">
     <parent link="LHand"/>
@@ -65,12 +65,12 @@
     <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
   </joint>
 
-  <!--joint name="RGripper" type="revolute">
+  <joint name="RGripper" type="revolute">
     <parent link="RHand"/>
     <child link="RGripper"/>
     <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
     <axis xyz="1 0 0"/>
     <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
-  </joint-->
+  </joint>
 
 </robot>
