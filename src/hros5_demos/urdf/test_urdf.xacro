@@ -18,4 +18,28 @@
     <axis xyz="0 0 1"/>
     <limit lower="-1.57" upper="1.57" effort="1.0" velocity="1.0"/>
   </joint>
+  <gpio name="dxl1">
+    <param name="type">dxl</param>
+    <param name="ID">22</param>
+    <command_interface name="Goal Position"/>
+    <state_interface name="Present Position"/>
+    <state_interface name="Present Velocity"/>
+    <state_interface name="Present Current"/>
+    <param name="Position P Gain">800</param> <!-- Proportional gain for position control -->
+    <param name="Position I Gain">100</param> <!-- Integral gain for position control -->
+    <param name="Position D Gain">100</param> <!-- Derivative gain for position control -->
+    <param name="Drive Mode">0</param> <!-- 0: Clockwise, 1: Counterclockwise -->
+  </gpio>
+  <gpio name="dxl2">
+    <param name="type">dxl</param>
+    <param name="ID">24</param>
+    <command_interface name="Goal Position"/>
+    <state_interface name="Present Position"/>
+    <state_interface name="Present Velocity"/>
+    <state_interface name="Present Current"/>
+    <param name="Position P Gain">800</param> <!-- Proportional gain for position control -->
+    <param name="Position I Gain">100</param> <!-- Integral gain for position control -->
+    <param name="Position D Gain">100</param> <!-- Derivative gain for position control -->
+    <param name="Drive Mode">0</param> <!-- 0: Clockwise, 1: Counterclockwise -->
+  </gpio>
 </robot>
