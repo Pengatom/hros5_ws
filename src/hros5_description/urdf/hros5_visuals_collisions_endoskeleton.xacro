@@ -165,7 +165,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://hros5_description/meshes/hands/${side}Gripper.stl" scale="${scale} ${scale} ${scale}"/>
+        <mesh filename="package://hros5_description/meshes/hands/${side}Gripper.dae" scale="${scale} ${scale} ${scale}"/>
       </geometry>
     </visual>
     <collision>
