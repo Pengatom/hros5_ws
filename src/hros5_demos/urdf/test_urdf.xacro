@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot name="two_dynamixels" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <link name="base_link"/>
+  <link name="LHand_link"/>
+  <joint name="LHand" type="revolute">
+    <parent link="base_link"/>
+    <child link="LHand_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="1.0" velocity="1.0"/>
+  </joint>
+
+  <link name="LGripper_link"/>
+  <joint name="LGripper" type="revolute">
+    <parent link="LHand_link"/>
+    <child link="LGripper_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.57" upper="1.57" effort="1.0" velocity="1.0"/>
+  </joint>
+</robot>

@@ -1,0 +1,12 @@
+DynamixelHardware:
+  ros__parameters:
+    use_dummy: false
+    number_of_joints: 2
+    serial_port: "/dev/ttyUSB0"
+    baud_rate: 1000000
+    protocol_version: 2.0
+    joint_names: ["LHand", "LGripper"]
+    joint_ids: [22, 24]
+    profile_type: "velocity"
+    profile_velocity: 100
+    profile_acceleration: 10

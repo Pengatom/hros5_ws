@@ -1,0 +1,10 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+
+    dynamixel_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      joints:
+        - LHand
+        - LGripper
+      interface_name: position
