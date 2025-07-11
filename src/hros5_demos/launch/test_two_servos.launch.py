@@ -14,17 +14,11 @@ def generate_launch_description():
             "test_urdf.xacro",
         ])
     ])
-    print("robot_description_command:", robot_description_content)
     robot_description = {
         "robot_description": ParameterValue(robot_description_content, value_type=str)
     }
 
-    yaml_file = PathJoinSubstitution([
-        FindPackageShare("hros5_demos"),
-        "config",
-        "two_mx28.yaml",
-    ])
-
+    # Load controllers YAML
     controllers_yaml = PathJoinSubstitution([
         FindPackageShare("hros5_demos"),
         "config",
@@ -32,12 +26,21 @@ def generate_launch_description():
     ])
 
     return LaunchDescription([
+        # Robot State Publisher (publishes /robot_description topic)
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            output="screen",
+            parameters=[robot_description],
+        ),
+        # ros2_control node with hardware plugin (hardware params come from URDF)
         Node(
             package="controller_manager",
             executable="ros2_control_node",
-            parameters=[robot_description, yaml_file, controllers_yaml],
+            parameters=[robot_description, controllers_yaml],
             output="screen"
         ),
+        # Spawner nodes
         Node(
             package="controller_manager",
             executable="spawner",
