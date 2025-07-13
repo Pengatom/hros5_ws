@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hands_test">
+    <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+
+    <!-- Import hands_test urdf file -->
+    <xacro:include filename="$(find hros5_description)/urdf/hands/left_hand_test.xacro" />
+
+    <!-- Import control_xacro -->
+    <xacro:include filename="hands_test.ros2_control.xacro" />
+
+
+    <xacro:hands_test_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+
+</robot>

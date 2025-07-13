@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: hros5_description
+    relative_path: urdf/hands/left_hand_test.xacro
+  srdf:
+    relative_path: config/hands_test.srdf
+  package_settings:
+    author_name: Pengatom
+    author_email: ""
+    generated_timestamp: 1752411339
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
