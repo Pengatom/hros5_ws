@@ -1,0 +1,5 @@
+# Default initial positions for hands_test's ros2_control fake system
+
+initial_positions:
+  LGrip: 0
+  LWrist: 0
