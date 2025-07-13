@@ -1,9 +1,9 @@
 joints:
-  - name: LHand
+  - name: LWrist
     id: 24
     cw_limit: 548
     ccw_limit: 3548
-  - name: LGripper
+  - name: LGrip
     id: 22
     cw_limit: 1380
     ccw_limit: 2420

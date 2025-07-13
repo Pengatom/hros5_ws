@@ -57,7 +57,7 @@
     <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
   </joint>
 
-  <joint name="LGripper" type="revolute">
+  <joint name="LGrip" type="revolute">
     <parent link="LHand"/>
     <child link="LGripper"/>
     <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
@@ -65,7 +65,7 @@
     <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
   </joint>
 
-  <joint name="RGripper" type="revolute">
+  <joint name="RGrip" type="revolute">
     <parent link="RHand"/>
     <child link="RGripper"/>
     <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
