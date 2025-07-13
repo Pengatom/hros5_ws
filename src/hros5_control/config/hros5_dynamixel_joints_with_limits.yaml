@@ -1,0 +1,99 @@
+# HR-OS5 Dynamixel Joint Config with Limits
+
+joints:
+  - name: RShoulderPitch
+    id: 1
+    cw_limit: TBD
+    ccw_limit: TBD
+  - name: LShoulderPitch
+    id: 2
+    cw_limit: TBD
+    ccw_limit: TBD
+  - name: RShoulderRoll
+    id: 3
+    cw_limit: 0
+    ccw_limit: 3672
+  - name: LShoulderRoll
+    id: 4
+    cw_limit: 409
+    ccw_limit: 3200
+  - name: RElbowPitch
+    id: 5
+    cw_limit: 896
+    ccw_limit: 3712
+  - name: LElbowPitch
+    id: 6
+    cw_limit: 384
+    ccw_limit: 3200
+  - name: RHipYaw
+    id: 7
+    cw_limit: 1800
+    ccw_limit: 2800
+  - name: LHipYaw
+    id: 8
+    cw_limit: 1296
+    ccw_limit: 2296
+  - name: RHipRoll
+    id: 9
+    cw_limit: 1024
+    ccw_limit: 2105
+  - name: LHipRoll
+    id: 10
+    cw_limit: 1992
+    ccw_limit: 3072
+  - name: RHipPitch
+    id: 11
+    cw_limit: 1024
+    ccw_limit: 2432
+  - name: LHipPitch
+    id: 12
+    cw_limit: 1664
+    ccw_limit: 3072
+  - name: RKneePitch
+    id: 13
+    cw_limit: 1800
+    ccw_limit: 3500
+  - name: LKneePitch
+    id: 14
+    cw_limit: 550
+    ccw_limit: 2275
+  - name: RAnklePitch
+    id: 15
+    cw_limit: 1843
+    ccw_limit: 3072
+  - name: LAnklePitch
+    id: 16
+    cw_limit: 1024
+    ccw_limit: 2275
+  - name: RAnkleRoll
+    id: 17
+    cw_limit: 1024
+    ccw_limit: 3072
+  - name: LAnkleRoll
+    id: 18
+    cw_limit: 1024
+    ccw_limit: 3072
+  - name: HeadYaw
+    id: 19
+    cw_limit: 1024
+    ccw_limit: 3072
+  - name: HeadPitch
+    id: 20
+    cw_limit: 1800
+    ccw_limit: 2450
+  - name: RHand
+    id: 23
+    cw_limit: 1640
+    ccw_limit: 2800
+  - name: LHand
+    id: 24
+    cw_limit: 1380
+    ccw_limit: 2420
+  - name: RGripper
+    id: 21
+    cw_limit: TBD
+    ccw_limit: TBD
+  - name: LGripper
+    id: 22
+    cw_limit: 548
+    ccw_limit: 3548
