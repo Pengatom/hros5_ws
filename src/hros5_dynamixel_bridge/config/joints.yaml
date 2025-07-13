@@ -1,0 +1,9 @@
+joints:
+  - name: LHand
+    id: 24
+    cw_limit: 548
+    ccw_limit: 3548
+  - name: LGripper
+    id: 22
+    cw_limit: 1380
+    ccw_limit: 2420

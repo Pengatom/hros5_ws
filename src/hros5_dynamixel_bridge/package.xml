@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>hros5_dynamixel_bridge</name>
+  <version>0.1.0</version>
+  <description>ROS2 hardware bridge for controlling multiple Dynamixel servos using YAML configuration. Publishes JointState, subscribes to JointTrajectory, and supports MoveIt2/RViz2/Gazebo integration.</description>
+  <maintainer email="pengatom@email.com">Pengatom</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <build_depend>dynamixel_sdk</build_depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>rclcpp_components</build_depend>
+  <build_depend>yaml-cpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>yaml-cpp</exec_depend>
+  <exec_depend>dynamixel_sdk</exec_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

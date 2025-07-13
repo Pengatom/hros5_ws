@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="hros5_humanoid">
+
+  <xacro:property name="link_length" value="0.05"/>
+
+  <link name="base_link"/>
+
+  <!-- Arm -->
+  <joint name="RShoulderPitch" type="revolute">
+    <parent link="base_link"/>
+    <child link="RShoulderPitch_link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RShoulderPitch_link"/>
+
+  <joint name="RShoulderRoll" type="revolute">
+    <parent link="RShoulderPitch_link"/>
+    <child link="RShoulderRoll_link"/>
+    <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RShoulderRoll_link"/>
+
+  <joint name="RElbowPitch" type="revolute">
+    <parent link="RShoulderRoll_link"/>
+    <child link="RElbowPitch_link"/>
+    <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RElbowPitch_link"/>
+
+  <joint name="RHand" type="revolute">
+    <parent link="RElbowPitch_link"/>
+    <child link="RHand_link"/>
+    <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0" upper="1.0" effort="1.0" velocity="1.0"/>
+  </joint>
+  <link name="RHand_link"/>
+
+  <joint name="LShoulderPitch" type="revolute">
+    <parent link="base_link"/>
+    <child link="LShoulderPitch_link"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14" upper="3.14" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LShoulderPitch_link"/>
+
+  <joint name="LShoulderRoll" type="revolute">
+    <parent link="LShoulderPitch_link"/>
+    <child link="LShoulderRoll_link"/>
+    <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LShoulderRoll_link"/>
+
+  <joint name="LElbowPitch" type="revolute">
+    <parent link="LShoulderRoll_link"/>
+    <child link="LElbowPitch_link"/>
+    <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LElbowPitch_link"/>
+
+  <joint name="LHand" type="revolute">
+    <parent link="LElbowPitch_link"/>
+    <child link="LHand_link"/>
+    <origin xyz="0 ${link_length} 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0" upper="1.0" effort="1.0" velocity="1.0"/>
+  </joint>
+  <link name="LHand_link"/>
+
+  <!-- Hip and Leg (Right) -->
+  <joint name="RHipYaw" type="revolute">
+    <parent link="base_link"/>
+    <child link="RHipYaw_link"/>
+    <origin xyz="0 0 -0.08" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.0" upper="2.0" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RHipYaw_link"/>
+
+  <joint name="RHipRoll" type="revolute">
+    <parent link="RHipYaw_link"/>
+    <child link="RHipRoll_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-2.0" upper="2.0" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RHipRoll_link"/>
+
+  <joint name="RHipPitch" type="revolute">
+    <parent link="RHipRoll_link"/>
+    <child link="RHipPitch_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RHipPitch_link"/>
+
+  <joint name="RKneePitch" type="revolute">
+    <parent link="RHipPitch_link"/>
+    <child link="RKneePitch_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="RKneePitch_link"/>
+
+  <joint name="RAnklePitch" type="revolute">
+    <parent link="RKneePitch_link"/>
+    <child link="RAnklePitch_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5" upper="1.5" effort="1.5" velocity="1.0"/>
+  </joint>
+  <link name="RAnklePitch_link"/>
+
+  <joint name="RAnkleRoll" type="revolute">
+    <parent link="RAnklePitch_link"/>
+    <child link="RAnkleRoll_link"/>
+    <origin xyz="0.04 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.5" upper="1.5" effort="1.5" velocity="1.0"/>
+  </joint>
+  <link name="RAnkleRoll_link"/>
+
+  <!-- Hip and Leg (Left) -->
+  <joint name="LHipYaw" type="revolute">
+    <parent link="base_link"/>
+    <child link="LHipYaw_link"/>
+    <origin xyz="0 0 -0.08" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.0" upper="2.0" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LHipYaw_link"/>
+
+  <joint name="LHipRoll" type="revolute">
+    <parent link="LHipYaw_link"/>
+    <child link="LHipRoll_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-2.0" upper="2.0" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LHipRoll_link"/>
+
+  <joint name="LHipPitch" type="revolute">
+    <parent link="LHipRoll_link"/>
+    <child link="LHipPitch_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LHipPitch_link"/>
+
+  <joint name="LKneePitch" type="revolute">
+    <parent link="LHipPitch_link"/>
+    <child link="LKneePitch_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.5" upper="2.5" effort="2.0" velocity="1.0"/>
+  </joint>
+  <link name="LKneePitch_link"/>
+
+  <joint name="LAnklePitch" type="revolute">
+    <parent link="LKneePitch_link"/>
+    <child link="LAnklePitch_link"/>
+    <origin xyz="0 0 -${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5" upper="1.5" effort="1.5" velocity="1.0"/>
+  </joint>
+  <link name="LAnklePitch_link"/>
+
+  <joint name="LAnkleRoll" type="revolute">
+    <parent link="LAnklePitch_link"/>
+    <child link="LAnkleRoll_link"/>
+    <origin xyz="0.04 0 0" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.5" upper="1.5" effort="1.5" velocity="1.0"/>
+  </joint>
+  <link name="LAnkleRoll_link"/>
+
+  <!-- Head -->
+  <joint name="HeadYaw" type="revolute">
+    <parent link="base_link"/>
+    <child link="HeadYaw_link"/>
+    <origin xyz="0 0 0.18" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-2.0" upper="2.0" effort="1.0" velocity="1.0"/>
+  </joint>
+  <link name="HeadYaw_link"/>
+
+  <joint name="HeadPitch" type="revolute">
+    <parent link="HeadYaw_link"/>
+    <child link="HeadPitch_link"/>
+    <origin xyz="0 0 ${link_length}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.5" upper="1.5" effort="1.0" velocity="1.0"/>
+  </joint>
+  <link name="HeadPitch_link"/>
+
+  <!-- Grippers -->
+  <joint name="LGripper" type="revolute">
+    <parent link="LHand_link"/>
+    <child link="LGripper_link"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0" upper="1.0" effort="0.5" velocity="0.5"/>
+  </joint>
+  <link name="LGripper_link"/>
+
+  <joint name="RGripper" type="revolute">
+    <parent link="RHand_link"/>
+    <child link="RGripper_link"/>
+    <origin xyz="0 0 0.02" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0" upper="1.0" effort="0.5" velocity="0.5"/>
+  </joint>
+  <link name="RGripper_link"/>
+
+</robot>

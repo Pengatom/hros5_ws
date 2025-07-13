@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot name="hands_test" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <!-- Argument with fallback -->
+  <xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
+  <!--xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hands/visuals_collisions_hand_section.xacro"/-->
+
+	<!-- XACRO PROPERTIES -->
+	<xacro:property name="PI" value="3.14159265359" />
+	<xacro:property name="PI_2" value="1.57079632679" />
+	<xacro:property name="scale" value="0.1" />
+
+ <!-- Include shared geometry macros -->
+	<xacro:include filename="$(arg meshes_xacro_filename)" />
+
+	<!-- Load xacro subparts of the robot -->
+  <xacro:include filename="$(find hros5_description)/urdf/hands/left_hand.xacro"/>
+
+  <!-- Anchor link -->
+  <link name="base_link"/>
+  <link name="LLowerArm"/>
+  <joint name="base_to_llowerarm" type="fixed">
+    <parent link="base_link"/>
+    <child link="LLowerArm"/>
+    <origin xyz="0 0.1 0.075" rpy="0.0 -1.5708 0"/>
+  </joint>
+</robot>

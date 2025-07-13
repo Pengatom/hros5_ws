@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="hands_links_joints" params="side reflect">
+
+    <joint name="${side}ForearmJoint" type="fixed">
+      <parent link="${side}LowerArm"/>
+      <child link="${side}Forearm"/>
+      <origin xyz="0 0 -0.075" rpy="-1.5708 3.1416 0"/>
+    </joint>
+
+    <link name="${side}Forearm">
+      <xacro:visuals_collisions_forearm side="${side}" reflect="${reflect}"/>
+      <inertial>
+        <origin xyz="0 0 0" />
+        <mass value="0.1"/>
+        <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      </inertial>
+    </link>
+
+    <link name="${side}Hand">
+      <xacro:visuals_collisions_hand side="${side}" reflect="${reflect}"/>
+        <inertial>
+          <origin xyz="0 0 0"/>
+          <mass value="0.08"/>
+          <inertia ixx="0.0008" ixy="0.0" ixz="0.0" iyy="0.0008" iyz="0.0" izz="0.0008"/>
+        </inertial>
+    </link>
+
+    <link name="${side}Gripper">
+      <xacro:visuals_collisions_gripper side="${side}" reflect="${reflect}"/>
+        <inertial>
+          <origin xyz="0 0 0"/>
+          <mass value="0.05"/>
+          <inertia ixx="0.0005" ixy="0.0" ixz="0.0" iyy="0.0005" iyz="0.0" izz="0.0005"/>
+        </inertial>
+    </link>
+
+  </xacro:macro>
+
+  <!-- Direct test instantiation -->
+  <xacro:hands_links_joints reflect="1" side="L"/>
+
+  <joint name="LWrist" type="revolute">
+    <parent link="LForearm"/>
+    <child link="LHand"/>
+    <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
+    <axis xyz="1 0 0"/>
+    <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
+  </joint>
+
+  <joint name="LGripper" type="revolute">
+    <parent link="LHand"/>
+    <child link="LGripper"/>
+    <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
+  </joint>
+</robot>
