@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="left_hand_sim">
+
+  <!-- Import macros for geometry if needed -->
+  <!-- Anchor link -->
+  <link name="base_link"/>
+  <link name="LLowerArm"/>
+ <!-- Forearm link -->
+  <link name="LForearm">
+    <visual>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/LForearm.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Basic link: LHand -->
+  <link name="LHand">
+    <visual>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/LHand.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Gripper link -->
+  <link name="LGripper">
+    <visual>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/LGripper.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Joint: base_link connects LLowerArm to LHand -->
+  <joint name="base_to_llowerarm" type="fixed">
+    <parent link="base_link"/>
+    <child link="LLowerArm"/>
+    <origin xyz="0 0.1 0.075" rpy="0.0 -1.5708 0"/>
+  </joint>
+  <!-- Joint: LLowerArm connects LForeArm to LHand -->
+  <joint name="LForearmJoint" type="fixed">
+      <parent link="LLowerArm"/>
+      <child link="LForearm"/>
+      <origin xyz="0 0 -0.075" rpy="-1.5708 3.1416 0"/>
+  </joint>
+
+  <!-- Joint: LWrist connects LForearm to LHand -->
+  <joint name="LWrist" type="revolute">
+    <parent link="LForearm"/>
+    <child link="LHand"/>
+    <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
+    <axis xyz="1 0 0"/>
+    <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
+  </joint>
+
+  <!-- Joint: LGrip connects LHand to LGripper -->
+  <joint name="LGrip" type="revolute">
+    <parent link="LHand"/>
+    <child link="LGripper"/>
+    <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
+  </joint>
+
+  <!-- Add ros2_control simulation hardware interface -->
+  <ros2_control name="SimHandSystem" type="system">
+    <hardware>
+      <plugin>ros2_control_demo_example_2/GenericSystem</plugin>
+      <param name="example_param_hw_start_duration_sec">0.1</param>
+      <param name="example_param_hw_stop_duration_sec">0.1</param>
+    </hardware>
+    <joint name="LWrist">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LGrip">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+</robot>
