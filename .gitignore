@@ -1,5 +1,6 @@
 install/
 build/
 log/
+.vscode/
 
 src/dynamixel/
