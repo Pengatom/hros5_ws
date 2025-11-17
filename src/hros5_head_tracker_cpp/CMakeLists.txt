@@ -11,6 +11,7 @@ find_package(std_msgs REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(dynamixel_sdk REQUIRED)
 
 include_directories(include ${OpenCV_INCLUDE_DIRS})
 
@@ -20,22 +21,16 @@ ament_target_dependencies(tracker_node
   rclcpp sensor_msgs std_msgs image_transport cv_bridge)
 target_link_libraries(tracker_node ${OpenCV_LIBS})
 
+# --- OpenCV window test ---
+add_executable(opencv_window_test src/opencv_window_test.cpp)
+ament_target_dependencies(opencv_window_test rclcpp OpenCV)
+
 # --- Dynamixel node (C++) ---
 add_executable(dxl_node src/dxl_node.cpp)
-ament_target_dependencies(dxl_node rclcpp std_msgs)
-
-# Dynamixel SDK (system-wide). If not found, vendor it and link manually.
-find_library(DXL_LIB dynamixel_sdk)
-if(DXL_LIB)
-  message(STATUS "Found Dynamixel SDK library: ${DXL_LIB}")
-  target_link_libraries(dxl_node ${DXL_LIB})
-else()
-  message(WARNING "Dynamixel SDK not found system-wide. "
-                  "Install it (sudo make install) or vendor it and link manually.")
-endif()
+ament_target_dependencies(dxl_node rclcpp std_msgs dynamixel_sdk)
 
 # --- install targets ---
-install(TARGETS tracker_node dxl_node
+install(TARGETS tracker_node dxl_node opencv_window_test
   DESTINATION lib/${PROJECT_NAME}
 )
 

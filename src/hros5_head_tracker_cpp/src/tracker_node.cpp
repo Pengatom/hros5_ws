@@ -1,11 +1,14 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
-#include <cv_bridge/cv_bridge.h>
+#include <cv_bridge/cv_bridge.hpp>
 #include <image_transport/image_transport.hpp>
 #include <opencv2/opencv.hpp>
+#include <chrono>
 
 using std::placeholders::_1;
+using namespace std::chrono_literals;
+using Clock = std::chrono::steady_clock;
 
 class TrackerNode : public rclcpp::Node {
 public:
@@ -15,6 +18,7 @@ public:
     this->declare_parameter<std::string>("camera_topic", "/camera/color/image_raw");
 
     std::string topic = this->get_parameter("camera_topic").as_string();
+    RCLCPP_INFO(this->get_logger(), "Subscribing to camera topic: %s", topic.c_str());
     sub_ = image_transport::create_subscription(this, topic,
       std::bind(&TrackerNode::imageCb, this, _1), "raw");
 
@@ -23,12 +27,36 @@ public:
 
     RCLCPP_INFO(this->get_logger(), "TrackerNode started. Press 's' to select ROI.");
     cv::namedWindow(windowName_, cv::WINDOW_AUTOSIZE);
+    cv::startWindowThread();  // spawn HighGUI thread to avoid Qt notifier warnings
+    showPlaceholder();
+    last_image_time_ = Clock::now();
+    ui_timer_ = this->create_wall_timer(100ms, [this](){
+      // Keep HighGUI event loop alive even if no images yet.
+      cv::waitKey(1);
+      auto now = Clock::now();
+      if (!got_image_ && now - last_image_time_ > 3s) {
+        RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 5000,
+          "No images received on subscription yet. Check the topic name and encoding.");
+      }
+    });
   }
 
   ~TrackerNode() override { cv::destroyWindow(windowName_); }
 
 private:
+  void showPlaceholder() {
+    cv::Mat img(480, 640, CV_8UC3, cv::Scalar(30, 30, 30));
+    cv::putText(img, "Waiting for images...", {40, 80},
+                cv::FONT_HERSHEY_SIMPLEX, 1.0, {180,180,180}, 2);
+    cv::putText(img, "Press 's' after stream arrives to select ROI", {40, 130},
+                cv::FONT_HERSHEY_SIMPLEX, 0.7, {180,180,180}, 2);
+    cv::imshow(windowName_, img);
+    cv::waitKey(1);
+  }
+
   void imageCb(const sensor_msgs::msg::Image::ConstSharedPtr & msg) {
+    got_image_ = true;
+    last_image_time_ = Clock::now();
     cv::Mat img = cv_bridge::toCvShare(msg, "bgr8")->image;
     if (img.empty()) return;
 
@@ -80,7 +108,10 @@ private:
   std::string windowName_ = "HR-OS5 Head Tracker (C++)";
   image_transport::Subscriber sub_;
   rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr pub_;
+  rclcpp::TimerBase::SharedPtr ui_timer_;
   bool roi_selected_ = false;
+  bool got_image_{false};
+  Clock::time_point last_image_time_;
   cv::Mat hsv_roi_;
   cv::Rect track_window_;
 };

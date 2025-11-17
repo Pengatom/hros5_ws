@@ -2,5 +2,6 @@ install/
 build/
 log/
 .vscode/
+.colcon-log/
 
 src/dynamixel/

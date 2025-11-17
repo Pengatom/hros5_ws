@@ -1,0 +1,19 @@
+tracker:
+  ros__parameters:
+    camera_topic: "/camera/realsense/color/image_raw"
+    fov_h_deg: 69.0
+    fov_v_deg: 42.0
+
+dxl:
+  ros__parameters:
+    device: "/dev/dxl"
+    baud: 1000000
+    kp: 0.6
+    max_step_deg: 2.0
+    pan_min_deg: -120.0
+    pan_max_deg: 120.0
+    tilt_min_deg: -30.0
+    tilt_max_deg: 60.0
+    pan_offset_deg: 0.0
+    tilt_offset_deg: 0.0
+    error_topic: "/hros5/head/target_angles_deg"

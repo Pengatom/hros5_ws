@@ -20,6 +20,7 @@ public:
     declare_parameter<std::string>("device", "/dev/dxl");
     declare_parameter<int>("baud", 1000000);
     declare_parameter<double>("kp", 0.6);
+    declare_parameter<double>("max_step_deg", 2.0);
     declare_parameter<double>("pan_min_deg", -120.0);
     declare_parameter<double>("pan_max_deg", 120.0);
     declare_parameter<double>("tilt_min_deg", -30.0);
@@ -70,13 +71,21 @@ private:
     double tilt_max = get_parameter("tilt_max_deg").as_double();
     double pan_off  = get_parameter("pan_offset_deg").as_double();
     double tilt_off = get_parameter("tilt_offset_deg").as_double();
+    double max_step = get_parameter("max_step_deg").as_double();
 
     if (msg->data.size() < 2) return;
     double pan_err = msg->data[0];
     double tilt_err = msg->data[1];
 
-    pan_deg_  = clip(pan_deg_  + kp * pan_err,  pan_min,  pan_max);
-    tilt_deg_ = clip(tilt_deg_ + kp * tilt_err, tilt_min, tilt_max);
+    auto step_limited = [max_step](double step){
+      return std::max(-max_step, std::min(max_step, step));
+    };
+
+    double pan_step  = step_limited(kp * pan_err);
+    double tilt_step = step_limited(kp * tilt_err);
+
+    pan_deg_  = clip(pan_deg_  + pan_step,  pan_min,  pan_max);
+    tilt_deg_ = clip(tilt_deg_ + tilt_step, tilt_min, tilt_max);
 
     int pan_ticks  = static_cast<int>((pan_deg_  + pan_off + 180.0) * TICKS_PER_DEG);
     int tilt_ticks = static_cast<int>((tilt_deg_ + tilt_off + 180.0) * TICKS_PER_DEG);
