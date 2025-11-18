@@ -24,14 +24,12 @@ def generate_launch_description():
         Node(
             package='hros5_head_tracker_cpp',
             executable='tracker_node',
-            name='tracker',
             output='screen',
             parameters=[cfg]
         ),
         Node(
             package='hros5_head_tracker_cpp',
             executable='dxl_node',
-            name='dxl',
             output='screen',
             parameters=[cfg]
         ),

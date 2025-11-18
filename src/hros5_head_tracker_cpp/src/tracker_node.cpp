@@ -16,6 +16,11 @@ public:
     this->declare_parameter<double>("fov_h_deg", 69.0);
     this->declare_parameter<double>("fov_v_deg", 42.0);
     this->declare_parameter<std::string>("camera_topic", "/camera/color/image_raw");
+    this->declare_parameter<double>("kp", 0.6);
+    this->declare_parameter<double>("pan_min_deg", -120.0);
+    this->declare_parameter<double>("pan_max_deg", 120.0);
+    this->declare_parameter<double>("tilt_min_deg", -30.0);
+    this->declare_parameter<double>("tilt_max_deg", 60.0);
 
     std::string topic = this->get_parameter("camera_topic").as_string();
     RCLCPP_INFO(this->get_logger(), "Subscribing to camera topic: %s", topic.c_str());
@@ -64,6 +69,12 @@ private:
       cv::putText(img, "Press 's' to select ROI", {20,40},
                   cv::FONT_HERSHEY_SIMPLEX, 1.0, {255,255,255}, 2);
     } else {
+      double kp = this->get_parameter("kp").as_double();
+      double pan_min = this->get_parameter("pan_min_deg").as_double();
+      double pan_max = this->get_parameter("pan_max_deg").as_double();
+      double tilt_min = this->get_parameter("tilt_min_deg").as_double();
+      double tilt_max = this->get_parameter("tilt_max_deg").as_double();
+
       cv::Mat hsv; cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
       int histSize = 16; float hranges[] = {0,180}; const float* ranges = hranges; int channels[] = {0};
       cv::Mat hist; cv::calcHist(&hsv_roi_, 1, channels, cv::Mat(), hist, 1, &histSize, &ranges);
@@ -86,8 +97,18 @@ private:
       float pan_err_deg  = static_cast<float>(dx * fov_h);
       float tilt_err_deg = static_cast<float>(-dy * fov_v);
 
+      auto clip = [](double x, double lo, double hi){
+        return std::max(lo, std::min(hi, x));
+      };
+
+      double pan_step  = kp * pan_err_deg;
+      double tilt_step = kp * tilt_err_deg;
+
+      pan_deg_  = clip(pan_deg_  + pan_step,  pan_min,  pan_max);
+      tilt_deg_ = clip(tilt_deg_ + tilt_step, tilt_min, tilt_max);
+
       std_msgs::msg::Float32MultiArray out;
-      out.data = {pan_err_deg, tilt_err_deg};
+      out.data = {static_cast<float>(pan_deg_), static_cast<float>(tilt_deg_)};
       pub_->publish(out);
     }
 
@@ -114,6 +135,8 @@ private:
   Clock::time_point last_image_time_;
   cv::Mat hsv_roi_;
   cv::Rect track_window_;
+  double pan_deg_{0.0};
+  double tilt_deg_{0.0};
 };
 
 int main(int argc, char** argv) {
