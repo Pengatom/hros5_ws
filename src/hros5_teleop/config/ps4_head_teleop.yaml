@@ -1,0 +1,20 @@
+head_teleop_node:
+  ros__parameters:
+    # PS4 /dev/input/js0 typical mapping on Linux:
+    # axis 0: left stick horizontal (left = -1, right = +1)
+    # axis 1: left stick vertical (up = -1, down = +1)
+    pan_axis: 0
+    tilt_axis: 1
+
+    # Inversion to make "up" = positive tilt, etc.
+    invert_pan: false
+    invert_tilt: false
+
+    # TODO: replace with your actual joint limits (deg)
+    pan_max_deg: 90.0
+    tilt_max_deg: 30.0
+
+    deadzone: 0.05
+    center_button: 3      # triangle on PS4
+
+    publish_rate_hz: 20.0
