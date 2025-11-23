@@ -19,7 +19,7 @@ hands_teleop_node:
     left_grip_min_deg: -56.68
     left_grip_max_deg: 30.75
 
-    enable_right_hand: false
+    enable_right_hand: true
     right_topic: /hros5/right_hand/target_angles_deg
     right_wrist_axis: 3          # PS4 right stick vertical (placeholder)
     right_wrist_invert: false
