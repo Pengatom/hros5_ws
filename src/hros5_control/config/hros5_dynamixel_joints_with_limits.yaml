@@ -3,12 +3,12 @@
 joints:
   - name: RShoulderPitch
     id: 1
-    cw_limit: TBD
-    ccw_limit: TBD
+    cw_limit: 0
+    ccw_limit: 4095
   - name: LShoulderPitch
     id: 2
-    cw_limit: TBD
-    ccw_limit: TBD
+    cw_limit: 0
+    ccw_limit: 4095
   - name: RShoulderRoll
     id: 3
     cw_limit: 0

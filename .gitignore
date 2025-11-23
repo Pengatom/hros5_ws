@@ -5,3 +5,4 @@ log/
 .colcon-log/
 
 src/dynamixel/
+scripts/__pycache__/*
