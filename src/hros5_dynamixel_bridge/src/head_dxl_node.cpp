@@ -18,7 +18,7 @@ constexpr uint16_t ADDR_GOAL_POSITION    = 116;
 
 class DxlNode : public rclcpp::Node {
 public:
-  DxlNode() : rclcpp::Node("dxl_node") {
+  DxlNode() : rclcpp::Node("head_dxl_node") {
     declare_parameter<std::string>("device", "/dev/dxl");
     declare_parameter<int>("baud", 1000000);
     declare_parameter<double>("kp", 0.6);

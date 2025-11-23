@@ -25,12 +25,8 @@ target_link_libraries(tracker_node ${OpenCV_LIBS})
 add_executable(opencv_window_test src/opencv_window_test.cpp)
 ament_target_dependencies(opencv_window_test rclcpp OpenCV)
 
-# --- Dynamixel node (C++) ---
-add_executable(dxl_node src/dxl_node.cpp)
-ament_target_dependencies(dxl_node rclcpp std_msgs dynamixel_sdk)
-
 # --- install targets ---
-install(TARGETS tracker_node dxl_node opencv_window_test
+install(TARGETS tracker_node opencv_window_test
   DESTINATION lib/${PROJECT_NAME}
 )
 
