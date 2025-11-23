@@ -16,7 +16,17 @@ ament_target_dependencies(head_teleop_node
   std_msgs
 )
 
+add_executable(hands_teleop_node src/hands_teleop_node.cpp)
+ament_target_dependencies(hands_teleop_node
+  rclcpp
+  sensor_msgs
+  std_msgs
+)
+
 install(TARGETS head_teleop_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+install(TARGETS hands_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

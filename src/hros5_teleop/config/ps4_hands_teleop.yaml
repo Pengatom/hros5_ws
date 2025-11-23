@@ -1,0 +1,35 @@
+hands_teleop_node:
+  ros__parameters:
+    joy_topic: joy
+    publish_rate_hz: 30.0
+
+    left_topic: /hros5/left_hand/target_angles_deg
+    left_wrist_axis: 0           # PS4 left stick horizontal (same as head pan)
+    left_wrist_invert: false
+    left_wrist_speed_deg_per_sec: 90.0
+    # Derived from joints.yaml LWrist cw=548, ccw=3548 (minus 2 deg guard-band)
+    left_wrist_min_deg: -129.82
+    left_wrist_max_deg: 129.91
+    left_wrist_deadzone: 0.1
+
+    left_grip_close_button: 4    # L1
+    left_grip_open_button: 6     # L2 (treated as a button)
+    left_grip_step_deg: 2.0
+    # Derived from joints.yaml LGrip cw=1380, ccw=2420 (minus 2 deg guard-band)
+    left_grip_min_deg: -56.68
+    left_grip_max_deg: 30.75
+
+    enable_right_hand: false
+    right_topic: /hros5/right_hand/target_angles_deg
+    right_wrist_axis: 3          # PS4 right stick vertical (placeholder)
+    right_wrist_invert: false
+    right_wrist_speed_deg_per_sec: 90.0
+    right_wrist_min_deg: -129.82
+    right_wrist_max_deg: 129.91
+    right_wrist_deadzone: 0.1
+
+    right_grip_close_button: 5   # R1
+    right_grip_open_button: 7    # R2
+    right_grip_step_deg: 2.0
+    right_grip_min_deg: -56.68
+    right_grip_max_deg: 30.75
