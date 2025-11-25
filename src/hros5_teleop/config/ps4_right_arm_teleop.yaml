@@ -1,7 +1,7 @@
-left_arm_teleop_node:
+right_arm_teleop_node:
   ros__parameters:
     joy_topic: joy
-    command_topic: /hros5/left_arm/target_angles_deg
+    command_topic: /hros5/right_arm/target_angles_deg
     publish_rate_hz: 30.0
 
     # Axes (PS4 mapping)
@@ -24,20 +24,20 @@ left_arm_teleop_node:
     step_min_deg: 5.0
     step_max_deg: 180.0
 
-    # Gripper (always active, even when debug is off)
-    grip_close_button: 4   # L1
-    grip_open_button: 6    # L2 (digital)
+    # Gripper (always active)
+    grip_close_button: 5   # R1
+    grip_open_button: 7    # R2 (digital)
     grip_step_deg: 2.0
-    grip_min_deg: -56.0    # from limits with small guard band
+    grip_min_deg: -56.0
     grip_max_deg: 30.0
 
-    debug_toggle_button: 3   # Triangle toggles debug mode
+    debug_toggle_button: 1   # Circle toggles debug mode
 
     # Joint limits derived from hros5_dynamixel_joints_with_limits.yaml (guarded a bit)
     joint_min_deg: [-178.0, -140.0, -144.0, -130.0, -58.0]  # pitch, roll, elbow, wrist, grip
-    joint_max_deg: [178.0, 100.0, 100.0, 130.0, 32.0]
+    joint_max_deg: [178.0, 140.0, 100.0, 130.0, 32.0]
 
     # Preset poses (D-pad left/right)
-    preset_home_deg: [0.0, 0.0, 0.0, 0.0, 0.0]
-    preset_ready_deg: [20.0, -20.0, 60.0, 0.0, 0.0]
-    #preset_ready_deg: [13.0, -10.0, -35.0, -16.0, 0.0]
+    preset_home_deg: [-7.0, -40.0, 0.0, 0.0, 0.0]
+    #preset_ready_deg: [20.0, 20.0, 60.0, 0.0, 0.0]
+    preset_ready_deg: [13.0, -10.0, -35.0, 0.0, 0.0]

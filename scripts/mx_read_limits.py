@@ -13,9 +13,9 @@ Default:
   - IDs: 1–25
 
 Usage examples:
-  python3 mx_read_limits_p1.py
-  python3 mx_read_limits_p1.py --ids 1 3 5 7 9 --device /dev/ttyUSB0 --baud 57600
-  python3 mx_read_limits_p1.py --protocol 2.0 --all --csv-path logs/mx_limits_after_upgrade.csv
+  python3 mx_read_limits.py
+  python3 mx_read_limits.py --ids 1 3 5 7 9 --device /dev/ttyUSB0 --baud 57600
+  python3 mx_read_limits.py --protocol 2.0 --all --csv-path logs/mx_limits_after_upgrade.csv
 """
 
 import sys
@@ -44,7 +44,7 @@ SERVO_CONFIGS = {
     },
     "mx106": {
         "label": "MX-106",
-        "model_numbers": {320},
+        "model_numbers": {320, 321},
         "ticks_per_rev": 4096.0,
     },
 }
@@ -178,7 +178,7 @@ def main():
         "--csv-path",
         type=str,
         default=None,
-        help="Optional CSV output path (used with --all). Defaults to mx_limits_p1_<timestamp>.csv",
+        help="Optional CSV output path (used with --all). Defaults to mx_limits_p<protocol>_<timestamp>.csv",
     )
 
     args = parser.parse_args()
@@ -286,7 +286,8 @@ def main():
         else:
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
             ids_suffix = "-".join(str(row["id"]) for row in csv_rows) or "none"
-            csv_path = Path(f"mx_limits_p1_{ts}_ids-{ids_suffix}.csv")
+            proto_tag = f"p{int(args.protocol)}"
+            csv_path = Path(f"mx_limits_{proto_tag}_{ts}_ids-{ids_suffix}.csv")
         csv_path.parent.mkdir(parents=True, exist_ok=True)
         extra_field_names = [name for name, _, _, _ in protocol_cfg["extra_fields"]]
         fieldnames = BASE_FIELDS + extra_field_names

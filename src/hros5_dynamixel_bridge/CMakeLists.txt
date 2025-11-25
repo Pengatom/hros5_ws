@@ -51,6 +51,15 @@ ament_target_dependencies(left_arm_dxl_node
   ament_index_cpp
 )
 
+add_executable(right_arm_dxl_node src/right_arm_dxl_node.cpp)
+ament_target_dependencies(right_arm_dxl_node
+  rclcpp
+  std_msgs
+  dynamixel_sdk
+  yaml-cpp
+  ament_index_cpp
+)
+
 target_include_directories(dynamixel_bridge_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -59,6 +68,7 @@ target_link_libraries(dynamixel_bridge_node yaml-cpp)
 target_link_libraries(left_hand_dxl_node yaml-cpp)
 target_link_libraries(right_hand_dxl_node yaml-cpp)
 target_link_libraries(left_arm_dxl_node yaml-cpp)
+target_link_libraries(right_arm_dxl_node yaml-cpp)
 
 install(
   DIRECTORY
@@ -74,7 +84,7 @@ install(
                  PATTERN "*.py"
 )
 
-install(TARGETS dynamixel_bridge_node head_dxl_node left_hand_dxl_node right_hand_dxl_node left_arm_dxl_node
+install(TARGETS dynamixel_bridge_node head_dxl_node left_hand_dxl_node right_hand_dxl_node left_arm_dxl_node right_arm_dxl_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
