@@ -1,6 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
-#include "dynamixel_sdk/dynamixel_sdk.h"
+#include <dynamixel_sdk/dynamixel_sdk.h>
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <yaml-cpp/yaml.h>
 #include <chrono>
