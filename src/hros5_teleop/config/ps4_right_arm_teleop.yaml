@@ -32,6 +32,9 @@ right_arm_teleop_node:
     grip_max_deg: 30.0
 
     debug_toggle_button: 1   # Circle toggles debug mode
+    echo_position_button: 0   # Cross echoes Dynamixel positions
+    echo_via_bridge: true
+    echo_request_topic: /hros5/right_arm/echo_positions
 
     # Joint limits derived from hros5_dynamixel_joints_with_limits.yaml (guarded a bit)
     joint_min_deg: [-178.0, -140.0, -144.0, -130.0, -58.0]  # pitch, roll, elbow, wrist, grip

@@ -1,11 +1,15 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/empty.hpp>
 #include <dynamixel_sdk/dynamixel_sdk.h>
 
 #include <algorithm>
 #include <array>
+#include <chrono>
 #include <cmath>
+#include <cstdint>
+#include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -34,6 +38,9 @@ public:
     cmd_topic_ = declare_parameter<std::string>("command_topic", "/hros5/left_arm/target_angles_deg");
     publish_rate_hz_ = declare_parameter<double>("publish_rate_hz", 30.0);
     fallback_dt_ = publish_rate_hz_ > 0.0 ? 1.0 / publish_rate_hz_ : 0.02;
+    echo_via_bridge_ = declare_parameter<bool>("echo_via_bridge", true);
+    echo_request_topic_ = declare_parameter<std::string>(
+      "echo_request_topic", "/hros5/left_arm/echo_positions");
 
     shoulder_pitch_axis_ = declare_parameter<int>("shoulder_pitch_axis", 1);  // LY
     shoulder_roll_axis_  = declare_parameter<int>("shoulder_roll_axis", 0);   // LX
@@ -71,23 +78,29 @@ public:
     joint_max_deg_ = declare_parameter<std::vector<double>>(
       "joint_max_deg", {178.0, 100.0, 100.0, 130.0, 32.0});
 
-    dxl_device_ = declare_parameter<std::string>("dxl_device", "/dev/dxl");
-    dxl_baud_ = declare_parameter<int>("dxl_baud", 1'000'000);
-    dxl_protocol_ = declare_parameter<double>("dxl_protocol", 2.0);
-    servo_ids_ = declare_parameter<std::vector<int>>("servo_ids", {2, 4, 6, 24, 22});
-    present_deg_.assign(servo_ids_.size(), 0.0);
-
-    port_ = dynamixel::PortHandler::getPortHandler(dxl_device_.c_str());
-    packet_ = dynamixel::PacketHandler::getPacketHandler(dxl_protocol_);
-
-    if (!port_->openPort()) {
-      RCLCPP_ERROR(get_logger(), "Failed to open Dynamixel port: %s", dxl_device_.c_str());
-    } else if (!port_->setBaudRate(dxl_baud_)) {
-      RCLCPP_ERROR(get_logger(), "Failed to set baud rate to %d", dxl_baud_);
-      port_->closePort();
+    if (echo_via_bridge_) {
+      echo_pub_ = create_publisher<std_msgs::msg::Empty>(echo_request_topic_, 10);
     } else {
-      bus_ok_ = true;
-      RCLCPP_INFO(get_logger(), "Dynamixel bus ready on %s @ %d", dxl_device_.c_str(), dxl_baud_);
+      dxl_device_ = declare_parameter<std::string>("dxl_device", "/dev/dxl");
+      dxl_baud_ = declare_parameter<int>("dxl_baud", 1'000'000);
+      dxl_protocol_ = declare_parameter<double>("dxl_protocol", 2.0);
+      auto servo_ids_param = declare_parameter<std::vector<int64_t>>(
+        "servo_ids", {2, 4, 6, 24, 22});
+      servo_ids_.assign(servo_ids_param.begin(), servo_ids_param.end());
+      present_deg_.assign(servo_ids_.size(), 0.0);
+
+      port_ = dynamixel::PortHandler::getPortHandler(dxl_device_.c_str());
+      packet_ = dynamixel::PacketHandler::getPacketHandler(dxl_protocol_);
+
+      if (!port_->openPort()) {
+        RCLCPP_ERROR(get_logger(), "Failed to open Dynamixel port: %s", dxl_device_.c_str());
+      } else if (!port_->setBaudRate(dxl_baud_)) {
+        RCLCPP_ERROR(get_logger(), "Failed to set baud rate to %d", dxl_baud_);
+        port_->closePort();
+      } else {
+        bus_ok_ = true;
+        RCLCPP_INFO(get_logger(), "Dynamixel bus ready on %s @ %d", dxl_device_.c_str(), dxl_baud_);
+      }
     }
 
     pub_ = create_publisher<std_msgs::msg::Float32MultiArray>(cmd_topic_, 10);
@@ -104,7 +117,7 @@ public:
 
   ~LeftArmTeleopNode() override
   {
-    if (bus_ok_ && port_ != nullptr) {
+    if (!echo_via_bridge_ && bus_ok_ && port_ != nullptr) {
       port_->closePort();
     }
   }
@@ -151,7 +164,14 @@ private:
       static_cast<size_t>(echo_position_button_) < msg->buttons.size() &&
       msg->buttons[echo_position_button_] == 1;
     if (x_pressed && !last_echo_pressed_) {
-      if (!bus_ok_) {
+      if (echo_via_bridge_) {
+        if (echo_pub_) {
+          std_msgs::msg::Empty req;
+          echo_pub_->publish(req);
+        } else {
+          RCLCPP_WARN(get_logger(), "Echo publisher not ready");
+        }
+      } else if (!bus_ok_) {
         RCLCPP_WARN(get_logger(), "Dynamixel bus not ready; cannot read positions.");
       } else {
         read_and_log_positions();
@@ -263,9 +283,31 @@ private:
   void read_and_log_positions()
   {
     constexpr uint16_t ADDR_PRESENT_POSITION = 132;
-    std::ostringstream oss;
-    oss.setf(std::ios::fixed);
-    oss.precision(2);
+    std::ostringstream summary;
+    summary.setf(std::ios::fixed);
+    summary.precision(2);
+
+    std::ostringstream polling;
+    polling << "Polling servos: ";
+    for (size_t i = 0; i < servo_ids_.size(); ++i) {
+      polling << servo_ids_[i];
+      if (i + 1 < servo_ids_.size()) {
+        polling << ", ";
+      }
+    }
+
+    char time_buf[9] = {0};
+    {
+      auto now = std::chrono::system_clock::now();
+      std::time_t tt = std::chrono::system_clock::to_time_t(now);
+      std::tm tm{};
+#ifdef _WIN32
+      localtime_s(&tm, &tt);
+#else
+      localtime_r(&tt, &tm);
+#endif
+      std::strftime(time_buf, sizeof(time_buf), "%H:%M:%S", &tm);
+    }
 
     for (size_t i = 0; i < servo_ids_.size(); ++i) {
       uint8_t err = 0;
@@ -273,24 +315,37 @@ private:
       int res = packet_->read4ByteTxRx(
         port_, static_cast<uint8_t>(servo_ids_[i]), ADDR_PRESENT_POSITION, &pos, &err);
       if (res != COMM_SUCCESS) {
-        oss << "[id " << servo_ids_[i] << ": comm err " << res << "] ";
+        summary << "[id " << servo_ids_[i] << ": comm err " << res << "] ";
         continue;
       }
       if (err) {
-        oss << "[id " << servo_ids_[i] << ": packet err " << static_cast<int>(err) << "] ";
+        summary << "[id " << servo_ids_[i] << ": packet err " << static_cast<int>(err) << "] ";
         continue;
       }
-      present_deg_[i] = ticks_to_deg(static_cast<int>(pos));
-      oss << "id " << servo_ids_[i] << ": " << present_deg_[i] << " deg; ";
+      int ticks = static_cast<int>(pos);
+      present_deg_[i] = ticks_to_deg(ticks);
+      summary << "id " << servo_ids_[i] << ": " << present_deg_[i] << " deg; ";
+
+      std::ostringstream detail;
+      detail.setf(std::ios::fixed);
+      detail << "[" << time_buf << "] ID "
+             << std::setw(3) << servo_ids_[i] << ": "
+             << std::setw(5) << ticks << " ticks ("
+             << std::showpos << std::setprecision(2) << std::setw(7) << present_deg_[i]
+             << " deg)";
+      RCLCPP_INFO(get_logger(), "%s", detail.str().c_str());
     }
 
-    RCLCPP_INFO(get_logger(), "Present positions: %s", oss.str().c_str());
+    RCLCPP_INFO(get_logger(), "%s", polling.str().c_str());
+    RCLCPP_INFO(get_logger(), "Present positions: %s", summary.str().c_str());
   }
 
   std::string joy_topic_;
   std::string cmd_topic_;
   double publish_rate_hz_{30.0};
   double fallback_dt_{0.02};
+  bool echo_via_bridge_{true};
+  std::string echo_request_topic_;
 
   int shoulder_pitch_axis_{1};
   int shoulder_roll_axis_{0};
@@ -327,6 +382,7 @@ private:
   rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr pub_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
+  rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr echo_pub_;
 
   std::string dxl_device_;
   int dxl_baud_{1'000'000};

@@ -1,5 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/empty.hpp>
 #include <dynamixel_sdk/dynamixel_sdk.h>
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <yaml-cpp/yaml.h>
@@ -8,6 +9,7 @@
 #include <unordered_map>
 #include <array>
 #include <algorithm>
+#include <iomanip>
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -19,6 +21,7 @@ constexpr uint16_t ADDR_OPERATING_MODE   = 11;
 constexpr uint16_t ADDR_PROFILE_ACCEL    = 108;
 constexpr uint16_t ADDR_PROFILE_VELOCITY = 112;
 constexpr uint16_t ADDR_GOAL_POSITION    = 116;
+constexpr uint16_t ADDR_PRESENT_POSITION = 132;
 
 namespace {
 
@@ -102,6 +105,7 @@ public:
     declare_parameter<std::string>("config_package", "hros5_control");
     declare_parameter<std::string>("config_file", "config/hros5_dynamixel_joints_with_limits.yaml");
     declare_parameter<std::string>("command_topic", "/hros5/right_arm/target_angles_deg");
+    declare_parameter<std::string>("echo_request_topic", "/hros5/right_arm/echo_positions");
 
     std::string config_path = resolve_config_path(
       get_parameter("config_file").as_string(),
@@ -159,6 +163,10 @@ public:
     sub_ = create_subscription<std_msgs::msg::Float32MultiArray>(
       get_parameter("command_topic").as_string(), 10, std::bind(&DxlNode::cb, this, _1));
 
+    echo_sub_ = create_subscription<std_msgs::msg::Empty>(
+      get_parameter("echo_request_topic").as_string(), 10,
+      std::bind(&DxlNode::handle_echo_request, this, _1));
+
     timer_ = create_wall_timer(20ms, std::bind(&DxlNode::update, this));
   }
 
@@ -212,6 +220,64 @@ private:
     }
   }
 
+  void handle_echo_request(const std_msgs::msg::Empty::SharedPtr) {
+    std::ostringstream polling;
+    polling << "Polling servos: ";
+    for (size_t i = 0; i < joints_.size(); ++i) {
+      polling << joints_[i].id;
+      if (i + 1 < joints_.size()) {
+        polling << ", ";
+      }
+    }
+    RCLCPP_INFO(this->get_logger(), "%s", polling.str().c_str());
+
+    char time_buf[9] = {0};
+    {
+      auto now = std::chrono::system_clock::now();
+      std::time_t tt = std::chrono::system_clock::to_time_t(now);
+      std::tm tm{};
+#ifdef _WIN32
+      localtime_s(&tm, &tt);
+#else
+      localtime_r(&tt, &tm);
+#endif
+      std::strftime(time_buf, sizeof(time_buf), "%H:%M:%S", &tm);
+    }
+
+    std::ostringstream summary;
+    summary.setf(std::ios::fixed);
+    summary.precision(2);
+
+    for (const auto& joint : joints_) {
+      uint8_t err = 0;
+      uint32_t pos = 0;
+      int res = packet_->read4ByteTxRx(
+        port_, static_cast<uint8_t>(joint.id), ADDR_PRESENT_POSITION, &pos, &err);
+      if (res != COMM_SUCCESS) {
+        summary << "[id " << joint.id << ": comm err " << res << "] ";
+        continue;
+      }
+      if (err) {
+        summary << "[id " << joint.id << ": packet err " << static_cast<int>(err) << "] ";
+        continue;
+      }
+      int ticks = static_cast<int>(pos);
+      double deg = ticks_to_deg(ticks);
+      summary << "id " << joint.id << ": " << deg << " deg; ";
+
+      std::ostringstream detail;
+      detail.setf(std::ios::fixed);
+      detail << "[" << time_buf << "] ID "
+             << std::setw(3) << joint.id << ": "
+             << std::setw(5) << ticks << " ticks ("
+             << std::showpos << std::setprecision(2) << std::setw(7) << deg
+             << " deg)";
+      RCLCPP_INFO(this->get_logger(), "%s", detail.str().c_str());
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Present positions: %s", summary.str().c_str());
+  }
+
   void write1(uint8_t id, uint16_t addr, uint8_t val){
     uint8_t err=0; int res = packet_->write1ByteTxRx(port_, id, addr, val, &err);
     if (res != COMM_SUCCESS || err) RCLCPP_WARN(this->get_logger(),
@@ -226,6 +292,7 @@ private:
   dynamixel::PortHandler *port_{nullptr};
   dynamixel::PacketHandler *packet_{nullptr};
   rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr sub_;
+  rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr echo_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
   std::vector<JointState> joints_;
 };

@@ -8,6 +8,7 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(dynamixel_sdk REQUIRED)
 
 add_executable(head_teleop_node src/head_teleop_node.cpp)
 ament_target_dependencies(head_teleop_node
@@ -28,6 +29,7 @@ ament_target_dependencies(left_arm_teleop_node
   rclcpp
   sensor_msgs
   std_msgs
+  dynamixel_sdk
 )
 
 add_executable(right_arm_teleop_node src/right_arm_teleop_node.cpp)
@@ -35,6 +37,7 @@ ament_target_dependencies(right_arm_teleop_node
   rclcpp
   sensor_msgs
   std_msgs
+  dynamixel_sdk
 )
 
 install(TARGETS head_teleop_node
