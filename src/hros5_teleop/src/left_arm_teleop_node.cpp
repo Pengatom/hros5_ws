@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdint>
 #include <cmath>
 #include <sstream>
 #include <string>
@@ -74,7 +75,9 @@ public:
     dxl_device_ = declare_parameter<std::string>("dxl_device", "/dev/dxl");
     dxl_baud_ = declare_parameter<int>("dxl_baud", 1'000'000);
     dxl_protocol_ = declare_parameter<double>("dxl_protocol", 2.0);
-    servo_ids_ = declare_parameter<std::vector<int>>("servo_ids", {2, 4, 6, 24, 22});
+    auto servo_ids_param = declare_parameter<std::vector<int64_t>>(
+      "servo_ids", std::vector<int64_t>{2, 4, 6, 24, 22});
+    servo_ids_.assign(servo_ids_param.begin(), servo_ids_param.end());
     present_deg_.assign(servo_ids_.size(), 0.0);
 
     port_ = dynamixel::PortHandler::getPortHandler(dxl_device_.c_str());
