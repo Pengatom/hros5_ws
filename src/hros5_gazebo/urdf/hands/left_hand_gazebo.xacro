@@ -12,6 +12,11 @@
         <mesh filename="package://hros5_description/meshes/hands/LForearm.dae" scale="0.1 0.1 0.1"/>
       </geometry>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/LForearm.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
   </link>
 
   <!-- Basic link: LHand -->
@@ -21,6 +26,11 @@
         <mesh filename="package://hros5_description/meshes/hands/LHand.dae" scale="0.1 0.1 0.1"/>
       </geometry>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/LHand.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
   </link>
 
   <!-- Gripper link -->
@@ -30,6 +40,11 @@
         <mesh filename="package://hros5_description/meshes/hands/LGripper.dae" scale="0.1 0.1 0.1"/>
       </geometry>
     </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://hros5_description/meshes/hands/LGripper.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
   </link>
 
   <!-- Joint: base_link connects LLowerArm to LHand -->

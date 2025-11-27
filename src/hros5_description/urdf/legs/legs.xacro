@@ -85,7 +85,7 @@
 			<limit lower="-0.785398163" upper="0.785398163" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}Foot">
-			<xacro:visuals_collisions_foot side="${side}"/>
+			<xacro:visuals_collisions_foot side="${side}" reflect="${reflect}"/>
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="-0.025995 -0.009506 -0.000503" />
 				<mass value="0.0794462"/>
@@ -128,6 +128,5 @@
 	<link name="r_sole"/>
   
 </robot>
-
 
 

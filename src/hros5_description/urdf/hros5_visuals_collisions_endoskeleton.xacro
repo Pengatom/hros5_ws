@@ -259,7 +259,7 @@
 	</xacro:macro>
 
 	<!-- FOOT VISUALS/COLLISIONS -->
-	<xacro:macro name="visuals_collisions_foot" params="side">
+	<xacro:macro name="visuals_collisions_foot" params="side reflect">
 		<visual>
 			<origin xyz="0.0565 ${reflect*0.007} -0.031" rpy="0 0 0"/>
 			<geometry>
