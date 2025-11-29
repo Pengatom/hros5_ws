@@ -6,3 +6,4 @@ log/
 
 src/dynamixel/
 scripts/__pycache__/*
+*.csv
