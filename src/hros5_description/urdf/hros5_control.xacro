@@ -140,6 +140,40 @@
       <plugin>dynamixel_hardware_interface/DynamixelHardware</plugin>
     </hardware>
 
+	  <joint name="HeadYaw">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="HeadPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+
+	  <joint name="LShoulderPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LShoulderRoll">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="LElbowPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RShoulderPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RShoulderRoll">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+	  <joint name="RElbowPitch">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+	  </joint>
+
 	  <joint name="LHipYaw">
 		<command_interface name="position"/>
 		<state_interface name="position"/>
@@ -189,6 +223,26 @@
 		<command_interface name="position"/>
 		<state_interface name="position"/>
 	  </joint>
+
+	  <joint name="LWrist">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+		<state_interface name="velocity"/>
+	  </joint>
+	  <joint name="LGrip">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+		<state_interface name="velocity"/>
+	  </joint>
+	  <joint name="RWrist">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+		<state_interface name="velocity"/>
+	  </joint>
+	  <joint name="RGrip">
+		<command_interface name="position"/>
+		<state_interface name="position"/>
+		<state_interface name="velocity"/>
+	  </joint>
 	</ros2_control>
 </robot>
-

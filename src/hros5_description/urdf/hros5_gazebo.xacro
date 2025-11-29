@@ -1,14 +1,5 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-<!-- GAZEBO ROS CONTROL AND IMU PLUGIN -->
-    <gazebo>
-        <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
-            <robotNamespace>/hros5</robotNamespace>
-            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
-        </plugin>
-    </gazebo>
-<!-- END OF GAZEBO ROS CONTROL PLUGIN -->
-
 <!-- MIMIC JOINTS  -->
 	<gazebo>
 		<plugin name="HeadPitchDummy" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
