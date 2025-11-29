@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <array>
 #include <algorithm>
+#include <cmath>
 #include <iomanip>
 
 using std::placeholders::_1;
@@ -38,6 +39,13 @@ struct JointState {
   int id{-1};
   double current_deg{0.0};
   double target_deg{0.0};
+  double measured_deg{0.0};
+  double last_measured_deg{0.0};
+  double stall_time_s{0.0};
+  bool have_measured{false};
+  bool last_profile_close{false};
+  bool last_profile_soft{false};
+  bool profile_set{false};
 };
 
 int read_limit(const YAML::Node& node){
@@ -102,10 +110,28 @@ public:
     declare_parameter<int>("baud", 1000000);
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
+    declare_parameter<double>("grip_max_step_deg", 3.0);
     declare_parameter<std::string>("config_package", "hros5_control");
     declare_parameter<std::string>("config_file", "config/hros5_dynamixel_joints_with_limits.yaml");
     declare_parameter<std::string>("command_topic", "/hros5/left_arm/target_angles_deg");
     declare_parameter<std::string>("echo_request_topic", "/hros5/left_arm/echo_positions");
+    declare_parameter<double>("profile_velocity", 80.0);
+    declare_parameter<double>("profile_accel", 20.0);
+    declare_parameter<double>("grip_profile_velocity", 200.0);  // kept for compatibility
+    declare_parameter<double>("grip_profile_accel", 60.0);      // kept for compatibility
+    declare_parameter<double>("grip_profile_velocity_close", 140.0);
+    declare_parameter<double>("grip_profile_accel_close", 70.0);
+    declare_parameter<double>("grip_profile_velocity_open", 220.0);
+    declare_parameter<double>("grip_profile_accel_open", 110.0);
+    declare_parameter<double>("grip_profile_velocity_close_soft", 70.0);
+    declare_parameter<double>("grip_profile_accel_close_soft", 35.0);
+    declare_parameter<double>("grip_soft_zone_deg", 6.0);
+    declare_parameter<bool>("grip_direct_command", true);
+    declare_parameter<double>("grip_target_slew_deg", 5.0);
+    declare_parameter<double>("grip_stall_motion_deg", 0.2);
+    declare_parameter<double>("grip_stall_timeout_sec", 0.18);
+    declare_parameter<double>("grip_release_margin_deg", 1.5);
+    declare_parameter<double>("grip_command_gap_deg", 0.7);
 
     std::string config_path = resolve_config_path(
       get_parameter("config_file").as_string(),
@@ -150,11 +176,21 @@ public:
     if (!port_->openPort()) throw std::runtime_error("openPort failed");
     if (!port_->setBaudRate(baud)) throw std::runtime_error("setBaudRate failed");
 
-    for (const auto& joint : joints_) {
+    double base_profile_velocity = get_parameter("profile_velocity").as_double();
+    double base_profile_accel = get_parameter("profile_accel").as_double();
+    double grip_profile_velocity_close = get_parameter("grip_profile_velocity_close").as_double();
+    double grip_profile_accel_close = get_parameter("grip_profile_accel_close").as_double();
+
+    for (auto& joint : joints_) {
       write1(joint.id, ADDR_TORQUE_ENABLE, 0);
       write1(joint.id, ADDR_OPERATING_MODE, 3);
-      write4(joint.id, ADDR_PROFILE_VELOCITY, 80);
-      write4(joint.id, ADDR_PROFILE_ACCEL, 20);
+      double vel = is_gripper(joint) ? grip_profile_velocity_close : base_profile_velocity;
+      double acc = is_gripper(joint) ? grip_profile_accel_close : base_profile_accel;
+      write4(joint.id, ADDR_PROFILE_VELOCITY, static_cast<uint32_t>(vel));
+      write4(joint.id, ADDR_PROFILE_ACCEL, static_cast<uint32_t>(acc));
+      joint.last_profile_close = is_gripper(joint);
+      joint.last_profile_soft = false;
+      joint.profile_set = true;
     }
     for (const auto& joint : joints_) {
       write1(joint.id, ADDR_TORQUE_ENABLE, 1);
@@ -180,6 +216,97 @@ public:
 private:
   static double clip(double x, double lo, double hi){ return std::max(lo, std::min(hi, x)); }
 
+  bool is_gripper(const JointState& joint) const {
+    return joint.prefix == "lgrip";
+  }
+
+  bool update_grip_measurement(JointState& joint){
+    uint8_t err = 0;
+    uint32_t pos = 0;
+    int res = packet_->read4ByteTxRx(
+      port_, static_cast<uint8_t>(joint.id), ADDR_PRESENT_POSITION, &pos, &err);
+    if (res != COMM_SUCCESS || err) {
+      RCLCPP_WARN_THROTTLE(
+        this->get_logger(), *this->get_clock(), 5000,
+        "read pos id=%d err=%d res=%d", joint.id, err, res);
+      return false;
+    }
+    double deg = ticks_to_deg(static_cast<int>(pos));
+    joint.measured_deg = deg;
+    if (!joint.have_measured) {
+      joint.last_measured_deg = deg;
+      joint.have_measured = true;
+      joint.stall_time_s = 0.0;
+    }
+    return true;
+  }
+
+  void apply_grip_profile(JointState& joint, bool closing, bool soft){
+    double vel = closing
+      ? (soft ? get_parameter("grip_profile_velocity_close_soft").as_double()
+              : get_parameter("grip_profile_velocity_close").as_double())
+      : get_parameter("grip_profile_velocity_open").as_double();
+    double acc = closing
+      ? (soft ? get_parameter("grip_profile_accel_close_soft").as_double()
+              : get_parameter("grip_profile_accel_close").as_double())
+      : get_parameter("grip_profile_accel_open").as_double();
+
+    if (joint.profile_set && joint.last_profile_close == closing && joint.last_profile_soft == soft) {
+      return;
+    }
+    joint.profile_set = true;
+    joint.last_profile_close = closing;
+    joint.last_profile_soft = soft;
+    write4(joint.id, ADDR_PROFILE_VELOCITY, static_cast<uint32_t>(vel));
+    write4(joint.id, ADDR_PROFILE_ACCEL, static_cast<uint32_t>(acc));
+  }
+
+  double apply_grip_guard(JointState& joint, double desired_target, double dt){
+    if (grip_contact_active_ && !joint.have_measured) {
+      return std::max(desired_target, grip_contact_deg_);
+    }
+    if (!joint.have_measured) return desired_target;
+
+    double release_margin = get_parameter("grip_release_margin_deg").as_double();
+    if (grip_contact_active_ && desired_target > grip_contact_deg_ + release_margin) {
+      grip_contact_active_ = false;
+      joint.stall_time_s = 0.0;
+    }
+
+    double motion_eps = get_parameter("grip_stall_motion_deg").as_double();
+    double stall_timeout = get_parameter("grip_stall_timeout_sec").as_double();
+    double command_gap = get_parameter("grip_command_gap_deg").as_double();
+
+    double movement = std::fabs(joint.measured_deg - joint.last_measured_deg);
+    if (movement > motion_eps) {
+      joint.stall_time_s = 0.0;
+    }
+
+    if (grip_contact_active_) {
+      joint.last_measured_deg = joint.measured_deg;
+      return std::max(desired_target, grip_contact_deg_);
+    }
+
+    double closing_gap = joint.measured_deg - desired_target;
+    bool requesting_more_close = closing_gap > command_gap;
+    if (requesting_more_close && movement < motion_eps) {
+      joint.stall_time_s += dt;
+    } else {
+      joint.stall_time_s = 0.0;
+    }
+
+    if (requesting_more_close && joint.stall_time_s >= stall_timeout) {
+      grip_contact_active_ = true;
+      grip_contact_deg_ = joint.measured_deg;
+      joint.last_measured_deg = joint.measured_deg;
+      RCLCPP_INFO(this->get_logger(), "Grip contact detected at %.2f deg, holding", grip_contact_deg_);
+      return grip_contact_deg_;
+    }
+
+    joint.last_measured_deg = joint.measured_deg;
+    return desired_target;
+  }
+
   void cb(const std_msgs::msg::Float32MultiArray::SharedPtr msg) {
     if (msg->data.size() < joints_.size()) return;
     double max_step = get_parameter("max_step_deg").as_double();
@@ -198,9 +325,15 @@ private:
   }
 
   void update(){
+    auto now = this->get_clock()->now();
+    double dt = last_update_.nanoseconds() == 0 ? 0.02 : (now - last_update_).seconds();
+    last_update_ = now;
+
     double max_step = get_parameter("max_step_deg").as_double();
-    auto step_limited = [max_step](double step){
-      return std::max(-max_step, std::min(max_step, step));
+    double grip_max_step = get_parameter("grip_max_step_deg").as_double();
+    auto step_limited = [max_step, grip_max_step](double step, bool grip){
+      double lim = grip ? grip_max_step : max_step;
+      return std::max(-lim, std::min(lim, step));
     };
     auto clip_local = [](double x, double lo, double hi){
       return std::max(lo, std::min(hi, x));
@@ -211,8 +344,35 @@ private:
       double max_deg = get_parameter(param_name(joint.prefix, "max_deg")).as_double();
       double offset_deg = get_parameter(param_name(joint.prefix, "offset_deg")).as_double();
 
-      double step = step_limited(joint.target_deg - joint.current_deg);
-      joint.current_deg = clip_local(joint.current_deg + step, min_deg, max_deg);
+      if (is_gripper(joint) && update_grip_measurement(joint)) {
+        joint.current_deg = joint.measured_deg;
+      }
+
+      double desired_target = clip_local(joint.target_deg, min_deg, max_deg);
+      if (is_gripper(joint)) {
+        desired_target = apply_grip_guard(joint, desired_target, dt);
+      }
+
+      bool grip_direct = is_gripper(joint) && get_parameter("grip_direct_command").as_bool();
+      if (is_gripper(joint)) {
+        bool closing = desired_target < joint.current_deg - 0.05;
+        bool opening = desired_target > joint.current_deg + 0.05;
+        if (closing || opening) {
+          double soft_zone = get_parameter("grip_soft_zone_deg").as_double();
+          bool soft = closing && joint.measured_deg <= (min_deg + soft_zone);
+          apply_grip_profile(joint, closing, soft);
+        }
+      }
+
+      if (grip_direct && is_gripper(joint)) {
+        double slew = get_parameter("grip_target_slew_deg").as_double();
+        double delta = desired_target - joint.current_deg;
+        double limited = joint.current_deg + std::max(-slew, std::min(slew, delta));
+        joint.current_deg = clip_local(limited, min_deg, max_deg);
+      } else {
+        double step = step_limited(desired_target - joint.current_deg, is_gripper(joint));
+        joint.current_deg = clip_local(joint.current_deg + step, min_deg, max_deg);
+      }
 
       int ticks = static_cast<int>((joint.current_deg + offset_deg + 180.0) * TICKS_PER_DEG);
       ticks = clamp_ticks(ticks, joint.info);
@@ -295,6 +455,9 @@ private:
   rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr echo_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
   std::vector<JointState> joints_;
+  bool grip_contact_active_{false};
+  double grip_contact_deg_{0.0};
+  rclcpp::Time last_update_;
 };
 
 int main(int argc, char** argv){
@@ -303,3 +466,4 @@ int main(int argc, char** argv){
   rclcpp::shutdown();
   return 0;
 }
+
