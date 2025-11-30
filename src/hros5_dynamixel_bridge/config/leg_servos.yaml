@@ -1,0 +1,61 @@
+joints:
+  - name: RHipYaw
+    id: 7
+    cw_limit: 1800
+    ccw_limit: 2800
+    offset_deg: 0.0
+  - name: LHipYaw
+    id: 8
+    cw_limit: 1296
+    ccw_limit: 2296
+    offset_deg: 0.0
+  - name: RHipRoll
+    id: 9
+    cw_limit: 1024
+    ccw_limit: 2105
+    offset_deg: 0.0
+  - name: LHipRoll
+    id: 10
+    cw_limit: 1992
+    ccw_limit: 3072
+    offset_deg: 0.0
+  - name: RHipPitch
+    id: 11
+    cw_limit: 1024
+    ccw_limit: 2432
+    offset_deg: 0.0
+  - name: LHipPitch
+    id: 12
+    cw_limit: 1664
+    ccw_limit: 3072
+    offset_deg: 0.0
+  - name: RKneePitch
+    id: 13
+    cw_limit: 1800
+    ccw_limit: 3500
+    offset_deg: 0.0
+  - name: LKneePitch
+    id: 14
+    cw_limit: 550
+    ccw_limit: 2275
+    offset_deg: 0.0
+  - name: RAnklePitch
+    id: 15
+    cw_limit: 1843
+    ccw_limit: 3072
+    offset_deg: 0.0
+  - name: LAnklePitch
+    id: 16
+    cw_limit: 1024
+    ccw_limit: 2275
+    offset_deg: 0.0
+  - name: RAnkleRoll
+    id: 17
+    cw_limit: 1024
+    ccw_limit: 3072
+    offset_deg: 0.0
+  - name: LAnkleRoll
+    id: 18
+    cw_limit: 1024
+    ccw_limit: 3072
+    offset_deg: 0.0

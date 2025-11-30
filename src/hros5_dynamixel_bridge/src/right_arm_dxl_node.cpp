@@ -31,6 +31,7 @@ struct JointInfo {
   int id{-1};
   int cw_limit{-1};
   int ccw_limit{-1};
+  double offset_deg{0.0};
 };
 
 struct JointState {
@@ -82,6 +83,9 @@ std::unordered_map<std::string, JointInfo> load_joint_info(const std::string& co
     info.id = node["id"].as<int>();
     info.cw_limit = read_limit(node["cw_limit"]);
     info.ccw_limit = read_limit(node["ccw_limit"]);
+    info.offset_deg = (node["offset_deg"] && node["offset_deg"].IsScalar())
+      ? node["offset_deg"].as<double>()
+      : 0.0;
     joints[node["name"].as<std::string>()] = info;
   }
   return joints;
@@ -111,8 +115,8 @@ public:
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
     declare_parameter<double>("grip_max_step_deg", 3.0);
-    declare_parameter<std::string>("config_package", "hros5_control");
-    declare_parameter<std::string>("config_file", "config/hros5_dynamixel_joints_with_limits.yaml");
+    declare_parameter<std::string>("config_package", "hros5_dynamixel_bridge");
+    declare_parameter<std::string>("config_file", "config/arm_servos.yaml");
     declare_parameter<std::string>("command_topic", "/hros5/right_arm/target_angles_deg");
     declare_parameter<std::string>("echo_request_topic", "/hros5/right_arm/echo_positions");
     declare_parameter<double>("profile_velocity", 80.0);
@@ -156,7 +160,7 @@ public:
 
       declare_parameter<double>(param_name(prefix, "min_deg"), min_default);
       declare_parameter<double>(param_name(prefix, "max_deg"), max_default);
-      declare_parameter<double>(param_name(prefix, "offset_deg"), 0.0);
+      declare_parameter<double>(param_name(prefix, "offset_deg"), it->second.offset_deg);
       declare_parameter<bool>(param_name("invert", prefix), false);
 
       JointState state;

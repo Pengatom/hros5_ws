@@ -25,6 +25,7 @@ struct JointInfo {
   int id{-1};
   int cw_limit{-1};
   int ccw_limit{-1};
+  double offset_deg{0.0};
 };
 
 int read_limit(const YAML::Node& node){
@@ -59,6 +60,9 @@ std::unordered_map<std::string, JointInfo> load_joint_info(const std::string& co
     info.id = node["id"].as<int>();
     info.cw_limit = read_limit(node["cw_limit"]);
     info.ccw_limit = read_limit(node["ccw_limit"]);
+    info.offset_deg = (node["offset_deg"] && node["offset_deg"].IsScalar())
+      ? node["offset_deg"].as<double>()
+      : 0.0;
     joints[node["name"].as<std::string>()] = info;
   }
   return joints;
@@ -83,7 +87,7 @@ public:
     bus_config_ = declare_and_get_bus_config(*this);
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
-    declare_parameter<std::string>("config_file", "config/joints.yaml");
+    declare_parameter<std::string>("config_file", "config/arm_servos.yaml");
 
     std::string config_path = resolve_config_path(get_parameter("config_file").as_string());
     auto joints = load_joint_info(config_path);
@@ -106,8 +110,8 @@ public:
     declare_parameter<double>("lgrip_max_deg", lgrip_max_default);
     declare_parameter<double>("lwrist_min_deg", lwrist_min_default);
     declare_parameter<double>("lwrist_max_deg", lwrist_max_default);
-    declare_parameter<double>("lgrip_offset_deg", 0.0);
-    declare_parameter<double>("lwrist_offset_deg", 0.0);
+    declare_parameter<double>("lgrip_offset_deg", lgrip_it->second.offset_deg);
+    declare_parameter<double>("lwrist_offset_deg", lwrist_it->second.offset_deg);
     declare_parameter<bool>("invert_lgrip", false);
     declare_parameter<bool>("invert_lwrist", false);
     declare_parameter<std::string>("error_topic", "/hros5/left_hand/target_angles_deg");

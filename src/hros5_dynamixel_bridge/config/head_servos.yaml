@@ -1,0 +1,11 @@
+joints:
+  - name: HeadYaw
+    id: 19
+    cw_limit: 1024
+    ccw_limit: 3072
+    offset_deg: 0.0
+  - name: HeadPitch
+    id: 20
+    cw_limit: 1800
+    ccw_limit: 2450
+    offset_deg: 0.0
