@@ -1,0 +1,7 @@
+/**:
+  ros__parameters:
+    device: "/dev/dxl"
+    baud: 1000000
+    protocol_version: 2.0
+    bus_timeout_ms: 100.0
+    bus_retries: 1

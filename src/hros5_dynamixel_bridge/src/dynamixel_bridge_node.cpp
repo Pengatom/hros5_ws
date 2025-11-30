@@ -20,14 +20,11 @@ public:
     DynamixelBridgeNode()
     : Node("dynamixel_bridge_node")
     {
+        bus_config_ = declare_and_get_bus_config(*this);
         declare_parameter<std::string>("config_file", "config/joints.yaml");
-        declare_parameter<std::string>("port", "/dev/ttyUSB0");
-        declare_parameter<int>("baudrate", 1000000);
         config_file_ = get_parameter("config_file").as_string();
-        port_ = get_parameter("port").as_string();
-        baudrate_ = get_parameter("baudrate").as_int();
 
-        driver_ = std::make_unique<DynamixelDriver>(port_, baudrate_);
+        driver_ = std::make_unique<DynamixelDriver>(bus_config_);
         if (!driver_->load_config(config_file_))
             RCLCPP_FATAL(get_logger(), "Failed to load YAML config!");
         else
@@ -81,8 +78,8 @@ private:
     }
 
     // Members
-    std::string config_file_, port_;
-    int baudrate_;
+    std::string config_file_;
+    DxlBusConfig bus_config_;
     std::vector<std::string> joint_names_;
     std::unique_ptr<DynamixelDriver> driver_;
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr pub_joint_state_;

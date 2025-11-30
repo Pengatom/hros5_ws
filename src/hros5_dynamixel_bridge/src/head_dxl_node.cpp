@@ -1,6 +1,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
 #include <dynamixel_sdk/dynamixel_sdk.h>
+#include "hros5_dynamixel_bridge/dxl_bus_config.hpp"
 #include <chrono>
 
 using std::placeholders::_1;
@@ -19,8 +20,7 @@ constexpr uint16_t ADDR_GOAL_POSITION    = 116;
 class DxlNode : public rclcpp::Node {
 public:
   DxlNode() : rclcpp::Node("head_dxl_node") {
-    declare_parameter<std::string>("device", "/dev/dxl");
-    declare_parameter<int>("baud", 1000000);
+    bus_config_ = declare_and_get_bus_config(*this);
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
     declare_parameter<double>("pan_min_deg", -120.0);
@@ -33,14 +33,18 @@ public:
     declare_parameter<bool>("invert_tilt", false);
     declare_parameter<std::string>("error_topic", "/hros5/head/target_angles_deg");
 
-    std::string dev = get_parameter("device").as_string();
-    int baud = get_parameter("baud").as_int();
+    port_ = dynamixel::PortHandler::getPortHandler(bus_config_.device.c_str());
+    packet_ = dynamixel::PacketHandler::getPacketHandler(bus_config_.protocol_version);
 
-    port_ = dynamixel::PortHandler::getPortHandler(dev.c_str());
-    packet_ = dynamixel::PacketHandler::getPacketHandler(2.0);
-
-    if (!port_->openPort()) throw std::runtime_error("openPort failed");
-    if (!port_->setBaudRate(baud)) throw std::runtime_error("setBaudRate failed");
+    if (!port_->openPort()) {
+      throw std::runtime_error("openPort failed for " + bus_config_.device);
+    }
+    if (!port_->setBaudRate(bus_config_.baud)) {
+      throw std::runtime_error("setBaudRate failed");
+    }
+    if (bus_config_.packet_timeout_ms > 0.0) {
+      port_->setPacketTimeout(bus_config_.packet_timeout_ms);
+    }
 
     write1(PAN_ID,  ADDR_TORQUE_ENABLE, 0);
     write1(TILT_ID, ADDR_TORQUE_ENABLE, 0);
@@ -122,16 +126,23 @@ private:
   }
 
   void write1(uint8_t id, uint16_t addr, uint8_t val){
-    uint8_t err=0; int res = packet_->write1ByteTxRx(port_, id, addr, val, &err);
-    if (res != COMM_SUCCESS || err) RCLCPP_WARN(this->get_logger(),
-      "write1 id=%d addr=%d err=%d res=%d", id, addr, err, res);
+    std::string label = "write1 id=" + std::to_string(id) + " addr=" + std::to_string(addr);
+    dxl_with_retry(
+      bus_config_, port_, this->get_logger(), label.c_str(),
+      [&](uint8_t& err){
+        return packet_->write1ByteTxRx(port_, id, addr, val, &err);
+      });
   }
   void write4(uint8_t id, uint16_t addr, uint32_t val){
-    uint8_t err=0; int res = packet_->write4ByteTxRx(port_, id, addr, val, &err);
-    if (res != COMM_SUCCESS || err) RCLCPP_WARN(this->get_logger(),
-      "write4 id=%d addr=%d err=%d res=%d", id, addr, err, res);
+    std::string label = "write4 id=" + std::to_string(id) + " addr=" + std::to_string(addr);
+    dxl_with_retry(
+      bus_config_, port_, this->get_logger(), label.c_str(),
+      [&](uint8_t& err){
+        return packet_->write4ByteTxRx(port_, id, addr, val, &err);
+      });
   }
 
+  DxlBusConfig bus_config_;
   dynamixel::PortHandler *port_{nullptr};
   dynamixel::PacketHandler *packet_{nullptr};
   rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr sub_;

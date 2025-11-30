@@ -15,13 +15,22 @@ include_directories(
 )
 
 add_executable(dynamixel_bridge_node src/dynamixel_bridge_node.cpp src/dynamixel_driver.cpp)
-ament_target_dependencies(dynamixel_bridge_node rclcpp sensor_msgs trajectory_msgs yaml-cpp dynamixel_sdk)
+ament_target_dependencies(dynamixel_bridge_node
+  rclcpp
+  sensor_msgs
+  trajectory_msgs
+  yaml-cpp
+  dynamixel_sdk
+  ament_index_cpp
+)
 
 add_executable(head_dxl_node src/head_dxl_node.cpp)
 ament_target_dependencies(head_dxl_node
   rclcpp
   std_msgs
   dynamixel_sdk
+  yaml-cpp
+  ament_index_cpp
 )
 
 add_executable(left_hand_dxl_node src/left_hand_dxl_node.cpp)
@@ -65,10 +74,16 @@ target_include_directories(dynamixel_bridge_node PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 target_link_libraries(dynamixel_bridge_node yaml-cpp)
+target_link_libraries(head_dxl_node yaml-cpp)
 target_link_libraries(left_hand_dxl_node yaml-cpp)
 target_link_libraries(right_hand_dxl_node yaml-cpp)
 target_link_libraries(left_arm_dxl_node yaml-cpp)
 target_link_libraries(right_arm_dxl_node yaml-cpp)
+
+install(
+  DIRECTORY include/
+  DESTINATION include
+)
 
 install(
   DIRECTORY

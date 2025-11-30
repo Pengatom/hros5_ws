@@ -10,15 +10,20 @@ constexpr int ADDR_PRESENT_POSITION   = 132;
 constexpr int TORQUE_ENABLE           = 1;
 constexpr int TORQUE_DISABLE          = 0;
 
-DynamixelDriver::DynamixelDriver(const std::string& port, int baudrate)
-    : port_(port), baudrate_(baudrate)
+DynamixelDriver::DynamixelDriver(const DxlBusConfig& bus_config)
+    : bus_config_(bus_config),
+      port_(bus_config.device),
+      baudrate_(bus_config.baud)
 {
     portHandler_ = dynamixel::PortHandler::getPortHandler(port_.c_str());
-    packetHandler_ = dynamixel::PacketHandler::getPacketHandler(2.0);
+    packetHandler_ = dynamixel::PacketHandler::getPacketHandler(bus_config_.protocol_version);
     if (!portHandler_->openPort())
         std::cerr << "Failed to open port " << port_ << std::endl;
     if (!portHandler_->setBaudRate(baudrate_))
         std::cerr << "Failed to set baudrate " << baudrate_ << std::endl;
+    if (bus_config_.packet_timeout_ms > 0.0) {
+        portHandler_->setPacketTimeout(bus_config_.packet_timeout_ms);
+    }
 }
 
 DynamixelDriver::~DynamixelDriver()
@@ -58,9 +63,13 @@ bool DynamixelDriver::load_config(const std::string& yaml_path)
 bool DynamixelDriver::enable_torque_all()
 {
     for (const auto& j : joint_configs_) {
-        int dxl_comm_result = packetHandler_->write1ByteTxRx(
-            portHandler_, j.second.id, ADDR_TORQUE_ENABLE, TORQUE_ENABLE);
-        if (dxl_comm_result != COMM_SUCCESS)
+        bool ok = with_retry("enable torque", [&](){
+            uint8_t err = 0;
+            int dxl_comm_result = packetHandler_->write1ByteTxRx(
+                portHandler_, j.second.id, ADDR_TORQUE_ENABLE, TORQUE_ENABLE, &err);
+            return dxl_comm_result == COMM_SUCCESS && err == 0;
+        });
+        if (!ok)
             std::cerr << "Failed to enable torque for " << j.second.name << std::endl;
     }
     return true;
@@ -69,8 +78,12 @@ bool DynamixelDriver::enable_torque_all()
 bool DynamixelDriver::disable_torque_all()
 {
     for (const auto& j : joint_configs_) {
-        packetHandler_->write1ByteTxRx(
-            portHandler_, j.second.id, ADDR_TORQUE_ENABLE, TORQUE_DISABLE);
+        with_retry("disable torque", [&](){
+            uint8_t err = 0;
+            int res = packetHandler_->write1ByteTxRx(
+                portHandler_, j.second.id, ADDR_TORQUE_ENABLE, TORQUE_DISABLE, &err);
+            return res == COMM_SUCCESS && err == 0;
+        });
     }
     return true;
 }
@@ -90,7 +103,9 @@ bool DynamixelDriver::sync_write_positions(const std::unordered_map<std::string,
         };
         syncWrite.addParam(j.second.id, param_goal_position);
     }
-    bool result = syncWrite.txPacket() == COMM_SUCCESS;
+    bool result = with_retry("sync write", [&](){
+        return syncWrite.txPacket() == COMM_SUCCESS;
+    });
     syncWrite.clearParam();
     return result;
 }
@@ -101,8 +116,10 @@ bool DynamixelDriver::sync_read_positions(std::unordered_map<std::string, double
     for (const auto& j : joint_configs_) {
         syncRead.addParam(j.second.id);
     }
-    if (syncRead.txRxPacket() != COMM_SUCCESS) {
-        std::cerr << "SyncRead failed!" << std::endl;
+    bool ok = with_retry("sync read", [&](){
+        return syncRead.txRxPacket() == COMM_SUCCESS;
+    });
+    if (!ok) {
         return false;
     }
     for (const auto& j : joint_configs_) {
