@@ -40,6 +40,13 @@ ament_target_dependencies(right_arm_teleop_node
   dynamixel_sdk
 )
 
+add_executable(right_leg_teleop_node src/right_leg_teleop_node.cpp)
+ament_target_dependencies(right_leg_teleop_node
+  rclcpp
+  sensor_msgs
+  std_msgs
+)
+
 install(TARGETS head_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
@@ -50,6 +57,9 @@ install(TARGETS left_arm_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
 install(TARGETS right_arm_teleop_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+install(TARGETS right_leg_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

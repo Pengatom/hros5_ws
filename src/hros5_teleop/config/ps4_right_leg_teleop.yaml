@@ -1,0 +1,34 @@
+right_leg_teleop_node:
+  ros__parameters:
+    joy_topic: joy
+    command_topic: /hros5/right_leg/target_angles_deg
+    publish_rate_hz: 30.0
+
+    hip_yaw_axis: 6
+    hip_roll_axis: 0
+    hip_pitch_axis: 1
+    knee_pitch_axis: 4
+    ankle_pitch_axis: 7
+    ankle_roll_axis: 3
+
+    invert_hip_yaw: false
+    invert_hip_roll: false
+    invert_hip_pitch: true
+    invert_knee_pitch: true
+    invert_ankle_pitch: true
+    invert_ankle_roll: false
+
+    hip_yaw_max_deg: 45.0
+    hip_roll_max_deg: 30.0
+    hip_pitch_max_deg: 50.0
+    knee_pitch_max_deg: 70.0
+    ankle_pitch_max_deg: 45.0
+    ankle_roll_max_deg: 25.0
+
+    deadzone: 0.1
+    center_button: 3
+
+    preset_forward_deg: [0.0, 0.0, 15.0, 30.0, -15.0, 0.0]
+    preset_backward_deg: [0.0, 0.0, -12.0, 20.0, 10.0, 0.0]
+    preset_leg_down_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    preset_leg_up_deg: [0.0, 0.0, 20.0, 45.0, -20.0, 0.0]

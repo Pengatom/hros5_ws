@@ -3,6 +3,7 @@ project(hros5_dynamixel_bridge)
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
@@ -69,6 +70,15 @@ ament_target_dependencies(right_arm_dxl_node
   ament_index_cpp
 )
 
+add_executable(right_leg_dxl_node src/right_leg_dxl_node.cpp)
+ament_target_dependencies(right_leg_dxl_node
+  rclcpp
+  std_msgs
+  dynamixel_sdk
+  yaml-cpp
+  ament_index_cpp
+)
+
 target_include_directories(dynamixel_bridge_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
@@ -79,6 +89,7 @@ target_link_libraries(left_hand_dxl_node yaml-cpp)
 target_link_libraries(right_hand_dxl_node yaml-cpp)
 target_link_libraries(left_arm_dxl_node yaml-cpp)
 target_link_libraries(right_arm_dxl_node yaml-cpp)
+target_link_libraries(right_leg_dxl_node yaml-cpp)
 
 install(
   DIRECTORY include/
@@ -99,7 +110,7 @@ install(
                  PATTERN "*.py"
 )
 
-install(TARGETS dynamixel_bridge_node head_dxl_node left_hand_dxl_node right_hand_dxl_node left_arm_dxl_node right_arm_dxl_node
+install(TARGETS dynamixel_bridge_node head_dxl_node left_hand_dxl_node right_hand_dxl_node left_arm_dxl_node right_arm_dxl_node right_leg_dxl_node
   DESTINATION lib/${PROJECT_NAME}
 )
 

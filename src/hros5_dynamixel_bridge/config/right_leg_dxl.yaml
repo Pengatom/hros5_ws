@@ -1,0 +1,17 @@
+/**:
+  ros__parameters:
+    # Dynamixel bus
+    bus_config_file: config/dxl_bus.yaml
+    device: /dev/dxl
+    baud: 1000000
+    protocol_version: 2.0
+    bus_timeout_ms: 100.0
+    bus_retries: 1
+
+    # Servo configuration
+    config_package: hros5_dynamixel_bridge
+    config_file: config/leg_servos.yaml
+    command_topic: /hros5/right_leg/target_angles_deg
+    profile_velocity: 60.0
+    profile_accel: 20.0
+    max_step_deg: 2.0
