@@ -28,6 +28,9 @@ right_leg_teleop_node:
     deadzone: 0.1
     center_button: 3
 
+    echo_position_button: 0   # Cross echoes Dynamixel positions
+    echo_request_topic: /hros5/right_leg/echo_positions
+
     preset_forward_deg: [0.0, 0.0, 15.0, 30.0, -15.0, 0.0]
     preset_backward_deg: [0.0, 0.0, -12.0, 20.0, 10.0, 0.0]
     preset_leg_down_deg: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]

@@ -1,6 +1,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/empty.hpp>
 
 #include <algorithm>
 #include <array>
@@ -34,6 +35,8 @@ public:
   {
     joy_topic_ = declare_parameter<std::string>("joy_topic", "joy");
     cmd_topic_ = declare_parameter<std::string>("command_topic", "/hros5/right_leg/target_angles_deg");
+    echo_request_topic_ = declare_parameter<std::string>("echo_request_topic", "/hros5/right_leg/echo_positions");
+    echo_position_button_ = declare_parameter<int>("echo_position_button", 0);  // PS4 X button
     publish_rate_hz_ = declare_parameter<double>("publish_rate_hz", 30.0);
     deadzone_ = declare_parameter<double>("deadzone", 0.1);
     center_button_ = declare_parameter<int>("center_button", 3);  // PS4: triangle
@@ -76,6 +79,7 @@ public:
     std::fill(commands_deg_.begin(), commands_deg_.end(), 0.0);
 
     pub_ = create_publisher<std_msgs::msg::Float32MultiArray>(cmd_topic_, 10);
+    echo_pub_ = create_publisher<std_msgs::msg::Empty>(echo_request_topic_, 10);
     joy_sub_ = create_subscription<sensor_msgs::msg::Joy>(
       joy_topic_, 10, std::bind(&RightLegTeleopNode::joy_callback, this, std::placeholders::_1));
 
@@ -107,6 +111,8 @@ private:
     {
       std::fill(commands_deg_.begin(), commands_deg_.end(), 0.0);
     }
+
+    handle_echo_position(msg);
   }
 
   double scaled_axis(const sensor_msgs::msg::Joy::SharedPtr& msg, int axis_index,
@@ -183,6 +189,19 @@ private:
     pub_->publish(cmd);
   }
 
+  void handle_echo_position(const sensor_msgs::msg::Joy::SharedPtr& msg)
+  {
+    bool pressed = echo_position_button_ >= 0 &&
+      static_cast<size_t>(echo_position_button_) < msg->buttons.size() &&
+      msg->buttons[echo_position_button_] == 1;
+    if (pressed && !last_echo_pressed_) {
+      if (echo_pub_) {
+        echo_pub_->publish(std_msgs::msg::Empty{});
+      }
+    }
+    last_echo_pressed_ = pressed;
+  }
+
   std::string joy_topic_;
   std::string cmd_topic_;
   double publish_rate_hz_{30.0};
@@ -216,8 +235,12 @@ private:
   std::array<double, 6> preset_leg_up_{};
 
   std::array<double, 6> commands_deg_{};
+  std::string echo_request_topic_;
+  int echo_position_button_{0};
+  bool last_echo_pressed_{false};
 
   rclcpp::Publisher<std_msgs::msg::Float32MultiArray>::SharedPtr pub_;
+  rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr echo_pub_;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
 };

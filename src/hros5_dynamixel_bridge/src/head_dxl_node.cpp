@@ -1,5 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/float32_multi_array.hpp>
+#include <std_msgs/msg/empty.hpp>
 #include <dynamixel_sdk/dynamixel_sdk.h>
 #include <ament_index_cpp/get_package_share_directory.hpp>
 #include <yaml-cpp/yaml.h>
@@ -8,6 +9,8 @@
 #include <algorithm>
 #include <filesystem>
 #include <unordered_map>
+#include <sstream>
+#include <iomanip>
 
 using std::placeholders::_1;
 using namespace std::chrono_literals;
@@ -19,6 +22,7 @@ constexpr uint16_t ADDR_OPERATING_MODE   = 11;
 constexpr uint16_t ADDR_PROFILE_ACCEL    = 108;
 constexpr uint16_t ADDR_PROFILE_VELOCITY = 112;
 constexpr uint16_t ADDR_GOAL_POSITION    = 116;
+constexpr uint16_t ADDR_PRESENT_POSITION = 132;
 
 namespace {
 
@@ -89,10 +93,11 @@ public:
     bus_config_ = declare_and_get_bus_config(*this);
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
-    declare_parameter<std::string>("config_package", "hros5_dynamixel_bridge");
-    declare_parameter<std::string>("config_file", "config/head_servos.yaml");
+    declare_parameter<std::string>("config_package", "hros5_control");
+    declare_parameter<std::string>("config_file", "config/joints/head.yaml");
     declare_parameter<bool>("invert_pan", false);
     declare_parameter<bool>("invert_tilt", false);
+    declare_parameter<std::string>("echo_request_topic", "/hros5/head/echo_positions");
     declare_parameter<std::string>("error_topic", "/hros5/head/target_angles_deg");
 
     std::string config_path = resolve_config_path(
@@ -148,6 +153,9 @@ public:
     std::string topic = get_parameter("error_topic").as_string();
     sub_ = create_subscription<std_msgs::msg::Float32MultiArray>(
       topic, 10, std::bind(&DxlNode::cb, this, _1));
+    echo_sub_ = create_subscription<std_msgs::msg::Empty>(
+      get_parameter("echo_request_topic").as_string(), 10,
+      std::bind(&DxlNode::handle_echo_request, this, std::placeholders::_1));
 
     timer_ = create_wall_timer(20ms, std::bind(&DxlNode::update, this));
   }
@@ -213,6 +221,59 @@ private:
     write4(tilt_id_, ADDR_GOAL_POSITION, tilt_ticks);
   }
 
+  void handle_echo_request(const std_msgs::msg::Empty::SharedPtr) {
+    std::ostringstream polling;
+    polling << "Polling servos: " << pan_id_ << ", " << tilt_id_;
+    RCLCPP_INFO(this->get_logger(), "%s", polling.str().c_str());
+
+    char time_buf[9] = {0};
+    auto now = std::chrono::system_clock::now();
+    std::time_t tt = std::chrono::system_clock::to_time_t(now);
+    std::tm tm{};
+#ifdef _WIN32
+    localtime_s(&tm, &tt);
+#else
+    localtime_r(&tt, &tm);
+#endif
+    std::strftime(time_buf, sizeof(time_buf), "%H:%M:%S", &tm);
+
+    struct EchoItem { int id; const char* label; };
+    std::array<EchoItem, 2> items{{{pan_id_, "HeadYaw"}, {tilt_id_, "HeadPitch"}}};
+
+    std::ostringstream summary;
+    summary.setf(std::ios::fixed);
+    summary.precision(2);
+
+    for (const auto& item : items) {
+      uint32_t pos = 0;
+      std::string label = std::string("echo read id=") + std::to_string(item.id);
+      bool ok = dxl_with_retry(
+        bus_config_, port_, this->get_logger(), label.c_str(),
+        [&](uint8_t& err){
+          return packet_->read4ByteTxRx(
+            port_, static_cast<uint8_t>(item.id), ADDR_PRESENT_POSITION, &pos, &err);
+        });
+      if (!ok) {
+        summary << "[" << item.label << " id " << item.id << ": read failed] ";
+        continue;
+      }
+      int ticks = static_cast<int>(pos);
+      double deg = ticks_to_deg(ticks);
+      summary << item.label << " (" << item.id << "): " << deg << " deg; ";
+
+      std::ostringstream detail;
+      detail.setf(std::ios::fixed);
+      detail << "[" << time_buf << "] ID "
+             << std::setw(3) << item.id << ": "
+             << std::setw(5) << ticks << " ticks ("
+             << std::showpos << std::setprecision(2) << std::setw(7) << deg
+             << " deg)";
+      RCLCPP_INFO(this->get_logger(), "%s", detail.str().c_str());
+    }
+
+    RCLCPP_INFO(this->get_logger(), "Present positions: %s", summary.str().c_str());
+  }
+
   void write1(uint8_t id, uint16_t addr, uint8_t val){
     std::string label = "write1 id=" + std::to_string(id) + " addr=" + std::to_string(addr);
     dxl_with_retry(
@@ -234,6 +295,7 @@ private:
   dynamixel::PortHandler *port_{nullptr};
   dynamixel::PacketHandler *packet_{nullptr};
   rclcpp::Subscription<std_msgs::msg::Float32MultiArray>::SharedPtr sub_;
+  rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr echo_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
   JointInfo pan_info_;
   JointInfo tilt_info_;

@@ -16,5 +16,7 @@ head_teleop_node:
 
     deadzone: 0.05
     center_button: 3      # triangle on PS4
+    echo_position_button: 0  # X on PS4
+    echo_request_topic: /hros5/head/echo_positions
 
     publish_rate_hz: 20.0
