@@ -1,0 +1,8 @@
+/**:
+  ros__parameters:
+    config_package: hros5_control
+    bus_config: config/dxl_bus.yaml
+    config_file: config/joints/right_arm.yaml
+    command_topic: /hros5/right_arm/target_angles_deg
+    max_step_deg: 2.0
+    grip_max_step_deg: 3.0

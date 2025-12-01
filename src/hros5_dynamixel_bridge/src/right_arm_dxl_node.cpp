@@ -115,8 +115,8 @@ public:
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
     declare_parameter<double>("grip_max_step_deg", 3.0);
-    declare_parameter<std::string>("config_package", "hros5_dynamixel_bridge");
-    declare_parameter<std::string>("config_file", "config/arm_servos.yaml");
+    declare_parameter<std::string>("config_package", "hros5_control");
+    declare_parameter<std::string>("config_file", "config/joints/right_arm.yaml");
     declare_parameter<std::string>("command_topic", "/hros5/right_arm/target_angles_deg");
     declare_parameter<std::string>("echo_request_topic", "/hros5/right_arm/echo_positions");
     declare_parameter<double>("profile_velocity", 80.0);

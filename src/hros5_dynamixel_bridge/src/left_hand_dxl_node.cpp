@@ -39,10 +39,11 @@ int read_limit(const YAML::Node& node){
   }
 }
 
-std::string resolve_config_path(const std::string& config_file){
+std::string resolve_config_path(const std::string& config_file,
+                                const std::string& config_package){
   std::filesystem::path cfg(config_file);
   if (cfg.is_absolute()) return cfg.string();
-  auto share = ament_index_cpp::get_package_share_directory("hros5_dynamixel_bridge");
+  auto share = ament_index_cpp::get_package_share_directory(config_package);
   return (std::filesystem::path(share) / cfg).string();
 }
 
@@ -87,9 +88,12 @@ public:
     bus_config_ = declare_and_get_bus_config(*this);
     declare_parameter<double>("kp", 0.6);
     declare_parameter<double>("max_step_deg", 2.0);
-    declare_parameter<std::string>("config_file", "config/arm_servos.yaml");
+    declare_parameter<std::string>("config_package", "hros5_control");
+    declare_parameter<std::string>("config_file", "config/joints/hands.yaml");
 
-    std::string config_path = resolve_config_path(get_parameter("config_file").as_string());
+    std::string config_path = resolve_config_path(
+      get_parameter("config_file").as_string(),
+      get_parameter("config_package").as_string());
     auto joints = load_joint_info(config_path);
     auto lgrip_it = joints.find("LGrip");
     auto lwrist_it = joints.find("LWrist");

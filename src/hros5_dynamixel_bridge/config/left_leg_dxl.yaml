@@ -2,8 +2,8 @@
   ros__parameters:
     config_package: hros5_control
     bus_config: config/dxl_bus.yaml
-    config_file: config/joints/right_leg.yaml
-    command_topic: /hros5/right_leg/target_angles_deg
+    config_file: config/joints/left_leg.yaml
+    command_topic: /hros5/left_leg/target_angles_deg
     profile_velocity: 60.0
     profile_accel: 20.0
     max_step_deg: 2.0

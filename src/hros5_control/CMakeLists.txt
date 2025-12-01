@@ -21,8 +21,15 @@ find_package(std_msgs REQUIRED)
 #install(TARGETS
 #  ${PROJECT_NAME}_node
 #  DESTINATION lib/${PROJECT_NAME})
+
 install(
-  DIRECTORY config launch
-  DESTINATION share/${PROJECT_NAME}
+  DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
 )
+
+install(
+  DIRECTORY launch/
+  DESTINATION share/${PROJECT_NAME}/launch
+)
+
 ament_package()

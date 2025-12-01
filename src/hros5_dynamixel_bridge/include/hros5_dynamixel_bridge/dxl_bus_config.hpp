@@ -29,7 +29,7 @@ struct DxlBusDefaults {
 
 inline std::string default_bus_config_path(){
   try {
-    auto share = ament_index_cpp::get_package_share_directory("hros5_dynamixel_bridge");
+    auto share = ament_index_cpp::get_package_share_directory("hros5_control");
     return (std::filesystem::path(share) / "config" / "dxl_bus.yaml").string();
   } catch (const std::exception&) {
     return std::string();
@@ -59,14 +59,49 @@ inline DxlBusDefaults load_bus_defaults(const std::string& config_file){
   return defaults;
 }
 
-inline DxlBusConfig declare_and_get_bus_config(rclcpp::Node& node) {
-  std::string default_file = default_bus_config_path();
-  auto defaults = load_bus_defaults(default_file);
-
-  std::string bus_file = node.declare_parameter<std::string>("bus_config_file", default_file);
-  if (!bus_file.empty() && bus_file != default_file) {
-    defaults = load_bus_defaults(bus_file);
+inline std::string resolve_bus_config_path(const std::string& path){
+  std::filesystem::path cfg(path);
+  if (cfg.is_absolute()) {
+    return cfg.string();
   }
+
+  // Try to anchor relative paths to the package share
+  std::string anchor;
+  std::string default_path = default_bus_config_path();
+  if (!default_path.empty()) {
+    auto p = std::filesystem::path(default_path);
+    if (p.has_parent_path() && p.parent_path().has_parent_path()) {
+      anchor = p.parent_path().parent_path().string(); // .../share/hros5_dynamixel_bridge
+    }
+  }
+  if (anchor.empty()) {
+    try {
+      anchor = ament_index_cpp::get_package_share_directory("hros5_dynamixel_bridge");
+    } catch (const std::exception&) {
+      // leave anchor empty
+    }
+  }
+  if (!anchor.empty()) {
+    return (std::filesystem::path(anchor) / cfg).string();
+  }
+  return cfg.string();
+}
+
+inline DxlBusConfig declare_and_get_bus_config(rclcpp::Node& node) {
+  const std::string default_param = "config/dxl_bus.yaml";
+  std::string default_file = default_bus_config_path();
+
+  std::string bus_param = node.declare_parameter<std::string>("bus_config", default_param);
+  // Backward-compatible override
+  std::string legacy_bus_param = node.declare_parameter<std::string>("bus_config_file", "");
+  std::string bus_file = legacy_bus_param.empty() ? bus_param : legacy_bus_param;
+
+  if (bus_file.empty()) {
+    bus_file = default_file;
+  }
+  bus_file = resolve_bus_config_path(bus_file);
+
+  auto defaults = load_bus_defaults(bus_file);
 
   DxlBusConfig cfg;
   cfg.device = node.declare_parameter<std::string>("device", defaults.device);
