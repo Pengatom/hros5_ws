@@ -47,6 +47,13 @@ ament_target_dependencies(right_leg_teleop_node
   std_msgs
 )
 
+add_executable(left_leg_teleop_node src/left_leg_teleop_node.cpp)
+ament_target_dependencies(left_leg_teleop_node
+  rclcpp
+  sensor_msgs
+  std_msgs
+)
+
 install(TARGETS head_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
@@ -60,6 +67,9 @@ install(TARGETS right_arm_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
 install(TARGETS right_leg_teleop_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+install(TARGETS left_leg_teleop_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
