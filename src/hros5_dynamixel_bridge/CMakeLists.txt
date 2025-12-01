@@ -70,6 +70,15 @@ ament_target_dependencies(right_arm_dxl_node
   ament_index_cpp
 )
 
+add_executable(left_leg_dxl_node src/left_leg_dxl_node.cpp)
+ament_target_dependencies(left_leg_dxl_node
+  rclcpp
+  std_msgs
+  dynamixel_sdk
+  yaml-cpp
+  ament_index_cpp
+)
+
 add_executable(right_leg_dxl_node src/right_leg_dxl_node.cpp)
 ament_target_dependencies(right_leg_dxl_node
   rclcpp
@@ -89,6 +98,7 @@ target_link_libraries(left_hand_dxl_node yaml-cpp)
 target_link_libraries(right_hand_dxl_node yaml-cpp)
 target_link_libraries(left_arm_dxl_node yaml-cpp)
 target_link_libraries(right_arm_dxl_node yaml-cpp)
+target_link_libraries(left_leg_dxl_node yaml-cpp)
 target_link_libraries(right_leg_dxl_node yaml-cpp)
 
 install(
@@ -110,7 +120,7 @@ install(
                  PATTERN "*.py"
 )
 
-install(TARGETS dynamixel_bridge_node head_dxl_node left_hand_dxl_node right_hand_dxl_node left_arm_dxl_node right_arm_dxl_node right_leg_dxl_node
+install(TARGETS dynamixel_bridge_node head_dxl_node left_hand_dxl_node right_hand_dxl_node left_arm_dxl_node right_arm_dxl_node left_leg_dxl_node right_leg_dxl_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
