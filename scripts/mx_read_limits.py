@@ -10,7 +10,7 @@ selected Dynamixel protocol version (1.0 default, 2.0 optional).
 Default:
   - Device: /dev/dxl
   - Baudrate: 1,000,000
-  - IDs: 1–25
+  - IDs: 1–24
 
 Usage examples:
   python3 mx_read_limits.py
@@ -30,11 +30,11 @@ from dynamixel_sdk import (
     COMM_SUCCESS,
 )
 
-# --- Servo definitions (Protocol 1.0) ---
+# --- Servo definitions (Protocol 1.0 & 2.0) ---
 SERVO_CONFIGS = {
     "mx28": {
         "label": "MX-28",
-        "model_numbers": {29},
+        "model_numbers": {29, 30},
         "ticks_per_rev": 4096.0,
     },
     "mx64": {
@@ -159,8 +159,8 @@ def main():
         "--ids",
         nargs="+",
         type=int,
-        default=[i for i in range(1, 26)],
-        help="List of servo IDs to query (default: 1-25)",
+        default=[i for i in range(1, 25)],
+        help="List of servo IDs to query (default: 1-24)",
     )
     parser.add_argument(
         "--protocol",
