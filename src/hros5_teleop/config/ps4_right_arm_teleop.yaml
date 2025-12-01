@@ -42,5 +42,4 @@ right_arm_teleop_node:
 
     # Preset poses (D-pad left/right)
     preset_home_deg: [-7.0, -40.0, 0.0, 0.0, 0.0]
-    #preset_ready_deg: [20.0, 20.0, 60.0, 0.0, 0.0]
     preset_ready_deg: [13.0, -10.0, -35.0, 0.0, 0.0]
