@@ -3,8 +3,8 @@
 Read present positions from one or more Dynamixel servos.
 
 Example:
-  ./scripts/dynamixel_read_positions.py --joint-names LShoulderPitch LShoulderRoll
-  ./scripts/dynamixel_read_positions.py --ids 11 12 --watch
+  python3 dxl_read_positions.py --joint-names LShoulderPitch LShoulderRoll
+  python3 dxl_read_positions.py --ids 11 12 --watch
 """
 
 import argparse
@@ -25,7 +25,7 @@ def parse_args() -> argparse.Namespace:
         description="Poll the present position register for selected Dynamixel servos."
     )
     parser.add_argument(
-        "--device", default="/dev/dxl",
+        "--port", "--device", dest="port", default="/dev/dxl",
         help="Serial device for the Dynamixel bus (default: %(default)s)",
     )
     parser.add_argument(
@@ -116,11 +116,11 @@ def main() -> int:
     args = parse_args()
     ids = resolve_ids(args)
 
-    port = PortHandler(args.device)
+    port = PortHandler(args.port)
     packet = PacketHandler(args.protocol)
 
     if not port.openPort():
-        print(f"Failed to open port {args.device}", file=sys.stderr)
+        print(f"Failed to open port {args.port}", file=sys.stderr)
         return 1
     if not port.setBaudRate(args.baud):
         print(f"Failed to set baud rate to {args.baud}", file=sys.stderr)

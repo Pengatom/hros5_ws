@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-mx28_p2_report.py — Read & report key parameters from a live Protocol 2.0 MX (e.g., MX-28 2.0).
+dxl_p2_report.py — Read & report key parameters from a live Protocol 2.0 MX (e.g., MX-28 2.0).
 
 - No comparison; just queries the servo and prints values.
 - Shows Min/Max Position Limits in ticks AND degrees.
@@ -8,7 +8,7 @@ mx28_p2_report.py — Read & report key parameters from a live Protocol 2.0 MX (
   Goal/Present Position (ticks + degrees).
 
 Usage:
-  python mx28_p2_report.py --port COM5 --baud 1000000 --id 19
+  python dxl_p2_report.py --port /dev/dxl --baud 1000000 --id 19
 """
 
 import argparse, time
@@ -79,7 +79,7 @@ def read4(pkt, ph, dxl_id, addr, retries=3):
 
 def main():
     ap = argparse.ArgumentParser(description="Report key parameters from a Protocol 2.0 MX servo (e.g., MX-28 2.0).")
-    ap.add_argument("--port", required=True, help="Serial port, e.g., COM5 or /dev/ttyUSB0")
+    ap.add_argument("--port", default="/dev/dxl", help="Serial port, e.g., COM5 or /dev/ttyUSB0")
     ap.add_argument("--baud", type=int, default=1000000, help="Baud (bps), e.g., 1000000")
     ap.add_argument("--id", type=int, required=True, help="Dynamixel ID")
     args = ap.parse_args()
@@ -105,7 +105,7 @@ def main():
     presp = read4(pkt, ph, args.id, ADDR_PRESENT_POSITION)
 
     # Print report
-    print("=== MX-28 P2 Parameter Report ===\n")
+    print("=== MX P2 Parameter Report ===\n")
     print(f"{'ID':24} {rid}")
     print(f"{'Baud Rate (bps)':24} {bps}  (raw={braw})")
     print(f"{'Min Voltage (V)':24} {None if vmin is None else vmin/10.0}")

@@ -5,7 +5,7 @@ Read position limits from Dynamixel MX-28 / MX-64 / MX-106 (Protocol 1.0 or 2.0)
 The script automatically queries each servo for its model number,
 matches it against known MX configurations, and then reads CW/CCW
 angle limits using the appropriate control-table addresses for the
-selected Dynamixel protocol version (1.0 default, 2.0 optional).
+selected Dynamixel protocol version (2.0 default, 1.0 optional).
 
 Default:
   - Device: /dev/dxl
@@ -13,9 +13,9 @@ Default:
   - IDs: 1–24
 
 Usage examples:
-  python3 mx_read_limits.py
-  python3 mx_read_limits.py --ids 1 3 5 7 9 --device /dev/ttyUSB0 --baud 57600
-  python3 mx_read_limits.py --protocol 2.0 --all --csv-path logs/mx_limits_after_upgrade.csv
+  python3 dxl_read_limits.py
+  python3 dxl_read_limits.py --ids 1 3 5 7 9 --port /dev/ttyUSB0 --baud 57600
+  python3 dxl_read_limits.py --protocol 2.0 --all --csv-path logs/mx_limits_after_upgrade.csv
 """
 
 import sys
@@ -142,10 +142,11 @@ def ticks_to_deg(ticks: int, deg_per_tick: float) -> float:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Read CW/CCW angle limits (position range) from Dynamixel MX-series (Protocol 1.0)."
+        description="Read CW/CCW angle limits (position range) from Dynamixel MX-series (Protocol 1.0 or 2.0)."
     )
     parser.add_argument(
-        "--device", "-d",
+        "--port", "--device", "-d",
+        dest="port",
         default="/dev/dxl",
         help="Serial device for Dynamixel bus (default: /dev/dxl)",
     )
@@ -190,18 +191,18 @@ def main():
         print(f"❌ Unsupported protocol version: {args.protocol}", file=sys.stderr)
         sys.exit(1)
 
-    port_handler = PortHandler(args.device)
+    port_handler = PortHandler(args.port)
     packet_handler = PacketHandler(args.protocol)
 
     if not port_handler.openPort():
-        print(f"❌ Failed to open port {args.device}", file=sys.stderr)
+        print(f"❌ Failed to open port {args.port}", file=sys.stderr)
         sys.exit(1)
 
     if not port_handler.setBaudRate(args.baud):
         print(f"❌ Failed to set baudrate {args.baud}", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Using device: {args.device}, baud: {args.baud}, protocol: {args.protocol}")
+    print(f"Using device: {args.port}, baud: {args.baud}, protocol: {args.protocol}")
     print("IDs:", args.ids)
     print()
     print(" ID | Model | Type   | FW |  CW_limit (ticks/deg)  | CCW_limit (ticks/deg) | Range (deg)")

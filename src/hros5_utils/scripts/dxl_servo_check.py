@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-hros5_servo_check.py
+dxl_servo_check.py
 
 Scan Dynamixel servos on /dev/dxl (default), IDs 0–25, using:
 - Protocol 1.0 or 2.0
@@ -28,18 +28,8 @@ PROTOCOL_FIRMWARE_ADDR = {
 }
 
 # Path to your local DynamixelSDK Python module
-SDK_PY_PATH = Path("/home/pengatom/hros5_ws/src/dynamixel/DynamixelSDK/python/src")
+DEFAULT_SDK_PATH = Path(__file__).resolve().parents[2] / "dynamixel" / "DynamixelSDK" / "python" / "src"
 # ---------------------------------------------------------------
-
-# Add SDK to Python path
-sys.path.append(str(SDK_PY_PATH))
-
-try:
-    from dynamixel_sdk import *  # type: ignore
-except ImportError as e:
-    print(f"❌ Could not import dynamixel_sdk from {SDK_PY_PATH}")
-    print("   Check that the path is correct and that the SDK is present.")
-    sys.exit(1)
 
 
 def parse_args():
@@ -83,11 +73,33 @@ def parse_args():
             "(default depends on protocol)."
         ),
     )
+    parser.add_argument(
+        "--sdk-path",
+        type=Path,
+        default=DEFAULT_SDK_PATH,
+        help="Path to DynamixelSDK python/src folder (used if SDK not importable).",
+    )
     return parser.parse_args()
+
+
+def import_sdk(sdk_path: Path):
+    try:
+        import dynamixel_sdk  # type: ignore
+    except ImportError:
+        sys.path.append(str(sdk_path))
+        try:
+            import dynamixel_sdk  # type: ignore
+        except ImportError:
+            print(f"❌ Could not import dynamixel_sdk from {sdk_path}")
+            print("   Check that the path is correct and that the SDK is present.")
+            sys.exit(1)
+    from dynamixel_sdk import PacketHandler, PortHandler, COMM_SUCCESS  # type: ignore
+    return PacketHandler, PortHandler, COMM_SUCCESS
 
 
 def main():
     args = parse_args()
+    PacketHandler, PortHandler, COMM_SUCCESS = import_sdk(args.sdk_path)
     if args.id_start > args.id_end:
         print("❌ --id-start must be <= --id-end")
         sys.exit(1)
@@ -102,7 +114,7 @@ def main():
             sys.exit(1)
 
     print("=== HROS5 Servo Check ===")
-    print(f"Using SDK path : {SDK_PY_PATH}")
+    print(f"Using SDK path : {args.sdk_path}")
     print(f"Port           : {args.port}")
     print(f"Baudrate       : {args.baud}")
     print(f"Protocol       : {args.protocol}")
