@@ -25,7 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--baud", nargs="+", type=int, default=[57600, 1000000], help="Baudrates to try (default: 57600 1000000)")
     parser.add_argument("--protocols", nargs="+", type=float, choices=[1.0, 2.0], default=[1.0, 2.0], help="Protocol versions to try (default: 1.0 2.0)")
     parser.add_argument("--start-id", type=int, default=1, help="Starting ID to scan (inclusive, default: 1)")
-    parser.add_argument("--end-id", type=int, default=29, help="Ending ID to scan (inclusive, default: 29)")
+    parser.add_argument("--end-id", type=int, default=24, help="Ending ID to scan (inclusive, default: 24)")
     parser.add_argument("--exhaustive", action="store_true", help="Try all baud/protocol combos even after devices are found.")
     return parser.parse_args()
 
