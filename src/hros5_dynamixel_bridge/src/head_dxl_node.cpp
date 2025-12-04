@@ -126,6 +126,21 @@ public:
     declare_parameter<double>("pan_offset_deg", pan_info_.offset_deg);
     declare_parameter<double>("tilt_offset_deg", tilt_info_.offset_deg);
 
+    auto bus_cfg_param = get_parameter("bus_config").as_string();
+    auto bus_cfg_file_param = get_parameter("bus_config_file").as_string();
+    std::string bus_cfg_path = resolve_bus_config_path(
+      bus_cfg_file_param.empty() ? bus_cfg_param : bus_cfg_file_param);
+    RCLCPP_INFO(this->get_logger(),
+      "Bus config: %s (device=%s, baud=%d, protocol=%.1f, timeout_ms=%.1f, retries=%d)",
+      bus_cfg_path.c_str(), bus_config_.device.c_str(), bus_config_.baud,
+      bus_config_.protocol_version, bus_config_.packet_timeout_ms, bus_config_.retries);
+
+    auto config_pkg = get_parameter("config_package").as_string();
+    auto config_file = get_parameter("config_file").as_string();
+    RCLCPP_INFO(this->get_logger(),
+      "Head joint config: package=%s file=%s (resolved: %s)",
+      config_pkg.c_str(), config_file.c_str(), config_path.c_str());
+
     port_ = dynamixel::PortHandler::getPortHandler(bus_config_.device.c_str());
     packet_ = dynamixel::PacketHandler::getPacketHandler(bus_config_.protocol_version);
 

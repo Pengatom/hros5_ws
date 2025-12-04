@@ -16,7 +16,7 @@ def generate_launch_description():
             executable='realsense2_camera_node',
             name='realsense',
             parameters=[{
-                'camera_name': 'camera',        # topics will be /camera/color/image_raw
+                'camera_name': 'realsense',     # topics will be /camera/realsense/color/image_raw
                 'rgb_camera.profile': '640x480x30',
                 'enable_depth': False,
             }]
@@ -28,8 +28,9 @@ def generate_launch_description():
             parameters=[cfg]
         ),
         Node(
-            package='hros5_head_tracker_cpp',
-            executable='dxl_node',
+            package='hros5_dynamixel_bridge',
+            executable='head_dxl_node',
+            name='head_dxl_node',
             output='screen',
             parameters=[cfg]
         ),

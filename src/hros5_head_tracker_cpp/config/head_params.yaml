@@ -1,26 +1,34 @@
 tracker_node:
   ros__parameters:
+    # Realsense RGB topic used for tracking
     camera_topic: "/camera/realsense/color/image_raw"
     fov_h_deg: 69.0
     fov_v_deg: 42.0
     kp: 0.6
-    pan_min_deg: -120.0
-    pan_max_deg: 120.0
-    tilt_min_deg: -30.0
-    tilt_max_deg: 60.0
+    # Tracker limits (degrees)
+    pan_min_deg: -90.0
+    pan_max_deg: 90.0
+    tilt_min_deg: -22.0
+    tilt_max_deg: 36.0
 
-dxl_node:
+head_dxl_node:
   ros__parameters:
-    device: "/dev/dxl"
-    baud: 1000000
-    kp: 0.6
-    max_step_deg: 0.5
-    invert_pan: true
+    # Shared configs from hros5_control
+    config_package: "hros5_control"
+    config_file: "config/joints/head.yaml"
+    bus_config: "config/dxl_bus.yaml"
+    # Topics
+    error_topic: "/hros5/head/target_angles_deg"
+    echo_request_topic: "/hros5/head/echo_positions"
+    # Servo behavior
+    kp: 0.6          # retained for compatibility (not used internally)
+    max_step_deg: 2.0
+    invert_pan: false
     invert_tilt: false
-    pan_min_deg: -120.0
-    pan_max_deg: 120.0
-    tilt_min_deg: -30.0
-    tilt_max_deg: 60.0
     pan_offset_deg: 0.0
     tilt_offset_deg: 0.0
-    error_topic: "/hros5/head/target_angles_deg"
+    # Safety limits (deg); defaults mirror hros5_control limits
+    pan_min_deg: -90.0
+    pan_max_deg: 90.0
+    tilt_min_deg: -22.0
+    tilt_max_deg: 36.0
