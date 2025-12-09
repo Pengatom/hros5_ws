@@ -1,4 +1,4 @@
-# �️ HR-OS5 Project Structure
+# HR-OS5 Project Structure
 **Workspace:** `~/hros5_ws/`  
 
 This document describes the current package layout of the HR-OS5 workspace and how it maps to the long-term roadmap (teleop → simulation → IK → walking → Nav2).
@@ -14,7 +14,7 @@ Roadmap phase tags:
 
 ---
 
-## � Workspace Layout (current)
+## Workspace Layout (current)
 
 ```text
 hros5_ws/
@@ -113,16 +113,20 @@ text
 Copy code
 hros5_control/
 ├─ config/
+│  ├─ hardware_controllers.yaml
 │  ├─ dynamixel.yaml
 │  ├─ hand_test_controllers.yaml
 │  ├─ hros5_dynamixel_joints_with_limits.yaml
+│  ├─ joint_limits.yaml
 │  ├─ left_arm_position_controller.yaml
 │  ├─ left_leg_controller.yaml
 │  ├─ position_controllers.yaml
 │  ├─ right_arm_position_controller.yaml
 │  ├─ right_leg_controller.yaml
+│  ├─ safety_watchdog.yaml
 │  └─ trajectory_controllers.yaml
 ├─ launch/
+│  ├─ hros5_hardware.launch.py          # canonical onboard bring-up (Issue #63)
 │  ├─ bringup_with_control.launch.py
 │  ├─ launch_leg_trajectory_control.py
 │  ├─ left_leg_control.launch.py
@@ -385,7 +389,7 @@ src/dynamixel/
 └─ dynamixel_interfaces/          (vendor)
 These provide SDKs and example interfaces. Your actual hardware integration is done through hros5_dynamixel_bridge.
 
-� Planned Future Packages (not yet created)
+Planned Future Packages (not yet created)
 These are not in the repo yet but are part of the long-term architecture:
 
 hros5_behaviors – walking, balance, high-level behaviors

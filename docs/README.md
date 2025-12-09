@@ -9,7 +9,15 @@ Foundation → Teleop → Digital Twin → IK → Balance → Walking → Autono
 
 ---
 
-# 1. Architecture Documents
+# 1. Project Structure
+
+High-level map of packages, roadmap phases, and key TODOs for each package.
+
+📄 **[`ProjectStructure.md`](ProjectStructure.md)**
+
+---
+
+# 2. Architecture Documents
 
 These files define the overall structure of the HR-OS5 software stack and where components run.
 
@@ -35,7 +43,7 @@ Used by: bring-up flow, teleop, digital twin, IK, balance, walking.
 
 ---
 
-# 2. Bring-up and Runtime Flow
+# 3. Bring-up and Runtime Flow
 
 ### **Bring-up Flow (upcoming)**  
 Will document:
@@ -49,7 +57,7 @@ Will document:
 
 ---
 
-# 3. Robot Model Structure
+# 4. Robot Model Structure
 
 ### **URDF/Xacro Structure (upcoming)**  
 Will describe:
@@ -63,7 +71,7 @@ Will describe:
 
 ---
 
-# 4. Development Workflow and Conventions
+# 5. Development Workflow and Conventions
 
 (Optional future documents)
 - Contribution guidelines  
@@ -74,22 +82,24 @@ Will describe:
 
 ---
 
-# 5. Directory Structure
+# 6. Directory Structure
 
 Intended documentation layout:
 
 ```text
 docs/
+├── ProjectStructure.md           ← Workspace/package map + roadmap tags
 ├── README.md ← You are here
 ├── architecture/
 │   ├── system_overview.md        ← High-level system architecture
 │   ├── onboard_offboard.md       ← Pi vs base-station node split
 │   ├── bringup_flow.md           ← (future) real/sim startup flow
-│   └── xacro_model_structure.md  ← (future) URDF/Xacro documentation```
+│   └── xacro_model_structure.md  ← (future) URDF/Xacro documentation
+```
 
 ---
 
-# 6. Usage Notes
+# 7. Usage Notes
 
 - Architecture documents are referenced from GitHub Issues across P0–P6.
 - All new packages, nodes, and launches must follow the onboard/offboard split.
