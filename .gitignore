@@ -5,5 +5,5 @@ log/
 .colcon-log/
 
 src/dynamixel/
-scripts/__pycache__/*
+src/hros5_utils/scripts/*
 *.csv

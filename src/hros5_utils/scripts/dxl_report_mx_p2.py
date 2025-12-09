@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 """
-dxl_p2_report.py — Read & report key parameters from a live Protocol 2.0 MX (e.g., MX-28 2.0).
+Read & report key parameters from a live Protocol 2.0 MX (e.g., MX-28 2.0).
 
 - No comparison; just queries the servo and prints values.
 - Shows Min/Max Position Limits in ticks AND degrees.
 - Also prints ID, Baud (decoded), Voltage limits, Temperature limit, Status Return Level,
   Goal/Present Position (ticks + degrees).
-
-Usage:
-  python dxl_p2_report.py --port /dev/dxl --baud 1000000 --id 19
 """
 
-import argparse, time
-from dynamixel_sdk import PortHandler, PacketHandler, COMM_SUCCESS
+import argparse
+import time
+
+from dxl_common import DEFAULT_BAUD, DEFAULT_PORT, import_sdk
 
 # Protocol 2.0 addresses for MX-28 2.0 style layout
 ADDR_ID                = 7    # 1B
@@ -27,6 +26,12 @@ ADDR_STATUS_RETURN_LVL = 68   # 1B
 ADDR_GOAL_POSITION     = 116  # 4B (ticks)
 ADDR_PRESENT_VELOCITY  = 128  # 4B
 ADDR_PRESENT_POSITION  = 132  # 4B (ticks)
+
+sdk = import_sdk()
+COMM_SUCCESS = sdk.COMM_SUCCESS
+PortHandler = sdk.PortHandler
+PacketHandler = sdk.PacketHandler
+
 
 BAUD_TABLE_P2 = {
     0: 9600,
@@ -79,8 +84,8 @@ def read4(pkt, ph, dxl_id, addr, retries=3):
 
 def main():
     ap = argparse.ArgumentParser(description="Report key parameters from a Protocol 2.0 MX servo (e.g., MX-28 2.0).")
-    ap.add_argument("--port", default="/dev/dxl", help="Serial port, e.g., COM5 or /dev/ttyUSB0")
-    ap.add_argument("--baud", type=int, default=1000000, help="Baud (bps), e.g., 1000000")
+    ap.add_argument("--port", default=DEFAULT_PORT, help=f"Serial port, e.g., /dev/ttyUSB0 (default: {DEFAULT_PORT})")
+    ap.add_argument("--baud", type=int, default=DEFAULT_BAUD, help=f"Baud (bps), e.g., 1000000 (default: {DEFAULT_BAUD})")
     ap.add_argument("--id", type=int, required=True, help="Dynamixel ID")
     args = ap.parse_args()
 
@@ -105,7 +110,7 @@ def main():
     presp = read4(pkt, ph, args.id, ADDR_PRESENT_POSITION)
 
     # Print report
-    print("=== MX P2 Parameter Report ===\n")
+    print("=== MX-28 P2 Parameter Report ===\n")
     print(f"{'ID':24} {rid}")
     print(f"{'Baud Rate (bps)':24} {bps}  (raw={braw})")
     print(f"{'Min Voltage (V)':24} {None if vmin is None else vmin/10.0}")
