@@ -4,11 +4,13 @@
 
 	<!-- Argument with fallback -->
 	<xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
+	<xacro:arg name="visual_mesh_ext" default="stl"/>
 	<xacro:arg name="scale" default="0.1"/>
 
 	<!-- XACRO PROPERTIES -->
 	<xacro:property name="PI" value="3.14159265359" />
 	<xacro:property name="PI_2" value="1.57079632679" />
+	<xacro:property name="visual_mesh_ext" value="$(arg visual_mesh_ext)" />
 	<xacro:property name="scale" value="$(arg scale)" />
 
  <!-- Include shared geometry macros -->

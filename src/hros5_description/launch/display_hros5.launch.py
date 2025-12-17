@@ -1,6 +1,6 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, Command
+from launch.substitutions import LaunchConfiguration, Command, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
@@ -12,20 +12,22 @@ def generate_launch_description():
     pkg_share = get_package_share_directory('hros5_description')
 
     # Launch arguments
-    meshes_xacro = LaunchConfiguration('meshes_xacro')
+    use_dae_meshes = LaunchConfiguration('use_dae_meshes')
     use_gui = 'false' #LaunchConfiguration('gui') # fix this to use joint_state_publisher_gui
 
-    default_meshes_path = os.path.join(pkg_share, 'urdf', 'hros5_visuals_collisions_endoskeleton.xacro')
+    meshes_xacro_file = os.path.join(pkg_share, 'urdf', 'hros5_visuals_collisions_endoskeleton.xacro')
     xacro_file = os.path.join(pkg_share, 'urdf', 'hros5.xacro')
     rviz_config_file = os.path.join(pkg_share, 'rviz', 'hros5.rviz')
+    visual_mesh_ext = PythonExpression([
+        "'dae' if '", use_dae_meshes, "' == 'true' else 'stl'"
+    ])
 
     return LaunchDescription([
         DeclareLaunchArgument(
-            'meshes_xacro',
-            default_value=default_meshes_path,
-            description='Path to mesh xacro file'
+            'use_dae_meshes',
+            default_value='true',
+            description='Use DAE visuals in RViz (falls back to STL if set false)'
         ),
-
         DeclareLaunchArgument(
             'gui',
             default_value='true',
@@ -41,7 +43,8 @@ def generate_launch_description():
                 'robot_description': ParameterValue(
                     Command([
                         'xacro ', xacro_file,
-                        ' meshes_xacro_filename:=', meshes_xacro
+                        ' meshes_xacro_filename:=', meshes_xacro_file,
+                        ' visual_mesh_ext:=', visual_mesh_ext
                     ]),
                     value_type=str
                 )
@@ -72,4 +75,3 @@ def generate_launch_description():
             arguments=['-d', rviz_config_file]
         )
     ])
-

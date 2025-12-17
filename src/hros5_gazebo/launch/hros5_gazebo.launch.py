@@ -14,10 +14,8 @@ def generate_launch_description():
     description_share = get_package_share_directory('hros5_description')
 
     default_world = os.path.join(pkg_share, 'worlds', 'empty.world')
-    dae_meshes = os.path.join(
+    meshes_xacro_file = os.path.join(
         description_share, 'urdf', 'hros5_visuals_collisions_endoskeleton.xacro')
-    stl_meshes = os.path.join(
-        description_share, 'urdf', 'hros5_visuals_collisions_endoskeleton_stl.xacro')
     xacro_file = os.path.join(pkg_share, 'urdf', 'hros5_gazebo.xacro')
     controllers_file = os.path.join(pkg_share, 'config', 'hros5_controllers.yaml')
 
@@ -26,7 +24,6 @@ def generate_launch_description():
     robot_name = LaunchConfiguration('robot_name')
     controller_config = LaunchConfiguration('controller_config')
     use_dae_meshes = LaunchConfiguration('use_dae_meshes')
-    meshes_xacro = LaunchConfiguration('meshes_xacro')
     controller_manager = LaunchConfiguration('controller_manager')
     spawn_x = LaunchConfiguration('spawn_x')
     spawn_y = LaunchConfiguration('spawn_y')
@@ -35,12 +32,16 @@ def generate_launch_description():
     spawn_pitch = LaunchConfiguration('spawn_pitch')
     spawn_yaw = LaunchConfiguration('spawn_yaw')
     gui_config = LaunchConfiguration('gui_config')
+    visual_mesh_ext = PythonExpression([
+        "'dae' if '", use_dae_meshes, "' == 'true' else 'stl'"
+    ])
 
     robot_description = ParameterValue(
         Command([
             'xacro ', xacro_file,
             ' controller_config:=', controller_config,
-            ' meshes_xacro_filename:=', meshes_xacro
+            ' meshes_xacro_filename:=', meshes_xacro_file,
+            ' visual_mesh_ext:=', visual_mesh_ext
         ]),
         value_type=str
     )
@@ -124,13 +125,6 @@ def generate_launch_description():
             'use_dae_meshes',
             default_value='false',
             description='Use DAE visuals (better in RViz, can crash Gazebo if meshes are incompatible)'),
-        DeclareLaunchArgument(
-            'meshes_xacro',
-            default_value=PythonExpression([
-                "'", dae_meshes, "' if '", use_dae_meshes,
-                "' == 'true' else '", stl_meshes, "'"
-            ]),
-            description='Mesh bundle xacro used when building the robot_description'),
         DeclareLaunchArgument(
             'spawn_x',
             default_value='0.0',
