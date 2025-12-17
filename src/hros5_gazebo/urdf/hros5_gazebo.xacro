@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<robot name="hros5_gazebo" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Full HR-OS5 model for Gazebo Harmonic with ros2_control simulation hardware -->
+
+  <!-- Allow overriding the mesh bundle used for visuals/collisions -->
+  <xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
+  <xacro:arg name="model_scale" default="1.0"/>
+  <xacro:arg name="controller_config" default="$(find hros5_gazebo)/config/hros5_controllers.yaml"/>
+
+  <!-- Reuse the existing robot assembly; override scale for sim if desired -->
+  <!-- Base meshes expect 0.1 scale; allow scaling relative to that -->
+  <xacro:property name="scale" value="$(eval 0.1 * model_scale)"/>
+  <xacro:include filename="$(find hros5_description)/urdf/robot/robot.xacro"/>
+
+  <!-- Bind Gazebo ros2_control to the simulated joints -->
+  <ros2_control name="Hros5GazeboSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <joint name="HeadYaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="HeadPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="LShoulderPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LShoulderRoll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LElbowPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RShoulderPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RShoulderRoll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RElbowPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="LHipYaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LHipRoll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LHipPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LKneePitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LAnklePitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LAnkleRoll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="RHipYaw">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RHipRoll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RHipPitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RKneePitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RAnklePitch">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RAnkleRoll">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="LWrist">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="LGrip">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RWrist">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="RGrip">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- Load the Gazebo ros2_control system plugin with this controller file -->
+  <gazebo>
+    <!-- Plugin class name must match what's exported from libgz_ros2_control-system.so -->
+    <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
+      <parameters>$(arg controller_config)</parameters>
+    </plugin>
+  </gazebo>
+</robot>

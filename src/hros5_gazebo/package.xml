@@ -9,8 +9,12 @@
   <depend>gazebo_ros</depend>
   <depend>hros5_description</depend>
   <depend>hros5_control</depend>
+  <depend>controller_manager</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>xacro</depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>
 </package>
-

@@ -2,13 +2,14 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 <!-- Note: This file is included by hros5.xacro and is not intended as a standalone entry point -->
 
-  <!-- Argument with fallback -->
-  <xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
+	<!-- Argument with fallback -->
+	<xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
+	<xacro:arg name="scale" default="0.1"/>
 
 	<!-- XACRO PROPERTIES -->
 	<xacro:property name="PI" value="3.14159265359" />
 	<xacro:property name="PI_2" value="1.57079632679" />
-	<xacro:property name="scale" value="0.1" />
+	<xacro:property name="scale" value="$(arg scale)" />
 
  <!-- Include shared geometry macros -->
 	<xacro:include filename="$(arg meshes_xacro_filename)" />
