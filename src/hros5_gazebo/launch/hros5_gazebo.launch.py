@@ -3,6 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory, get_package_prefix
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, SetEnvironmentVariable, TimerAction
+from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
@@ -33,15 +34,13 @@ def generate_launch_description():
     spawn_roll = LaunchConfiguration('spawn_roll')
     spawn_pitch = LaunchConfiguration('spawn_pitch')
     spawn_yaw = LaunchConfiguration('spawn_yaw')
-    model_scale = LaunchConfiguration('model_scale')
     gui_config = LaunchConfiguration('gui_config')
 
     robot_description = ParameterValue(
         Command([
             'xacro ', xacro_file,
             ' controller_config:=', controller_config,
-            ' meshes_xacro_filename:=', meshes_xacro,
-            ' model_scale:=', model_scale
+            ' meshes_xacro_filename:=', meshes_xacro
         ]),
         value_type=str
     )
@@ -157,13 +156,9 @@ def generate_launch_description():
             default_value='3.1416',
             description='Initial yaw (radians)'),
         DeclareLaunchArgument(
-            'model_scale',
-            default_value='1.0',
-            description='Scaling factor applied to meshes (1.0 for full size)'),
-        DeclareLaunchArgument(
             'gui_config',
-            default_value=[os.path.expanduser('~/.gz/sim/gui.config')],
-            description='Path to a saved Gazebo GUI config to enforce view/zoom'),
+            default_value='',
+            description='Optional path to a saved Gazebo GUI config to enforce view/zoom'),
 
         SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', resource_path),
         SetEnvironmentVariable('GZ_RESOURCE_PATH', resource_path),
@@ -171,9 +166,19 @@ def generate_launch_description():
         SetEnvironmentVariable('GZ_SIM_SYSTEM_PLUGIN_PATH', plugin_path),
         SetEnvironmentVariable('GZ_SYSTEM_PLUGIN_PATH', plugin_path),
         SetEnvironmentVariable('IGN_GAZEBO_SYSTEM_PLUGIN_PATH', plugin_path),
-        SetEnvironmentVariable('GZ_GUI_CONFIG_PATH', gui_config),
+        SetEnvironmentVariable(
+            'GZ_GUI_CONFIG_PATH',
+            gui_config,
+            condition=IfCondition(PythonExpression(["'", gui_config, "' != ''"]))
+        ),
 
         ExecuteProcess(
+            condition=IfCondition(PythonExpression(["'", gui_config, "' != ''"])),
+            cmd=['gz', 'sim', '-r', '--gui-config', gui_config, world],
+            output='screen'
+        ),
+        ExecuteProcess(
+            condition=UnlessCondition(PythonExpression(["'", gui_config, "' != ''"])),
             cmd=['gz', 'sim', '-r', world],
             output='screen'
         ),

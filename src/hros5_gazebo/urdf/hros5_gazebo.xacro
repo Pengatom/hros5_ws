@@ -4,12 +4,8 @@
 
   <!-- Allow overriding the mesh bundle used for visuals/collisions -->
   <xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
-  <xacro:arg name="model_scale" default="1.0"/>
   <xacro:arg name="controller_config" default="$(find hros5_gazebo)/config/hros5_controllers.yaml"/>
 
-  <!-- Reuse the existing robot assembly; override scale for sim if desired -->
-  <!-- Base meshes expect 0.1 scale; allow scaling relative to that -->
-  <xacro:property name="scale" value="$(eval 0.1 * model_scale)"/>
   <xacro:include filename="$(find hros5_description)/urdf/robot/robot.xacro"/>
 
   <!-- Bind Gazebo ros2_control to the simulated joints -->
