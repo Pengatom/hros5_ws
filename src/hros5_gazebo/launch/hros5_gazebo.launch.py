@@ -89,7 +89,7 @@ def generate_launch_description():
         output='screen'
     )
 
-    spawn_trajectory_controller = Node(
+    spawn_whole_body_controller = Node(
         package='controller_manager',
         executable='spawner',
         arguments=[
@@ -200,5 +200,5 @@ def generate_launch_description():
 
         TimerAction(period=2.0, actions=[spawn_entity]),
         TimerAction(period=4.0, actions=[spawn_joint_state_broadcaster]),
-        TimerAction(period=4.5, actions=[spawn_trajectory_controller]),
+        TimerAction(period=4.5, actions=[spawn_whole_body_controller]),
     ])
