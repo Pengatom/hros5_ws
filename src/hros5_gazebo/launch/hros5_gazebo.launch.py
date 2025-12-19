@@ -20,6 +20,7 @@ def generate_launch_description():
     controllers_file = os.path.join(pkg_share, 'config', 'hros5_controllers.yaml')
 
     world = LaunchConfiguration('world')
+    world_name = LaunchConfiguration('world_name')
     use_sim_time = LaunchConfiguration('use_sim_time')
     robot_name = LaunchConfiguration('robot_name')
     controller_config = LaunchConfiguration('controller_config')
@@ -32,6 +33,9 @@ def generate_launch_description():
     spawn_pitch = LaunchConfiguration('spawn_pitch')
     spawn_yaw = LaunchConfiguration('spawn_yaw')
     gui_config = LaunchConfiguration('gui_config')
+    launch_rqt_gui = LaunchConfiguration('launch_rqt_gui')
+    reset_to_stand = LaunchConfiguration('reset_to_stand')
+    start_reset_service = LaunchConfiguration('start_reset_service')
     visual_mesh_ext = PythonExpression([
         "'dae' if '", use_dae_meshes, "' == 'true' else 'stl'"
     ])
@@ -106,6 +110,10 @@ def generate_launch_description():
             default_value=default_world,
             description='Path to world SDF file'),
         DeclareLaunchArgument(
+            'world_name',
+            default_value='empty',
+            description='World name for reset services'),
+        DeclareLaunchArgument(
             'use_sim_time',
             default_value='true',
             description='Use simulation clock'),
@@ -153,6 +161,18 @@ def generate_launch_description():
             'gui_config',
             default_value='',
             description='Optional path to a saved Gazebo GUI config to enforce view/zoom'),
+        DeclareLaunchArgument(
+            'launch_rqt_gui',
+            default_value='false',
+            description='Launch rqt_joint_trajectory_controller for interactive joint sliders'),
+        DeclareLaunchArgument(
+            'reset_to_stand',
+            default_value='false',
+            description='Send a zero/standing JointTrajectory once after startup'),
+        DeclareLaunchArgument(
+            'start_reset_service',
+            default_value='true',
+            description='Start a /reset_world Trigger service that calls Gazebo reset'),
 
         SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', resource_path),
         SetEnvironmentVariable('GZ_RESOURCE_PATH', resource_path),
@@ -202,4 +222,49 @@ def generate_launch_description():
         TimerAction(period=2.0, actions=[spawn_entity]),
         TimerAction(period=4.0, actions=[spawn_joint_state_broadcaster]),
         TimerAction(period=4.5, actions=[spawn_whole_body_controller]),
+
+        TimerAction(
+            period=6.0,
+            actions=[
+                Node(
+                    condition=IfCondition(launch_rqt_gui),
+                    package='rqt_gui',
+                    executable='rqt_gui',
+                    name='rqt_joint_gui',
+                    output='screen',
+                    arguments=['--standalone', 'rqt_joint_trajectory_controller']
+                ),
+                Node(
+                    condition=IfCondition(launch_rqt_gui),
+                    package='rqt_gui',
+                    executable='rqt_gui',
+                    name='rqt_service_gui',
+                    output='screen',
+                    arguments=['--standalone', 'rqt_service_caller']
+                ),
+            ]
+        ),
+        Node(
+            condition=IfCondition(start_reset_service),
+            package='hros5_gazebo',
+            executable='reset_world_service.py',
+            name='reset_world_service',
+            parameters=[{'world_name': world_name}],
+            output='screen'
+        ),
+        TimerAction(
+            period=6.0,
+            actions=[
+                ExecuteProcess(
+                    condition=IfCondition(reset_to_stand),
+                    cmd=[
+                        'ros2', 'topic', 'pub', '--once',
+                        '/whole_body_controller/joint_trajectory',
+                        'trajectory_msgs/msg/JointTrajectory',
+                        "{header: {stamp: {sec: 0, nanosec: 0}, frame_id: ''}, joint_names: [HeadYaw, HeadPitch, LShoulderPitch, LShoulderRoll, LElbowPitch, RShoulderPitch, RShoulderRoll, RElbowPitch, LHipYaw, LHipRoll, LHipPitch, LKneePitch, LAnklePitch, LAnkleRoll, RHipYaw, RHipRoll, RHipPitch, RKneePitch, RAnklePitch, RAnkleRoll, LWrist, LGrip, RWrist, RGrip], points: [{positions: [0,0,0,0,0, 0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0], velocities: [], accelerations: [], effort: [], time_from_start: {sec: 2, nanosec: 0}}]}"
+                    ],
+                    output='screen'
+                )
+            ]
+        ),
     ])
