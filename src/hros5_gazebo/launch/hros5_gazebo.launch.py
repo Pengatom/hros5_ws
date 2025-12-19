@@ -183,7 +183,8 @@ def generate_launch_description():
             executable='parameter_bridge',
             name='gz_clock_bridge',
             arguments=[
-                '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
+                '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
+                '/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'
             ],
             output='screen'
         ),
