@@ -1,13 +1,13 @@
 moveit_setup_assistant_config:
   urdf:
-    package: hros5_description
-    relative_path: urdf/hands/left_hand_test.xacro
+    package: hros5_moveit_config
+    relative_path: config/hros5.urdf.xacro
   srdf:
-    relative_path: config/hands_test.srdf
+    relative_path: config/hros5.srdf
   package_settings:
     author_name: Pengatom
     author_email: ""
-    generated_timestamp: 1752411339
+    generated_timestamp: 1710240000
   control_xacro:
     command:
       - position

@@ -1,1 +1,29 @@
-{}
+left_arm:
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_attempts: 3
+  kinematics_solver_search_resolution: !!float 0.005
+  kinematics_solver_timeout: !!float 0.1
+
+right_arm:
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_attempts: 3
+  kinematics_solver_search_resolution: !!float 0.005
+  kinematics_solver_timeout: !!float 0.1
+
+left_leg:
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_attempts: 3
+  kinematics_solver_search_resolution: !!float 0.005
+  kinematics_solver_timeout: !!float 0.1
+
+right_leg:
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_attempts: 3
+  kinematics_solver_search_resolution: !!float 0.005
+  kinematics_solver_timeout: !!float 0.1
+
+head:
+  kinematics_solver: kdl_kinematics_plugin/KDLKinematicsPlugin
+  kinematics_solver_attempts: 3
+  kinematics_solver_search_resolution: !!float 0.005
+  kinematics_solver_timeout: !!float 0.1

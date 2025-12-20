@@ -3,18 +3,40 @@ controller_manager:
   ros__parameters:
     update_rate: 100  # Hz
 
-    hand_controller:
+    hros5_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-hand_controller:
+hros5_controller:
   ros__parameters:
     joints:
+      - HeadYaw
+      - HeadPitch
+      - LShoulderPitch
+      - LShoulderRoll
+      - LElbowPitch
       - LWrist
       - LGrip
+      - RShoulderPitch
+      - RShoulderRoll
+      - RElbowPitch
+      - RWrist
+      - RGrip
+      - LHipYaw
+      - LHipRoll
+      - LHipPitch
+      - LKneePitch
+      - LAnklePitch
+      - LAnkleRoll
+      - RHipYaw
+      - RHipRoll
+      - RHipPitch
+      - RKneePitch
+      - RAnklePitch
+      - RAnkleRoll
     command_interfaces:
       - position
     state_interfaces:

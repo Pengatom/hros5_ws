@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This does not replace URDF, and is not an extension of URDF.
+    This is a format for representing semantic information about the robot structure.
+    A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
+-->
+<robot name="hros5">
+  <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
+  <group name="left_arm">
+    <chain base_link="base_link" tip_link="LGripper"/>
+  </group>
+  <group name="right_arm">
+    <chain base_link="base_link" tip_link="RGripper"/>
+  </group>
+  <group name="left_leg">
+    <chain base_link="base_link" tip_link="LFoot"/>
+  </group>
+  <group name="right_leg">
+    <chain base_link="base_link" tip_link="RFoot"/>
+  </group>
+  <group name="head">
+    <chain base_link="base_link" tip_link="UpperHeadBase"/>
+  </group>
+
+  <!--GROUP STATES: Purpose: Define a named state for a particular group for easy use in planning and execution -->
+  <group_state name="home" group="left_arm">
+    <joint name="LShoulderPitch" value="0" />
+    <joint name="LShoulderRoll" value="0" />
+    <joint name="LElbowPitch" value="0" />
+    <joint name="LWrist" value="0" />
+    <joint name="LGrip" value="0" />
+  </group_state>
+  <group_state name="home" group="right_arm">
+    <joint name="RShoulderPitch" value="0" />
+    <joint name="RShoulderRoll" value="0" />
+    <joint name="RElbowPitch" value="0" />
+    <joint name="RWrist" value="0" />
+    <joint name="RGrip" value="0" />
+  </group_state>
+  <group_state name="home" group="left_leg">
+    <joint name="LHipYaw" value="0" />
+    <joint name="LHipRoll" value="0" />
+    <joint name="LHipPitch" value="0" />
+    <joint name="LKneePitch" value="0" />
+    <joint name="LAnklePitch" value="0" />
+    <joint name="LAnkleRoll" value="0" />
+  </group_state>
+  <group_state name="home" group="right_leg">
+    <joint name="RHipYaw" value="0" />
+    <joint name="RHipRoll" value="0" />
+    <joint name="RHipPitch" value="0" />
+    <joint name="RKneePitch" value="0" />
+    <joint name="RAnklePitch" value="0" />
+    <joint name="RAnkleRoll" value="0" />
+  </group_state>
+  <group_state name="home" group="head">
+    <joint name="HeadYaw" value="0" />
+    <joint name="HeadPitch" value="0" />
+  </group_state>
+
+  <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+</robot>

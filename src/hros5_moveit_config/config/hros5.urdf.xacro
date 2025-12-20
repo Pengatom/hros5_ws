@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hros5">
+  <xacro:arg name="initial_positions_file" default="$(find hros5_moveit_config)/config/initial_positions.yaml" />
+
+  <!-- Use the geometry-only xacro and add a fake ros2_control block for MoveIt -->
+  <xacro:include filename="$(find hros5_description)/urdf/robot/robot.xacro" />
+  <xacro:include filename="$(find hros5_moveit_config)/config/hros5.ros2_control.xacro" />
+
+  <xacro:hros5_ros2_control
+    name="FakeSystem"
+    initial_positions_file="$(arg initial_positions_file)" />
+</robot>

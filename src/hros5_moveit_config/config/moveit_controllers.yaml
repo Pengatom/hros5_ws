@@ -4,10 +4,32 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 
 moveit_simple_controller_manager:
   controller_names:
-    - hand_controller
+    - hros5_controller
 
-  hand_controller:
+  hros5_controller:
     type: FollowJointTrajectory
     joints:
+      - HeadYaw
+      - HeadPitch
+      - LShoulderPitch
+      - LShoulderRoll
+      - LElbowPitch
       - LWrist
       - LGrip
+      - RShoulderPitch
+      - RShoulderRoll
+      - RElbowPitch
+      - RWrist
+      - RGrip
+      - LHipYaw
+      - LHipRoll
+      - LHipPitch
+      - LKneePitch
+      - LAnklePitch
+      - LAnkleRoll
+      - RHipYaw
+      - RHipRoll
+      - RHipPitch
+      - RKneePitch
+      - RAnklePitch
+      - RAnkleRoll

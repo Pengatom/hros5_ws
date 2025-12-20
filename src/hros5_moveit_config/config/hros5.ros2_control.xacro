@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="hros5_ros2_control" params="name initial_positions_file">
+    <xacro:property name="initial_positions" value="${xacro.load_yaml(initial_positions_file)['initial_positions']}"/>
+
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <plugin>mock_components/GenericSystem</plugin>
+      </hardware>
+
+      <joint name="HeadYaw">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['HeadYaw']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="HeadPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['HeadPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="LShoulderPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LShoulderPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LShoulderRoll">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LShoulderRoll']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LElbowPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LElbowPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LWrist">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LWrist']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LGrip">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LGrip']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="RShoulderPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RShoulderPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RShoulderRoll">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RShoulderRoll']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RElbowPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RElbowPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RWrist">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RWrist']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RGrip">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RGrip']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="LHipYaw">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LHipYaw']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LHipRoll">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LHipRoll']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LHipPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LHipPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LKneePitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LKneePitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LAnklePitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LAnklePitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="LAnkleRoll">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['LAnkleRoll']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="RHipYaw">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RHipYaw']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RHipRoll">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RHipRoll']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RHipPitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RHipPitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RKneePitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RKneePitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RAnklePitch">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RAnklePitch']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+      <joint name="RAnkleRoll">
+        <command_interface name="position"/>
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['RAnkleRoll']}</param>
+        </state_interface>
+        <state_interface name="velocity"/>
+      </joint>
+    </ros2_control>
+  </xacro:macro>
+</robot>

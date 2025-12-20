@@ -1,6 +1,6 @@
 # hros5_moveit_config
 
-MoveIt2 configuration for HR-OS5 (currently the “hands_test” model only).
+MoveIt2 configuration for the full HR-OS5 model.
 
 Includes:
 
@@ -15,9 +15,9 @@ Includes:
 hros5_moveit_config/
 ├── CMakeLists.txt
 ├── config
-│   ├── hands_test.ros2_control.xacro
-│   ├── hands_test.srdf
-│   ├── hands_test.urdf.xacro
+│   ├── hros5.ros2_control.xacro
+│   ├── hros5.srdf
+│   ├── hros5.urdf.xacro
 │   ├── initial_positions.yaml
 │   ├── joint_limits.yaml
 │   ├── kinematics.yaml
@@ -36,5 +36,4 @@ hros5_moveit_config/
 │   └── warehouse_db.launch.py
 └── package.xml
 Status
-Initial MoveIt testbed (P2).
-Will later expand to full-body configuration.
+Initial MoveIt testbed for full-body HR-OS5.
