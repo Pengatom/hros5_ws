@@ -7,4 +7,196 @@ default_acceleration_scaling_factor: 0.1
 
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
-joint_limits: {}
+joint_limits:
+  HeadYaw:
+    has_position_limits: true
+    min_position: -1.22173048
+    max_position: 1.22173048
+    has_velocity_limits: true
+    max_velocity: 5.759586525
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  HeadPitch:
+    has_position_limits: true
+    min_position: -0.25
+    max_position: 0.4
+    has_velocity_limits: true
+    max_velocity: 5.759586525
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  LShoulderPitch:
+    has_position_limits: true
+    min_position: -3.14159265
+    max_position: 3.14159265
+    has_velocity_limits: true
+    max_velocity: 6.597344565
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  LShoulderRoll:
+    has_position_limits: true
+    min_position: -2.35619449
+    max_position: 1.30899694
+    has_velocity_limits: true
+    max_velocity: 6.597344565
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  LElbowPitch:
+    has_position_limits: true
+    min_position: -1.22173048
+    max_position: 1.65806279
+    has_velocity_limits: true
+    max_velocity: 6.597344565
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  LWrist:
+    has_position_limits: true
+    min_position: -3.14
+    max_position: 3.14
+    has_velocity_limits: true
+    max_velocity: 1.0
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  LGrip:
+    has_position_limits: true
+    min_position: -1.0
+    max_position: 0.5
+    has_velocity_limits: true
+    max_velocity: 1.0
+    has_acceleration_limits: true
+    max_acceleration: !!float 5.0
+  RShoulderPitch:
+    has_position_limits: true
+    min_position: -3.14159265
+    max_position: 3.14159265
+    has_velocity_limits: true
+    max_velocity: 6.597344565
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  RShoulderRoll:
+    has_position_limits: true
+    min_position: -1.30899694
+    max_position: 2.35619449
+    has_velocity_limits: true
+    max_velocity: 6.597344565
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  RElbowPitch:
+    has_position_limits: true
+    min_position: -1.65806279
+    max_position: 1.22173048
+    has_velocity_limits: true
+    max_velocity: 6.597344565
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  RWrist:
+    has_position_limits: true
+    min_position: -3.14
+    max_position: 3.14
+    has_velocity_limits: true
+    max_velocity: 1.0
+    has_acceleration_limits: true
+    max_acceleration: !!float 10.0
+  RGrip:
+    has_position_limits: true
+    min_position: -1.0
+    max_position: 0.5
+    has_velocity_limits: true
+    max_velocity: 1.0
+    has_acceleration_limits: true
+    max_acceleration: !!float 5.0
+  LHipYaw:
+    has_position_limits: true
+    min_position: -0.523598776
+    max_position: 0.523598776
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  LHipRoll:
+    has_position_limits: true
+    min_position: -0.785398163
+    max_position: 0.785398163
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  LHipPitch:
+    has_position_limits: true
+    min_position: -1.57079633
+    max_position: 1.57079633
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  LKneePitch:
+    has_position_limits: true
+    min_position: -2.7925268
+    max_position: 2.7925268
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  LAnklePitch:
+    has_position_limits: true
+    min_position: -1.57079633
+    max_position: 1.57079633
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  LAnkleRoll:
+    has_position_limits: true
+    min_position: -0.785398163
+    max_position: 0.785398163
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  RHipYaw:
+    has_position_limits: true
+    min_position: -0.523598776
+    max_position: 0.523598776
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  RHipRoll:
+    has_position_limits: true
+    min_position: -0.785398163
+    max_position: 0.785398163
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  RHipPitch:
+    has_position_limits: true
+    min_position: -1.57079633
+    max_position: 1.57079633
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  RKneePitch:
+    has_position_limits: true
+    min_position: -2.7925268
+    max_position: 2.7925268
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  RAnklePitch:
+    has_position_limits: true
+    min_position: -1.57079633
+    max_position: 1.57079633
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0
+  RAnkleRoll:
+    has_position_limits: true
+    min_position: -0.785398163
+    max_position: 0.785398163
+    has_velocity_limits: true
+    max_velocity: 4.712388975
+    has_acceleration_limits: true
+    max_acceleration: !!float 15.0

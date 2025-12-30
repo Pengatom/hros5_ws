@@ -8,6 +8,8 @@ moveit_simple_controller_manager:
 
   hros5_controller:
     type: FollowJointTrajectory
+    default: true
+    action_ns: follow_joint_trajectory
     joints:
       - HeadYaw
       - HeadPitch
