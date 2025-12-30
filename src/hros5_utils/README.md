@@ -2,6 +2,7 @@
 
 All Dynamixel utilities live in `src/hros5_utils/scripts`. Run any tool with `--help` for arguments.
 
+- `check_joint_limits.py` — Compare hardware (hros5_control), URDF, teleop, and MoveIt joint limits; prints a table and exits non-zero on mismatches.
 - `dxl_scan_bus.py` — Sweep an ID range across baudrates/protocols to see which servos respond.
 - `dxl_ping.py` — Quick ping to verify comms and read the model number for a single ID.
 - `dxl_servo_check.py` — Scan a range of IDs and report model + firmware version.
@@ -13,3 +14,13 @@ All Dynamixel utilities live in `src/hros5_utils/scripts`. Run any tool with `--
 - `dxl_read_positions.py` — Poll present positions for selected IDs or joint names from a YAML config.
 - `dxl_check_position.py` — Watch the present position register for a single servo.
 - `dxl_goal_position.py` — Enable torque, set a goal position, read back the result, and disable torque.
+
+### Joint limit consistency
+
+Run the checker from the workspace root (tweak `--tolerance-deg` if needed):
+
+```
+python3 src/hros5_utils/scripts/check_joint_limits.py --tolerance-deg 0.5
+```
+
+It will print a per-joint summary (hardware vs URDF vs teleop vs MoveIt) and return 1 when any mismatches are found so CI can gate on it.
