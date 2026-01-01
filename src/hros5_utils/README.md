@@ -3,6 +3,7 @@
 All Dynamixel utilities live in `src/hros5_utils/scripts`. Run any tool with `--help` for arguments.
 
 - `check_joint_limits.py` — Compare hardware (hros5_control), URDF, teleop, and MoveIt joint limits; prints a table and exits non-zero on mismatches.
+- `generate_joint_yamls.py` — Generate per-limb joint YAMLs from `hros5_dynamixel_joints_with_limits.yaml`; use `--check` to guard against stale files in CI.
 - `dxl_scan_bus.py` — Sweep an ID range across baudrates/protocols to see which servos respond.
 - `dxl_ping.py` — Quick ping to verify comms and read the model number for a single ID.
 - `dxl_servo_check.py` — Scan a range of IDs and report model + firmware version.
@@ -24,3 +25,17 @@ python3 src/hros5_utils/scripts/check_joint_limits.py --tolerance-deg 0.5
 ```
 
 It will print a per-joint summary (hardware vs URDF vs teleop vs MoveIt) and return 1 when any mismatches are found so CI can gate on it.
+
+### Generate per-limb joint YAMLs
+
+Regenerate `hros5_control/config/joints/*.yaml` (or verify they are current):
+
+```
+# Write fresh files
+python3 src/hros5_utils/scripts/generate_joint_yamls.py
+
+# CI-friendly: exit non-zero if files are stale/missing
+python3 src/hros5_utils/scripts/generate_joint_yamls.py --check
+```
+
+All generated YAMLs include a `DO NOT EDIT` header and are sourced from `hros5_control/config/hros5_dynamixel_joints_with_limits.yaml`.

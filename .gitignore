@@ -6,3 +6,4 @@ log/
 
 src/dynamixel/
 *.csv
+issues_all.json

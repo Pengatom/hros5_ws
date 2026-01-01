@@ -13,13 +13,20 @@ joint limits and controller configuration files.
 - Position and trajectory controller setups
 - Per-limb controller test launch files
 
+Joint limits live in `config/hros5_dynamixel_joints_with_limits.yaml`. Per-limb joint YAMLs under `config/joints/*.yaml` are generated from that source via:
+
+```
+python3 src/hros5_utils/scripts/generate_joint_yamls.py
+```
+
+Use `--check` in CI to ensure they stay in sync. The generated files include a `DO NOT EDIT` header.
+
 ## Directory structure
 
 ```text
 hros5_control/
 ├── CMakeLists.txt
 ├── config
-│   ├── dynamixel.yaml
 │   ├── hand_test_controllers.yaml
 │   ├── hros5_dynamixel_joints_with_limits.yaml
 │   ├── left_arm_position_controller.yaml
