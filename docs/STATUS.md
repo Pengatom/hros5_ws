@@ -269,6 +269,10 @@ ros2 launch hros5_teleop ps4_teleop.launch.py               # against the real D
 - **Started in the GUI** on skywalker with the real controller.
 - **Hard-limit finding:** the servo limits allow only a shallow squat (hip 16°, knee 32°, limited by the right ankle's −18° servo limit)
   and only 3° of sideways hip shift (right hip roll servo max +5°). Check whether these EEPROM limits are the true mechanical limits before walking work (#68).
+- **Wrist fix (#69, wrists only):** URDF wrist limits are now ±2.30 rad (servo hard limit, was ±3.14) and wrist velocity is 6.597 rad/s (was 1.0).
+  With 1 rad/s the sim wrist overshot into its limit and stuck there in hands mode.
+  `sim_dxl_bridge` also keeps every command 1° inside the URDF limits and logs the joints whose URDF range is narrower than the servo range (#66).
+  Confirmed with the real controller in the GUI: the wrists now move freely in both directions.
 - **Still open:**
   - `ps4_teleop_node` hasn't been run on the real robot yet.
   - Hardware still needs the single bus owner (§6 step 3) and the safety items (step 5).
