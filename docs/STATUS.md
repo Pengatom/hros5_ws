@@ -122,7 +122,7 @@ source install/setup.bash && python3 src/hros5_utils/scripts/check_joint_limits.
 
 **Now:** the checker passes ("All limits are inside the servo hard limits (minus 2 deg)"). Changed:
 - **URDF** (`legs.xacro`, `arms.xacro`, `hands.xacro`, `left_hand.xacro`): hip yaw ±19.8°, hip roll −2.9..+45° (L) / −45..+2.9° (R),
-  hip pitch −88..+31.8°, knee −18..+125.6°, ankle pitch −16..+88°, shoulder pitch ±177.9°, wrist ±129.8°,
+  hip pitch −88..+31.8°, knee −18..+125.6°, ankle pitch −88..+16° (toe up −88°, see below), shoulder pitch ±177.9°, wrist ±129.8°,
   grip −30.7..+28.6° (L) / −33.9..+28.6° (R). Leg pitch joints use one range that is inside both the left and the right servo.
 - **MoveIt `joint_limits.yaml`:** same as the URDF.
 - **Static `hros5_description/urdf/hros5.urdf`** (used by `hros5_bringup`'s rviz/gazebo launches): only its `<limit>` values were updated.
@@ -289,13 +289,18 @@ ros2 launch hros5_teleop ps4_teleop.launch.py               # against the real D
   - no motion without the dead-man,
   - head yaw/pitch in the expected directions,
   - Share/Options mode switching,
-  - a symmetric squat that stops as a group at the ankle limit,
+  - a symmetric squat (now down to hip −62.8° / knee +124.6° / ankle −62.8°, stopped by the knee limit, robot stays level),
   - a sideways hip shift,
   - position held on joy timeout,
   - Triangle returns joints to 0.
 - **Started in the GUI** on skywalker with the real controller.
-- **Hard-limit finding:** the servo limits allow only a shallow squat (hip 16°, knee 32°, limited by the right ankle's −18° servo limit)
-  and only 3° of sideways hip shift (right hip roll servo max +5°). Check whether these EEPROM limits are the true mechanical limits before walking work (#68).
+- **Ankle direction fix (2026-11-20):** the robot owner confirmed the ankles tilt the toe **up** about 90° but only a little down (wiring).
+  The ankle pitch signs in `joint_directions.yaml` were reversed (they assumed the small side was toe up), so they're flipped and marked `confirmed`.
+  The URDF ankle range is now −88° (toe up) .. +16° (toe down).
+  The squat used to stop at hip 16° / knee 32° because of this. It now goes down to the knee limit, with the base lowered from 0.39 to 0.25 m, level.
+- **Home fix:** Triangle now moves all joints of the mode in sync, so they arrive at 0 together.
+  Before, hips and ankles finished long before the knees, and the robot fell over when standing up from a deep squat.
+- Sideways hip shift is still only ±3°, because the hip roll servos allow only ~5° inwards. Check whether that's the real mechanical limit (#68).
 - **Wrist fix (#69, wrists only):** URDF wrist limits are now ±2.30 rad (servo hard limit, was ±3.14) and wrist velocity is 6.597 rad/s (was 1.0).
   With 1 rad/s the sim wrist overshot into its limit and stuck there in hands mode.
   `sim_dxl_bridge` also keeps every command 1° inside the URDF limits and logs the joints whose URDF range is narrower than the servo range (#66).

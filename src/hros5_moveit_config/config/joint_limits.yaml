@@ -140,8 +140,8 @@ joint_limits:
     max_acceleration: !!float 15.0
   LAnklePitch:
     has_position_limits: true
-    min_position: -0.2796
-    max_position: 1.5359
+    min_position: -1.5359
+    max_position: 0.2793
     has_velocity_limits: true
     max_velocity: 4.712388975
     has_acceleration_limits: true
@@ -188,8 +188,8 @@ joint_limits:
     max_acceleration: !!float 15.0
   RAnklePitch:
     has_position_limits: true
-    min_position: -0.2796
-    max_position: 1.5359
+    min_position: -1.5359
+    max_position: 0.2793
     has_velocity_limits: true
     max_velocity: 4.712388975
     has_acceleration_limits: true

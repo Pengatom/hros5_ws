@@ -43,7 +43,8 @@ One `joy_node` and one node drive all limbs through modes (#27/#28). Configurati
   Motion is in URDF terms, so the same stick motion is the same physical motion on the left and right side, even though the servos are mounted mirrored.
 - **Starting position:** every joint starts at 0°, like the DXL nodes.
 - **Hard limits:** joints driven by the same stick move as a group. If one would pass its hard limit, the whole group stops.
-  This keeps the feet flat in a squat, which currently stops at about 16° hip / 32° knee because of the ankle servo limits.
+  This keeps the feet flat in a squat, which goes down to about hip 63° / knee 125° (the knee limit).
+- **Home (Triangle):** all joints of the mode move in sync and arrive at 0 together, so the robot can stand up from a deep squat.
 - **Topics:** publishes `/hros5/<limb>/target_angles_deg` for head, arms and legs (same layouts as below) and the current mode on `/hros5/teleop/mode`.
   Wrist and grip go out on the arm topics only, because the hand topics would give those servos a second owner on the bus.
 

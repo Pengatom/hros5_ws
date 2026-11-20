@@ -290,14 +290,25 @@ private:
       const double speed = speeds_[mode.speed];
 
       if (button("home")) {
-        // Move every joint of this mode towards 0 deg (URDF zero = servo 0 deg).
+        // Move every joint of this mode towards 0 deg (URDF zero = servo 0 deg), synchronised so
+        // they all arrive together: the joint furthest away moves at the home speed, the others
+        // proportionally slower. Otherwise e.g. the hips and ankles of a deep squat reach 0 long
+        // before the knees and the robot tips over.
         std::set<std::string> joints;
         for (const auto& b : mode.bindings) joints.insert(b.joint);
         if (!mode.grip.empty()) joints.insert(mode.grip);
-        const double step = speeds_["home"] * dt;
+        double max_dist = 0.0;
         for (const auto& j : joints) {
           const double goal = std::clamp(0.0, limits_[j].min_deg, limits_[j].max_deg);
-          target_[j] += std::clamp(goal - target_[j], -step, step);
+          max_dist = std::max(max_dist, std::fabs(goal - target_[j]));
+        }
+        const double step = speeds_["home"] * dt;
+        if (max_dist > 1e-6) {
+          const double fraction = std::min(1.0, step / max_dist);
+          for (const auto& j : joints) {
+            const double goal = std::clamp(0.0, limits_[j].min_deg, limits_[j].max_deg);
+            target_[j] += (goal - target_[j]) * fraction;
+          }
         }
       } else {
         // Group the bindings by axis so coupled joints (e.g. a squat) stop together at a limit.
