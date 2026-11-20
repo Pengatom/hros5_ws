@@ -330,6 +330,8 @@ for all software (§4), so they have to be fixed on the robot first.
      the gap by ~5 mm per degree. They touch at ~6.6°, so 5° is a one-leg foot-collision guard.
    - **Why it matters:** a sideways hip shift (weight shift, which walking needs) tilts *both* legs the same way, so the feet stay apart.
      The fixed per-servo limit can't tell the two cases apart, and the shift stops at ~3° in "legs" mode.
+   - **Confirmed on the robot (2026-11-20):** the hips can roll inward a lot more than 5°, *if the other leg moves out of the way too*.
+     So the real limit is foot-to-foot collision, not the hip joint.
    - **To do:**
      - Measure the real mechanical inward stop of each hip roll.
      - If it's larger, raise the EEPROM limits to it (minus margin).
