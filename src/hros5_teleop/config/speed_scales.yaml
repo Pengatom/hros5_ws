@@ -1,0 +1,14 @@
+# Speed scales for ps4_teleop_node (#28), in degrees per second at full stick deflection.
+# The DXL nodes (and sim_dxl_bridge) additionally limit every joint to 2 deg per 20 ms.
+speed_scales:
+  head: 90.0
+  arm: 60.0
+  hand: 90.0
+  leg: 30.0
+  grip: 60.0          # R1/R2 in arm modes
+  home: 30.0          # Triangle: speed towards 0 deg
+  stick_exponent: 2.0 # 1 = linear; >1 gives finer control near the centre
+
+# Targets stay this far inside the absolute servo limits
+# (hros5_control/config/hros5_dynamixel_joints_with_limits.yaml).
+limit_guard_deg: 2.0

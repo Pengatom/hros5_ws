@@ -149,6 +149,7 @@ Recommended order, smallest working step first:
    The longer-term alternative is a ros2_control hardware plugin (#60), which is bigger.
 4. **One teleop node with modes** (#27/#28). Use one `joy_node` and one `ps4_mapping.yaml`. Select the mode with buttons (head / left arm / right arm / legs).
    Add a dead-man button that must be held for any motion.
+   *Done 2026-11-20: `ps4_teleop_node`, verified in Gazebo (§9). Not yet run on hardware.*
 5. **Safety basics.** Read present positions at startup and use them as the first target (no jump). Add a command timeout that holds or reduces torque,
    a torque-off button, and leg mode disabled unless explicitly enabled (robot on a stand).
 6. **One launch file** (#30/#60). Onboard: bus node + `robot_state_publisher` (+ `joy_node` if the controller pairs with the Pi).
@@ -191,7 +192,7 @@ Add `headless:=true` to run only the Gazebo server, without the GUI (for SSH ses
 - A symmetric squat sent through the PS4/servo topic path (URDF hip −15°, knee +30°, ankle −15° on both legs) lowers the base by 1 cm with roll and pitch at 0.00°.
 - **Leg directions:** in the URDF, left and right pitch joints use the **same** axis, so +knee bends both knees the natural way (shin back),
   and −hip swings the leg forward. The **servos** are mounted mirrored: the left knee servo bends towards −, the right towards +.
-  The servo-to-URDF signs are in `hros5_gazebo/config/sim_joint_map.yaml`.
+  The servo-to-URDF signs are in `hros5_control/config/joint_directions.yaml`.
   (An earlier version of this file wrongly said the URDF legs were mirrored.)
 - On a real PC (12 cores, RTX 2060 SUPER on the nouveau driver) the same tests pass at a real-time factor of about 0.7–0.9, and the GUI runs.
   A VMware VM shows only a gray 3D view, because its virtual GPU can't run Gazebo's renderer.
@@ -226,7 +227,7 @@ The launch starts Gazebo, a single `joy_node`, the unchanged `hros5_teleop` node
 - It listens on the same `/hros5/<limb>/target_angles_deg` topics (servo degrees, 0° = tick 2048), with the same message layouts.
 - It clamps to the absolute servo limits in `hros5_dynamixel_joints_with_limits.yaml` and moves at most 2° per 20 ms (grip 3°), like the real nodes.
   Like them, it starts every joint at 0°.
-- It converts to URDF radians with the per-joint sign in `hros5_gazebo/config/sim_joint_map.yaml` and streams all 24 joints to `whole_body_controller`.
+- It converts to URDF radians with the per-joint sign in `hros5_control/config/joint_directions.yaml` and streams all 24 joints to `whole_body_controller`.
 - The echo topics (`/hros5/<limb>/echo_positions`) log the simulated servo angle and ticks.
 
 Leg teleop starts with the robot on a stand (`fixed_base:=auto`), because moving one leg tips the free-standing robot over.
@@ -240,8 +241,34 @@ Leg teleop starts with the robot on a stand (`fixed_base:=auto`), because moving
 - **Not yet tried with the controller:** arms, legs and hands.
 
 **Known gaps:**
-- **Joint directions:** the servo-to-URDF signs marked low/medium confidence in `sim_joint_map.yaml` (head yaw, arms, hip yaw, ankle roll, wrist, grip) need checking on the real robot.
+- **Joint directions:** the servo-to-URDF signs marked low/medium confidence in `hros5_control/config/joint_directions.yaml` (head yaw, arms, hip yaw, ankle roll, wrist, grip) need checking on the real robot.
 - **Button labels:** `joy_node` reports 8 axes and 13 buttons for the PS4 controller. That's the Linux `hid-sony` layout, which should be
   0 Cross, 1 Circle, 2 Triangle, 3 Square, 4 L1, 5 R1, 6 L2, 7 R2 (not yet confirmed button by button).
   The configs' axis indices match this layout, but some button comments don't (for example, `center_button: 3` would be Square, not Triangle).
-- **Still one limb at a time:** the single teleop node with modes and a dead-man button (§6 step 4, #27/#28) is still the next step.
+
+### Whole-robot teleop: `ps4_teleop_node` (§6 step 4, #27/#28)
+
+```bash
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py      # default limb:=all
+ros2 launch hros5_teleop ps4_teleop.launch.py               # against the real DXL nodes
+```
+
+- **Configuration:** one node and one `joy_node`. Mappings are in `ps4_mapping.yaml` (#27), deadzones and speeds in `deadzones.yaml` / `speed_scales.yaml` (#28).
+- **Modes:** head, left_arm, right_arm, hands, left_leg, right_leg, and legs (both together), cycled with Options/Share.
+- **Dead-man:** hold L1. If `/joy` goes silent for 0.5 s, the robot holds its position.
+- **Motion:** sticks jog joints in URDF terms. `joint_directions.yaml` converts to servo degrees.
+  Joints driven by the same stick stop as a group at the hard limits (servo limit minus 2°).
+- **Verified in headless Gazebo with scripted `/joy`:**
+  - no motion without the dead-man,
+  - head yaw/pitch in the expected directions,
+  - Share/Options mode switching,
+  - a symmetric squat that stops as a group at the ankle limit,
+  - a sideways hip shift,
+  - position held on joy timeout,
+  - Triangle returns joints to 0.
+- **Started in the GUI** on skywalker with the real controller.
+- **Hard-limit finding:** the servo limits allow only a shallow squat (hip 16°, knee 32°, limited by the right ankle's −18° servo limit)
+  and only 3° of sideways hip shift (right hip roll servo max +5°). Check whether these EEPROM limits are the true mechanical limits before walking work (#68).
+- **Still open:**
+  - `ps4_teleop_node` hasn't been run on the real robot yet.
+  - Hardware still needs the single bus owner (§6 step 3) and the safety items (step 5).

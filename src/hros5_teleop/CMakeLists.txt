@@ -9,6 +9,21 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(dynamixel_sdk REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(yaml-cpp REQUIRED)
+
+# One node for the whole robot: modes + dead-man, driven by config/ps4_mapping.yaml (#27/#28)
+add_executable(ps4_teleop_node src/ps4_teleop_node.cpp)
+ament_target_dependencies(ps4_teleop_node
+  rclcpp
+  sensor_msgs
+  std_msgs
+  ament_index_cpp
+)
+target_link_libraries(ps4_teleop_node yaml-cpp)
+install(TARGETS ps4_teleop_node
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 add_executable(head_teleop_node src/head_teleop_node.cpp)
 ament_target_dependencies(head_teleop_node

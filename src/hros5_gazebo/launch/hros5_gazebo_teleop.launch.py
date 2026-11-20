@@ -1,11 +1,14 @@
 """Gazebo + PS4 teleop: the same hros5_teleop nodes as on hardware, driving the sim robot.
 
-  ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=left_arm
+  ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py              # whole robot: ps4_teleop_node
+  ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=left_arm   # one legacy per-limb node
 
 The real *_dxl_node executables are replaced by sim_dxl_bridge.py, which listens on the same
-/hros5/<limb>/target_angles_deg topics. All teleop nodes use the same sticks, so (as on
-hardware) one limb is driven at a time. Legs default to fixed_base:=true (robot on a stand),
-because moving one leg while standing tips the robot over.
+/hros5/<limb>/target_angles_deg topics.
+- limb:=all (default) runs ps4_teleop_node (modes + dead-man, hros5_teleop/ps4_teleop.launch.py).
+- Any other limb runs that limb's original teleop node. Those all use the same sticks, so (as on
+  hardware) only one limb at a time. Single legs default to fixed_base:=true (robot on a stand),
+  because moving one leg while standing tips the robot over.
 """
 import os
 
@@ -66,8 +69,11 @@ def generate_launch_description():
     ]
 
     return LaunchDescription([
-        DeclareLaunchArgument('limb', default_value='head',
-                              description='Which teleop to run: ' + ', '.join(TELEOP)),
+        DeclareLaunchArgument('limb', default_value='all',
+                              description='all = ps4_teleop_node (whole robot, modes); or one of: '
+                                          + ', '.join(TELEOP)),
+        DeclareLaunchArgument('initial_mode', default_value='head',
+                              description='limb:=all only: first ps4_teleop_node mode'),
         DeclareLaunchArgument('fixed_base', default_value='auto',
                               description='true/false, or auto = true for legs, false otherwise'),
         DeclareLaunchArgument('spawn_z', default_value='auto',
@@ -77,8 +83,18 @@ def generate_launch_description():
         DeclareLaunchArgument('joy_device_id', default_value='0',
                               description='Joystick index for joy_node (0 = /dev/input/js0)'),
         gazebo,
-        # One joy_node for everything (the per-limb teleop launch files each start their own).
+        # Whole robot: joy_node + ps4_teleop_node.
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(
+                get_package_share_directory('hros5_teleop'), 'launch', 'ps4_teleop.launch.py')),
+            condition=IfCondition(PythonExpression(["'", limb, "' == 'all'"])),
+            launch_arguments={
+                'joy_device_id': joy_dev,
+                'initial_mode': LaunchConfiguration('initial_mode'),
+            }.items()),
+        # Single limb: one joy_node for the legacy node (their own launch files each start one).
         Node(
+            condition=IfCondition(PythonExpression(["'", limb, "' != 'all'"])),
             package='joy',
             executable='joy_node',
             name='joy_node',

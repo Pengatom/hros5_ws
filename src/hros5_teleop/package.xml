@@ -13,6 +13,11 @@
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>dynamixel_sdk</depend>
+  <depend>ament_index_cpp</depend>
+  <depend>yaml-cpp</depend>
+  <!-- ps4_teleop_node reads servo limits and joint directions from hros5_control -->
+  <exec_depend>hros5_control</exec_depend>
+  <exec_depend>joy</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

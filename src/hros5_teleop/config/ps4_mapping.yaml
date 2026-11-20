@@ -1,0 +1,120 @@
+# PS4 controller mapping for ps4_teleop_node (#27).
+# Changing this file changes teleop behaviour without code changes.
+#
+# Layout as reported by joy_node (ROS 2 Jazzy) on Linux (hid-sony / hid-playstation driver):
+# 8 axes, 13 buttons. ROS joy convention: stick left/up = +1, D-pad left/up = +1,
+# L2/R2 trigger axes rest at +1.0 and read -1.0 fully pressed (they are also buttons 6/7).
+
+axes:
+  left_x: 0
+  left_y: 1
+  l2_trigger: 2
+  right_x: 3
+  right_y: 4
+  r2_trigger: 5
+  dpad_x: 6
+  dpad_y: 7
+
+buttons:
+  cross: 0
+  circle: 1
+  triangle: 2
+  square: 3
+  l1: 4
+  r1: 5
+  l2: 6
+  r2: 7
+  share: 8
+  options: 9
+  ps: 10
+  l3: 11
+  r3: 12
+
+# Semantic action -> button name (from the list above).
+actions:
+  deadman: l1           # hold: nothing moves unless this is held
+  mode_next: options    # works without the dead-man
+  mode_prev: share
+  home: triangle        # hold together with the dead-man: current mode's joints move to 0 deg
+  echo_positions: cross # ask the DXL node(s) of the current mode to log servo positions
+  grip_close: r1        # in arm modes: that arm's gripper (hold the dead-man)
+  grip_open: r2
+
+# Modes, in the order mode_next walks through them.
+# Each binding moves a joint (URDF name) in the URDF sense:
+#   joint velocity = sign * stick value * speed_scales[<mode speed>] (deg/s)
+# joint_directions.yaml (hros5_control) converts to servo degrees, so a binding means the
+# same physical motion on the left and right side even though the servos are mirrored.
+# URDF conventions (checked with forward kinematics):
+#   ShoulderPitch -  = arm forward/up     ShoulderRoll + = arm towards the robot's left
+#   ElbowPitch    -  = elbow bends        HipPitch     - = leg forward
+#   KneePitch     +  = knee bends         AnklePitch   - = toes up (dorsiflexion)
+#   HipRoll/AnkleRoll + = towards the robot's left   HeadPitch + = look down
+modes:
+  - name: head
+    speed: head
+    bindings:
+      - {joint: HeadYaw,   axis: left_x, sign: 1}
+      - {joint: HeadPitch, axis: left_y, sign: -1}    # stick up = look up
+
+  - name: left_arm
+    speed: arm
+    grip: LGrip
+    bindings:
+      - {joint: LShoulderPitch, axis: left_y,  sign: -1}   # stick up = arm forward/up
+      - {joint: LShoulderRoll,  axis: left_x,  sign: 1}    # stick left = arm to the left
+      - {joint: LElbowPitch,    axis: right_y, sign: -1}   # stick up = bend elbow
+      - {joint: LWrist,         axis: right_x, sign: 1}
+
+  - name: right_arm
+    speed: arm
+    grip: RGrip
+    bindings:
+      - {joint: RShoulderPitch, axis: left_y,  sign: -1}
+      - {joint: RShoulderRoll,  axis: left_x,  sign: 1}
+      - {joint: RElbowPitch,    axis: right_y, sign: -1}
+      - {joint: RWrist,         axis: right_x, sign: 1}
+
+  - name: hands
+    speed: hand
+    bindings:
+      - {joint: LWrist, axis: left_x,  sign: 1}
+      - {joint: LGrip,  axis: left_y,  sign: 1}
+      - {joint: RWrist, axis: right_x, sign: 1}
+      - {joint: RGrip,  axis: right_y, sign: 1}
+
+  - name: left_leg
+    speed: leg
+    bindings:
+      - {joint: LHipPitch,   axis: left_y,  sign: -1}   # stick up = leg forward
+      - {joint: LHipRoll,    axis: left_x,  sign: 1}    # stick left = leg to the left
+      - {joint: LKneePitch,  axis: right_y, sign: -1}   # stick down = bend knee
+      - {joint: LAnkleRoll,  axis: right_x, sign: 1}
+      - {joint: LAnklePitch, axis: dpad_y,  sign: -1}   # D-pad up = toes up
+      - {joint: LHipYaw,     axis: dpad_x,  sign: 1}
+
+  - name: right_leg
+    speed: leg
+    bindings:
+      - {joint: RHipPitch,   axis: left_y,  sign: -1}
+      - {joint: RHipRoll,    axis: left_x,  sign: 1}
+      - {joint: RKneePitch,  axis: right_y, sign: -1}
+      - {joint: RAnkleRoll,  axis: right_x, sign: 1}
+      - {joint: RAnklePitch, axis: dpad_y,  sign: -1}
+      - {joint: RHipYaw,     axis: dpad_x,  sign: 1}
+
+  # Both legs together: right stick down = squat (feet stay flat),
+  # left stick left/right = shift the hips sideways over the feet (feet stay flat).
+  - name: legs
+    speed: leg
+    bindings:
+      - {joint: LHipPitch,   axis: right_y, sign: 1}
+      - {joint: RHipPitch,   axis: right_y, sign: 1}
+      - {joint: LKneePitch,  axis: right_y, sign: -2}
+      - {joint: RKneePitch,  axis: right_y, sign: -2}
+      - {joint: LAnklePitch, axis: right_y, sign: 1}
+      - {joint: RAnklePitch, axis: right_y, sign: 1}
+      - {joint: LHipRoll,    axis: left_x,  sign: 1}
+      - {joint: RHipRoll,    axis: left_x,  sign: 1}
+      - {joint: LAnkleRoll,  axis: left_x,  sign: -1}
+      - {joint: RAnkleRoll,  axis: left_x,  sign: -1}

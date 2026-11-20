@@ -1,4 +1,4 @@
-# Servo-to-URDF joint direction for the simulated Dynamixel bridge (sim_dxl_bridge.py).
+# Servo-to-URDF joint direction (source of truth, used by hros5_teleop and hros5_gazebo).
 #
 #   URDF angle [rad] = direction * radians(servo angle [deg])
 #   servo angle = (ticks / (4096/360)) - 180 - offset_deg, i.e. 0 deg = tick 2048

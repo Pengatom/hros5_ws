@@ -1,0 +1,7 @@
+# Joystick deadzones for ps4_teleop_node (#28).
+# Stick values inside the deadzone count as 0; outside it they are rescaled so motion
+# starts smoothly from 0 at the deadzone edge.
+deadzones:
+  sticks: 0.12        # left_x, left_y, right_x, right_y
+  dpad: 0.5           # D-pad axes are -1/0/+1
+  joy_timeout_s: 0.5  # no /joy message for this long = dead-man released

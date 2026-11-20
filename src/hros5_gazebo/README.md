@@ -12,7 +12,6 @@ hros5_gazebo/
 ├── config
 │   ├── hros5_controllers.yaml
 │   ├── sim_controllers.yaml
-│   ├── sim_joint_map.yaml
 │   └── left_hand_controllers.yaml
 ├── launch
 │   ├── hros5_gazebo.launch.py
@@ -50,13 +49,15 @@ Verified on 2026-11-20: the robot stands, both controllers are active, `/imu` pu
 ## PS4 teleop in simulation
 
 ```bash
-ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=head        # head, left_arm, right_arm, left_leg, right_leg, hands
-ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=left_leg    # legs start on a stand (fixed_base:=auto)
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py                   # whole robot: ps4_teleop_node (modes, hold L1)
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=head        # one original per-limb node instead
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=left_leg    # single legs start on a stand (fixed_base:=auto)
 ```
 
-- **The launch:** starts Gazebo, one `joy_node`, the unchanged `hros5_teleop` node for that limb, and `scripts/sim_dxl_bridge.py`.
+- **The launch:** starts Gazebo, `scripts/sim_dxl_bridge.py`, one `joy_node`, and either `ps4_teleop_node` (default) or the original teleop node for one limb.
+  Controls are listed in the `hros5_teleop` README.
 - **`sim_dxl_bridge.py`:** replaces the real `*_dxl_node` executables. It subscribes to the same `/hros5/<limb>/target_angles_deg` topics, applies the same servo hard limits and 2°-per-20 ms rate limit, and drives `whole_body_controller`.
-- **`config/sim_joint_map.yaml`:** holds the servo-to-URDF sign per joint, with a confidence rating for each.
+- **`hros5_control/config/joint_directions.yaml`:** holds the servo-to-URDF sign per joint, with a confidence rating for each.
   In the URDF, left and right pitch joints use the same axis, while the servos are mounted mirrored.
 
 See `docs/STATUS.md` §9.

@@ -123,6 +123,7 @@ hros5_control/
 │  ├─ hand_test_controllers.yaml
 │  ├─ hros5_dynamixel_joints_with_limits.yaml   # source of truth for servo IDs + limits
 │  ├─ joints/                           # GENERATED per-limb YAMLs (head, left/right_arm, left/right_leg, hands)
+│  ├─ joint_directions.yaml             # servo-to-URDF sign per joint (used by ps4_teleop_node and the Gazebo bridge)
 │  ├─ joint_limits.yaml
 │  ├─ left_arm_position_controller.yaml
 │  ├─ left_leg_controller.yaml
@@ -199,7 +200,8 @@ TODOs
 [P1–P2] Extend tools (e.g. servo scanner, limit reader) using this package’s config.
 
 4. hros5_teleop
-PS4 teleop for head, hands, left/right arm, left/right leg (one node + one launch per limb; each launch starts its own joy_node)
+PS4 teleop for the whole robot: `ps4_teleop_node` (one node with modes and a dead-man button, driven by `ps4_mapping.yaml`, #27/#28).
+The original per-limb nodes are still there (one node + one launch per limb; each launch starts its own joy_node).
 
 Purpose
 Converts joystick input into ROS messages for head, hands, and arms. This is your main manual control entry point.
@@ -209,6 +211,9 @@ text
 Copy code
 hros5_teleop/
 ├─ config/
+│  ├─ ps4_mapping.yaml          # buttons/axes -> named actions, modes and bindings (#27)
+│  ├─ deadzones.yaml            # stick/D-pad deadzones, joy timeout (#28)
+│  ├─ speed_scales.yaml         # deg/s per mode, limit guard band (#28)
 │  ├─ ps4_hands_teleop.yaml
 │  ├─ ps4_head_teleop.yaml
 │  ├─ ps4_left_arm_teleop.yaml
@@ -216,6 +221,7 @@ hros5_teleop/
 │  ├─ ps4_left_leg_teleop.yaml
 │  └─ ps4_right_leg_teleop.yaml
 ├─ launch/
+│  ├─ ps4_teleop.launch.py      # joy_node + ps4_teleop_node (whole robot)
 │  ├─ hands_teleop.launch.py
 │  ├─ head_teleop.launch.py
 │  ├─ left_arm_teleop.launch.py
@@ -223,6 +229,7 @@ hros5_teleop/
 │  ├─ left_leg_teleop.launch.py
 │  └─ right_leg_teleop.launch.py
 └─ src/
+   ├─ ps4_teleop_node.cpp
    ├─ hands_teleop_node.cpp
    ├─ head_teleop_node.cpp
    ├─ left_arm_teleop_node.cpp

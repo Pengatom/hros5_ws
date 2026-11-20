@@ -10,7 +10,7 @@ executables in hros5_dynamixel_bridge, and behaves like them:
   - logs joint positions on the limb's echo_positions topic
 
 Instead of writing to the bus, it converts to URDF radians with the per-joint direction
-in config/sim_joint_map.yaml and streams the whole body to the JointTrajectoryController.
+in hros5_control/config/joint_directions.yaml and streams the whole body to the JointTrajectoryController.
 The unchanged hros5_teleop nodes therefore drive the simulated robot the same way they
 drive the real one.
 """
@@ -57,14 +57,14 @@ class SimDxlBridge(Node):
         self.declare_parameter('max_step_deg', 2.0)
         self.declare_parameter('grip_max_step_deg', 3.0)
         self.declare_parameter('trajectory_topic', '/whole_body_controller/joint_trajectory')
-        self.declare_parameter('joint_map_file', os.path.join(
-            get_package_share_directory('hros5_gazebo'), 'config', 'sim_joint_map.yaml'))
         self.declare_parameter('servo_package', 'hros5_control')
         self.declare_parameter('servo_limits_file', 'config/hros5_dynamixel_joints_with_limits.yaml')
         self.declare_parameter('servo_joints_dir', 'config/joints')
+        self.declare_parameter('joint_directions_file', 'config/joint_directions.yaml')
 
         self.servo = self._load_servo_config()
-        with open(self.get_parameter('joint_map_file').value) as f:
+        share = get_package_share_directory(self.get_parameter('servo_package').value)
+        with open(os.path.join(share, self.get_parameter('joint_directions_file').value)) as f:
             self.direction = {k: int(v) for k, v in yaml.safe_load(f)['direction'].items()}
 
         self.joints = sorted({n for _, _, names in LIMBS.values() for n in names})
