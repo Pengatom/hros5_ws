@@ -31,11 +31,15 @@ hros5_ws/
    ├─ hros5_gazebo/
    ├─ hros5_head_tracker_cpp/
    ├─ hros5_moveit_config/
-   ├─ hros5_navigation/                  
+   ├─ hros5_navigation/                  (COLCON_IGNORE)
    ├─ hros5_teleop/
+   ├─ hros5_utils/                       (Python DXL + limit-check scripts; not a ROS package)
    ├─ dynamixel.model
    └─ mx28at2.model
-Vendor/third-party code lives under src/dynamixel/.
+Vendor/third-party code lives under src/dynamixel/. **This folder is gitignored and not in the repo.** Clone it, or install
+`ros-jazzy-dynamixel-sdk` from apt.
+
+> For what currently works and what's broken, see [`STATUS.md`](STATUS.md) (snapshot 2026-11-11).
 All HR-OS5 ROS 2 packages are prefixed hros5_….
 
 1. hros5_description
@@ -115,8 +119,10 @@ hros5_control/
 ├─ config/
 │  ├─ hardware_controllers.yaml
 │  ├─ dynamixel.yaml
+│  ├─ dxl_bus.yaml                      # serial bus: /dev/dxl, 1 Mbaud, protocol 2.0 (used by all DXL nodes)
 │  ├─ hand_test_controllers.yaml
-│  ├─ hros5_dynamixel_joints_with_limits.yaml
+│  ├─ hros5_dynamixel_joints_with_limits.yaml   # source of truth for servo IDs + limits
+│  ├─ joints/                           # GENERATED per-limb YAMLs (head, left/right_arm, left/right_leg, hands)
 │  ├─ joint_limits.yaml
 │  ├─ left_arm_position_controller.yaml
 │  ├─ left_leg_controller.yaml
@@ -157,19 +163,29 @@ text
 Copy code
 hros5_dynamixel_bridge/
 ├─ config/
-│  └─ joints.yaml                # joint name ↔ ID mapping
+│  ├─ head_dxl.yaml              # per-limb node params → point at hros5_control/config/joints/*.yaml + dxl_bus.yaml
+│  ├─ left_arm_dxl.yaml
+│  ├─ left_leg_dxl.yaml
+│  ├─ right_arm_dxl.yaml
+│  ├─ right_leg_dxl.yaml
+│  └─ joints.yaml                # joint name ↔ ID mapping (generic bridge)
 ├─ include/hros5_dynamixel_bridge/
+│  ├─ dxl_bus_config.hpp         # shared bus params + retry helper
 │  └─ dynamixel_driver.hpp
 ├─ launch/
+│  ├─ head_dxl.launch.py, left_arm_dxl.launch.py, right_arm_dxl.launch.py,
+│  │  left_leg_dxl.launch.py, right_leg_dxl.launch.py      # the working per-limb launches
 │  ├─ bringup.launch.py
 │  └─ rviz_bringup.launch.py
 ├─ src/
 │  ├─ dynamixel_bridge_node.cpp  # generic
 │  ├─ dynamixel_driver.cpp       # low-level bus logic
 │  ├─ head_dxl_node.cpp
-│  ├─ left_arm_dxl_node.cpp
+│  ├─ left_arm_dxl_node.cpp      # includes LWrist + LGrip
+│  ├─ right_arm_dxl_node.cpp     # includes RWrist + RGrip
+│  ├─ left_leg_dxl_node.cpp
+│  ├─ right_leg_dxl_node.cpp
 │  ├─ left_hand_dxl_node.cpp
-│  ├─ right_arm_dxl_node.cpp
 │  └─ right_hand_dxl_node.cpp
 └─ urdf/
    └─ hros5_minimal.urdf.xacro   # minimal model for tests
@@ -183,7 +199,7 @@ TODOs
 [P1–P2] Extend tools (e.g. servo scanner, limit reader) using this package’s config.
 
 4. hros5_teleop
-PS4 teleop for head, hands, left arm, right arm
+PS4 teleop for head, hands, left/right arm, left/right leg (one node + one launch per limb; each launch starts its own joy_node)
 
 Purpose
 Converts joystick input into ROS messages for head, hands, and arms. This is your main manual control entry point.
@@ -196,17 +212,23 @@ hros5_teleop/
 │  ├─ ps4_hands_teleop.yaml
 │  ├─ ps4_head_teleop.yaml
 │  ├─ ps4_left_arm_teleop.yaml
-│  └─ ps4_right_arm_teleop.yaml
+│  ├─ ps4_right_arm_teleop.yaml
+│  ├─ ps4_left_leg_teleop.yaml
+│  └─ ps4_right_leg_teleop.yaml
 ├─ launch/
 │  ├─ hands_teleop.launch.py
 │  ├─ head_teleop.launch.py
 │  ├─ left_arm_teleop.launch.py
-│  └─ right_arm_teleop.launch.py
+│  ├─ right_arm_teleop.launch.py
+│  ├─ left_leg_teleop.launch.py
+│  └─ right_leg_teleop.launch.py
 └─ src/
    ├─ hands_teleop_node.cpp
    ├─ head_teleop_node.cpp
    ├─ left_arm_teleop_node.cpp
-   └─ right_arm_teleop_node.cpp
+   ├─ right_arm_teleop_node.cpp
+   ├─ left_leg_teleop_node.cpp
+   └─ right_leg_teleop_node.cpp
 TODOs
 [P1] Standardise PS4 mapping across all nodes (consistent sign conventions and button usage).
 
@@ -239,20 +261,26 @@ TODOs
 [P2+] Leave high-level behaviours (like “walk while looking at X”) to a separate behaviors layer later.
 
 6. hros5_gazebo
-Gazebo testbed (currently focused on left hand)
+Gazebo testbed (full robot + left-hand test)
 
 Purpose
-Provides a minimal Gazebo world and config to simulate part of the robot (currently the left hand).
+Provides Gazebo worlds and configs for full-body simulation (#34/#35/#36 closed) and the original left-hand test.
 
 Structure
 text
 Copy code
 hros5_gazebo/
 ├─ config/
+│  ├─ hros5_controllers.yaml
+│  ├─ sim_controllers.yaml
 │  └─ left_hand_controllers.yaml
 ├─ launch/
+│  ├─ hros5_gazebo.launch.py
 │  └─ left_hand_gazebo.launch.py
+├─ scripts/
+│  └─ reset_world_service.py
 ├─ urdf/
+│  ├─ hros5_gazebo.xacro
 │  └─ hands/
 │     └─ left_hand_gazebo.xacro
 └─ worlds/
@@ -267,19 +295,19 @@ Add sim controllers for head, arms, legs.
 [P2] Keep physics tuning here (e.g. damping, friction configs).
 
 7. hros5_moveit_config
-MoveIt2 configuration (currently hands test)
+MoveIt2 configuration (full robot)
 
 Purpose
-MoveIt2 config package currently targeted at a hands-only test robot.
+MoveIt2 config for the full HR-OS5 model. The SRDF defines head, left/right arm, left/right leg, legs and whole_body groups. Not yet tuned (#40/#49).
 
 Structure
 text
 Copy code
 hros5_moveit_config/
 ├─ config/
-│  ├─ hands_test.ros2_control.xacro
-│  ├─ hands_test.srdf
-│  ├─ hands_test.urdf.xacro
+│  ├─ hros5.ros2_control.xacro
+│  ├─ hros5.srdf
+│  ├─ hros5.urdf.xacro
 │  ├─ initial_positions.yaml
 │  ├─ joint_limits.yaml
 │  ├─ kinematics.yaml
@@ -396,9 +424,9 @@ hros5_behaviors – walking, balance, high-level behaviors
 
 hros5_perception – object/person tracking, 3D perception
 
-hros5_utils – shared tools/scripts (servo scanners, reports, etc.)
-
 They’ll be added when you reach those phases (P3–P6).
+
+(hros5_utils already exists: Python scripts for DXL scanning/limits and check_joint_limits.py. See src/hros5_utils/README.md.)
 
 ✔ Immediate Focus (P0–P1)
 From this structure, the most important near-term tasks are:

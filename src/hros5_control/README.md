@@ -27,8 +27,10 @@ Use `--check` in CI to ensure they stay in sync. The generated files include a `
 hros5_control/
 ├── CMakeLists.txt
 ├── config
+│   ├── dxl_bus.yaml                 # serial bus params for all DXL nodes
 │   ├── hand_test_controllers.yaml
 │   ├── hros5_dynamixel_joints_with_limits.yaml
+│   ├── joints/                      # generated per-limb ID/limit YAMLs
 │   ├── left_arm_position_controller.yaml
 │   ├── left_leg_controller.yaml
 │   ├── position_controllers.yaml
@@ -42,6 +44,9 @@ hros5_control/
 │   ├── position.launch.py
 │   └── trajectory.launch.py
 └── package.xml
+```
+
 Status
-Active foundation of the control stack (P0–P2).
+Active foundation of the control stack (P0–P2). Implementation progress: see [`docs/STATUS.md`](../../docs/STATUS.md).
+
 Will expand with IK and balance layers (P3–P4).

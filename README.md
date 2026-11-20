@@ -16,7 +16,9 @@ This repository contains the ROS 2 workspace for the **HR-OS5 humanoid robot**, 
 - **Tools Used**:
   - RViz 2
   - Gazebo
-  - `joy` + `teleop_twist_joy`
+  - `joy` + custom `hros5_teleop` nodes (`teleop_twist_joy` is not used)
+
+> **Implementation progress against this design:** see [`docs/STATUS.md`](docs/STATUS.md).
 
 ---
 
@@ -83,13 +85,16 @@ hros5_ws/
   Central launch files to bring up the robot in simulation or real hardware, including RViz and Gazebo.
 
 - [`hros5_control`](src/hros5_control):  
-  Placeholder for future ROS 2 Control hardware interface and controller manager.
+  Servo IDs/limits (source of truth), DXL bus config, and ros2_control controller YAMLs. No hardware plugin yet.
+
+- [`hros5_dynamixel_bridge`](src/hros5_dynamixel_bridge):  
+  Per-limb Dynamixel nodes (head, arms, legs, hands) that take degree targets and drive the servos.
 
 - [`hros5_navigation`](src/hros5_navigation):  
   Configuration for the Nav2 stack including map, localization, and planning setup.
 
 - [`hros5_teleop`](src/hros5_teleop):  
-  PS4 controller input using `joy` and `teleop_twist_joy` nodes.
+  PS4 controller teleop: `joy_node` plus one custom node per limb, publishing degree targets to the DXL nodes.
 
 - [`hros5_demos`](src/hros5_demos):  
   Standalone scripts and nodes to test motors, input devices, and subsystems.
@@ -100,7 +105,8 @@ hros5_ws/
 
 - **ROS 2 Jazzy**
 - **colcon** build tool
-- **Dynamixel SDK** (for servo communication)
+- **Dynamixel SDK** (for servo communication). `src/dynamixel/` is gitignored, so install `ros-jazzy-dynamixel-sdk` or clone it there
+- A udev rule that creates `/dev/dxl` for the USB2AX/U2D2 adapter (not included in the repo)
 - **USB2AX** or equivalent USB2Dynamixel adapter
 - **PS4 controller** (optional, for input testing)
 
@@ -130,7 +136,17 @@ source install/setup.bash
 Example: Launch the robot model in RViz2
 
 ```bash
-ros2 launch hros5_description view_robot.launch.py
+ros2 launch hros5_description display_hros5.launch.py
+```
+
+Example: PS4 head teleop on real hardware (the currently verified path). Run each in its own terminal:
+
+```bash
+ros2 launch hros5_dynamixel_bridge head_dxl.launch.py
+```
+
+```bash
+ros2 launch hros5_teleop head_teleop.launch.py
 ```
 
 Example: Start navigation (Nav2)

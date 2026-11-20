@@ -9,6 +9,9 @@ Implements:
 - Joint name → servo ID mapping
 - One node per body region (head, hands, arms, legs)
 - Bus configuration YAML now lives in `hros5_control/config/dxl_bus.yaml`.
+- Servo IDs and limits come from `hros5_control/config/joints/<limb>.yaml`. These files are generated, so don't edit them by hand.
+
+Implementation progress: see [`docs/STATUS.md`](../../docs/STATUS.md).
 
 ## Directory structure
 
@@ -24,6 +27,7 @@ hros5_dynamixel_bridge/
 │   └── right_leg_dxl.yaml
 ├── include
 │   └── hros5_dynamixel_bridge
+│       ├── dxl_bus_config.hpp
 │       └── dynamixel_driver.hpp
 ├── launch
 │   ├── bringup.launch.py

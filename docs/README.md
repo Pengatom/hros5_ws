@@ -9,6 +9,14 @@ Foundation → Teleop → Digital Twin → IK → Balance → Walking → Autono
 
 ---
 
+# 0. Current Status
+
+What works on `master` today, known problems, and the path to full PS4 teleop.
+
+📄 **[`STATUS.md`](STATUS.md)**
+
+---
+
 # 1. Project Structure
 
 High-level map of packages, roadmap phases, and key TODOs for each package.
@@ -53,7 +61,7 @@ Will document:
 - Connections between onboard and offboard nodes  
 - Phase-specific launch layering (P1–P6)
 
-📄 **`bringup_flow.md` (to be created after Issue #60)**
+📄 **`bringup_flow.md`** (empty placeholder file. To be written after Issue #60.)
 
 ---
 
@@ -67,7 +75,7 @@ Will describe:
 - Naming conventions (links/joints)  
 - Where ros2_control integrates into the model  
 
-📄 **`xacro_model_structure.md` (to be created after model stabilizes)**
+📄 **`xacro_model_structure.md`** (empty placeholder file. To be written after the model stabilizes.)
 
 ---
 
@@ -88,6 +96,7 @@ Intended documentation layout:
 
 ```text
 docs/
+├── STATUS.md                     ← Current status of master vs roadmap
 ├── ProjectStructure.md           ← Workspace/package map + roadmap tags
 ├── README.md ← You are here
 ├── architecture/
