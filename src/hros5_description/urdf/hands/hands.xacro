@@ -46,7 +46,11 @@
     <child link="LHand"/>
     <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
     <axis xyz="1 0 0"/>
-    <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
+    <!-- Servo hard limit: ticks 548..3548 = +-131.8 deg = +-2.30 rad (hros5_dynamixel_joints_with_limits.yaml, #69).
+         Was +-3.14, and Gazebo could take the "short way" round through +-180 deg.
+         velocity was 1.0 rad/s: far below a Dynamixel's speed, and in Gazebo it made the wrist overshoot
+         into its limit and stick there. 6.597 rad/s matches the other joints. -->
+    <limit lower="-2.30" upper="2.30" effort="1.0" velocity="6.597344565"/>
   </joint>
 
   <joint name="RWrist" type="revolute">
@@ -54,7 +58,8 @@
     <child link="RHand"/>
     <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
     <axis xyz="1 0 0"/>
-    <limit lower="-3.14" upper="3.14" effort="1.0" velocity="1.0"/>
+    <!-- Servo hard limit +-131.8 deg = +-2.30 rad (#69); velocity as LWrist. -->
+    <limit lower="-2.30" upper="2.30" effort="1.0" velocity="6.597344565"/>
   </joint>
 
   <joint name="LGrip" type="revolute">

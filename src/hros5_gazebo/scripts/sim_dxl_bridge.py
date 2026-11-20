@@ -16,14 +16,16 @@ drive the real one.
 """
 import math
 import os
+import xml.etree.ElementTree as ET
 
 import rclpy
 import yaml
 from ament_index_python.packages import get_package_share_directory
 from builtin_interfaces.msg import Duration
 from rclpy.node import Node
+from rclpy.qos import DurabilityPolicy, QoSProfile
 from sensor_msgs.msg import JointState
-from std_msgs.msg import Empty, Float32MultiArray
+from std_msgs.msg import Empty, Float32MultiArray, String
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 
 TICKS_PER_DEG = 4096.0 / 360.0
@@ -84,6 +86,13 @@ class SimDxlBridge(Node):
                 self.create_subscription(Empty, echo_topic,
                                          lambda m, limb=limb: self._on_echo(limb), 10)
         self.create_subscription(JointState, '/joint_states', self._on_joint_states, 10)
+        # URDF joint limits: commands are kept urdf_margin_deg inside them. A joint driven exactly
+        # onto its URDF limit can stick there in Gazebo/ros2_control (seen on the wrists).
+        self.declare_parameter('urdf_margin_deg', 1.0)
+        self.urdf_limits = {}
+        self.create_subscription(
+            String, '/robot_description', self._on_robot_description,
+            QoSProfile(depth=1, durability=DurabilityPolicy.TRANSIENT_LOCAL))
         self.pub = self.create_publisher(
             JointTrajectory, self.get_parameter('trajectory_topic').value, 10)
         self.dt = 1.0 / self.get_parameter('rate_hz').value
@@ -129,6 +138,27 @@ class SimDxlBridge(Node):
             self.active = True
             self.get_logger().info(f'First command from {limb}: now driving the robot.')
 
+    def _on_robot_description(self, msg):
+        margin = math.radians(self.get_parameter('urdf_margin_deg').value)
+        limits = {}
+        for j in ET.fromstring(msg.data).findall('joint'):
+            lim = j.find('limit')
+            if j.get('type') == 'revolute' and lim is not None and j.get('name') in self.direction:
+                limits[j.get('name')] = (float(lim.get('lower')) + margin, float(lim.get('upper')) - margin)
+        self.urdf_limits = limits
+        # Point out where the URDF allows less than the servo (the sim then stops short of the servo target).
+        narrower = []
+        for name, (lo, hi) in limits.items():
+            s, d = self.servo[name], self.direction[name]
+            servo_urdf = sorted((math.radians(d * s['min']), math.radians(d * s['max'])))
+            if lo > servo_urdf[0] + 1e-3 or hi < servo_urdf[1] - 1e-3:
+                narrower.append(f"{name} (URDF {math.degrees(lo):+.0f}..{math.degrees(hi):+.0f} vs servo "
+                                f"{math.degrees(servo_urdf[0]):+.0f}..{math.degrees(servo_urdf[1]):+.0f} deg)")
+        self.get_logger().info(f'URDF limits loaded for {len(limits)} joints.')
+        if narrower:
+            self.get_logger().info('URDF range narrower than the servo range (#66), sim stops at the URDF limit: '
+                                   + '; '.join(narrower))
+
     def _on_joint_states(self, msg):
         self.measured.update(zip(msg.name, msg.position))
 
@@ -154,7 +184,12 @@ class SimDxlBridge(Node):
         traj = JointTrajectory()
         traj.joint_names = self.joints
         point = JointTrajectoryPoint()
-        point.positions = [self.direction[n] * math.radians(self.current[n]) for n in self.joints]
+        point.positions = []
+        for n in self.joints:
+            rad = self.direction[n] * math.radians(self.current[n])
+            if n in self.urdf_limits:
+                rad = clip(rad, *self.urdf_limits[n])
+            point.positions.append(rad)
         t = 2.0 * self.dt
         point.time_from_start = Duration(sec=int(t), nanosec=int((t % 1.0) * 1e9))
         traj.points = [point]
