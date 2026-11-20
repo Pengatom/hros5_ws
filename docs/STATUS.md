@@ -185,10 +185,14 @@ Add `headless:=true` to run only the Gazebo server, without the GUI (for SSH ses
 
 - The build passes (`colcon build --packages-up-to hros5_gazebo`). `joint_state_broadcaster` and `whole_body_controller` both reach **active**.
 - The robot lands on its feet at base z = 0.390 m and **stands upright** for 25+ s of sim time (roll/pitch < 0.01°).
-- `/imu` publishes about 9.81 m/s² on z at rest. During a squat-and-lean move, roll, the gyro and acceleration respond (there's a short ~2 g spike when the robot settles), then it returns to level (#37).
+- `/imu` publishes about 9.81 m/s² on z at rest. During a leg move with side lean, roll, the gyro and acceleration respond (there's a short ~2 g spike when the robot settles), then it returns to level (#37).
   `/joint_states` lists all 24 joints.
-- A `FollowJointTrajectory` goal with arms at ±0.8 rad and a squat (hip ∓0.4, knee ±0.8, ankle ∓0.4) **succeeds**. Base z drops to 0.371 m, the robot tilts 1.5° in roll, and it stays upright.
-  Note that left and right leg pitch axes are mirrored: the same physical bend is +0.8 on `LKneePitch` and −0.8 on `RKneePitch`.
+- `FollowJointTrajectory` goals for arms and legs **succeed**, and the robot stays upright.
+- A symmetric squat sent through the PS4/servo topic path (URDF hip −15°, knee +30°, ankle −15° on both legs) lowers the base by 1 cm with roll and pitch at 0.00°.
+- **Leg directions:** in the URDF, left and right pitch joints use the **same** axis, so +knee bends both knees the natural way (shin back),
+  and −hip swings the leg forward. The **servos** are mounted mirrored: the left knee servo bends towards −, the right towards +.
+  The servo-to-URDF signs are in `hros5_gazebo/config/sim_joint_map.yaml`.
+  (An earlier version of this file wrongly said the URDF legs were mirrored.)
 - On a real PC (12 cores, RTX 2060 SUPER on the nouveau driver) the same tests pass at a real-time factor of about 0.7–0.9, and the GUI runs.
   A VMware VM shows only a gray 3D view, because its virtual GPU can't run Gazebo's renderer.
 - **Slow:** the real-time factor is only about 0.1–0.16 on the 2-core VM. The full STL mesh collisions are the likely cost; simpler collision shapes would help (backlog).
@@ -207,3 +211,37 @@ Changes made on 2026-11-11:
 6. **`package.xml`.** The Gazebo Classic `gazebo_ros` dependency (not in Jazzy) is replaced with `gz_ros2_control`, the controller packages and `ros_gz_*`.
 
 Still open for Gazebo: foot contact sensors (#38), sim/real interface parity (#64), canonical joint limits in the URDF (#66/#72/#73), and real masses/inertias (#32).
+
+---
+
+## 9. PS4 teleop in Gazebo (2026-11-20)
+
+```bash
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=head   # or left_arm, right_arm, left_leg, right_leg, hands
+```
+
+The launch starts Gazebo, a single `joy_node`, the unchanged `hros5_teleop` node for the chosen limb, and
+`sim_dxl_bridge.py`, which stands in for the real `*_dxl_node` executables:
+
+- It listens on the same `/hros5/<limb>/target_angles_deg` topics (servo degrees, 0° = tick 2048), with the same message layouts.
+- It clamps to the absolute servo limits in `hros5_dynamixel_joints_with_limits.yaml` and moves at most 2° per 20 ms (grip 3°), like the real nodes.
+  Like them, it starts every joint at 0°.
+- It converts to URDF radians with the per-joint sign in `hros5_gazebo/config/sim_joint_map.yaml` and streams all 24 joints to `whole_body_controller`.
+- The echo topics (`/hros5/<limb>/echo_positions`) log the simulated servo angle and ticks.
+
+Leg teleop starts with the robot on a stand (`fixed_base:=auto`), because moving one leg tips the free-standing robot over.
+
+**Verified:**
+- **Head:** with a real PS4 controller on skywalker, the head follows the left stick in the Gazebo GUI.
+- **Bridge (scripted commands):**
+  - Directions for legs, arm presets and head are as expected.
+  - A left-knee command of +60° is clamped at the servo hard limit of +20° (tick 2275).
+  - A symmetric squat keeps the robot level.
+- **Not yet tried with the controller:** arms, legs and hands.
+
+**Known gaps:**
+- **Joint directions:** the servo-to-URDF signs marked low/medium confidence in `sim_joint_map.yaml` (head yaw, arms, hip yaw, ankle roll, wrist, grip) need checking on the real robot.
+- **Button labels:** `joy_node` reports 8 axes and 13 buttons for the PS4 controller. That's the Linux `hid-sony` layout, which should be
+  0 Cross, 1 Circle, 2 Triangle, 3 Square, 4 L1, 5 R1, 6 L2, 7 R2 (not yet confirmed button by button).
+  The configs' axis indices match this layout, but some button comments don't (for example, `center_button: 3` would be Square, not Triangle).
+- **Still one limb at a time:** the single teleop node with modes and a dead-man button (§6 step 4, #27/#28) is still the next step.

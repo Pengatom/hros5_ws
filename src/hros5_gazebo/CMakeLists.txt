@@ -8,6 +8,7 @@ install(
 install(
   PROGRAMS
     scripts/reset_world_service.py
+    scripts/sim_dxl_bridge.py
   DESTINATION lib/${PROJECT_NAME}
 )
 ament_package()

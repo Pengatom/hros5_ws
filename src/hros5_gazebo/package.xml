@@ -22,6 +22,14 @@
   <exec_depend>rqt_service_caller</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_srvs</exec_depend>
+  <!-- PS4 teleop in sim (hros5_gazebo_teleop.launch.py, sim_dxl_bridge.py) -->
+  <exec_depend>joy</exec_depend>
+  <exec_depend>hros5_teleop</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>

@@ -12,6 +12,8 @@ PS4 controller teleop for HR-OS5. Each limb has its own node and launch file. Ev
 | `hands_teleop_node` | `hands_teleop.launch.py` | `/hros5/left_hand/...`, `/hros5/right_hand/target_angles_deg` | — |
 
 The matching consumers are the `*_dxl_node` executables in `hros5_dynamixel_bridge`.
+In simulation, `hros5_gazebo/scripts/sim_dxl_bridge.py` consumes the same topics. Run any of these nodes against Gazebo with
+`ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=<head|left_arm|right_arm|left_leg|right_leg|hands>`.
 
 ## Behaviour
 
@@ -23,7 +25,7 @@ The matching consumers are the `*_dxl_node` executables in `hros5_dynamixel_brid
 
 ## Status and caveats (master, 2026-11-11)
 
-- Verified on hardware: **head** (#17).
+- Verified on hardware: **head** (#17). Verified in Gazebo with a real PS4 controller: **head** (2026-11-20).
 - All nodes listen to the same `/joy` and the same sticks, with no mode switching.
   Run **one** teleop launch at a time. Running two also creates duplicate `joy_node` instances.
 - The axis/button indices in `config/ps4_*.yaml` mix two layouts: button comments follow SDL2, axis indices follow Linux joydev.

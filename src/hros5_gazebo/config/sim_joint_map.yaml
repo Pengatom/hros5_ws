@@ -1,0 +1,46 @@
+# Servo-to-URDF joint direction for the simulated Dynamixel bridge (sim_dxl_bridge.py).
+#
+#   URDF angle [rad] = direction * radians(servo angle [deg])
+#   servo angle = (ticks / (4096/360)) - 180 - offset_deg, i.e. 0 deg = tick 2048
+#
+# The real *_dxl_node executables never convert to URDF angles, so nothing in the
+# repo recorded these signs. They were derived on 2026-11-20 from the servo limits in
+# hros5_control/config/hros5_dynamixel_joints_with_limits.yaml, forward kinematics of
+# the URDF, and the arm teleop presets. The URDF uses the SAME axis for left and right
+# pitch joints, but the servos are mounted mirrored, so one side gets -1.
+#
+# Confidence:
+#   high   - only one direction fits the servo's asymmetric range
+#            (e.g. the left knee servo can reach -132 deg but only +20 deg)
+#   medium - follows from the arm presets (L/R mirrored values)
+#   low    - range is symmetric; +1 is a guess
+# Check low and medium values on the real robot: pose a joint, use the teleop's echo
+# button to read the servo angle, and compare it with the same joint in RViz.
+
+direction:
+  HeadYaw: 1          # low: servo range is symmetric (+-90)
+  HeadPitch: 1        # medium: servo and URDF ranges both larger on the + (look down) side
+
+  LShoulderPitch: 1   # medium: "ready" preset -13 = arm forward; URDF forward is negative
+  RShoulderPitch: -1  # medium: mirrored preset (+13)
+  LShoulderRoll: 1    # medium: preset +40 = arm out; URDF out is positive for the left arm
+  RShoulderRoll: 1    # medium: preset -40 = arm out; URDF out is negative for the right arm
+  LElbowPitch: -1     # medium: "ready" preset +35 = bent; URDF bend is negative
+  RElbowPitch: 1      # medium: mirrored preset (-35)
+  LWrist: 1           # low
+  RWrist: 1           # low
+  LGrip: 1            # low
+  RGrip: 1            # low
+
+  LHipYaw: -1         # low: assumes the larger range (66 deg) is toe-out
+  RHipYaw: -1         # low: same assumption
+  LHipRoll: 1         # high: servo -5..+90, larger side = leg out; URDF out is positive
+  RHipRoll: 1         # high: servo -90..+5, larger side = leg out; URDF out is negative
+  LHipPitch: -1       # high: servo -34..+90, larger side = flex forward; URDF forward is negative
+  RHipPitch: 1        # high: servo -90..+34
+  LKneePitch: -1      # high: servo -132..+20, knee bends to -; URDF bend is positive
+  RKneePitch: 1       # high: servo -22..+128
+  LAnklePitch: -1     # high: servo -90..+20, the small side is dorsiflexion; URDF dorsiflexion is negative
+  RAnklePitch: 1      # high: servo -18..+90
+  LAnkleRoll: 1       # low: servo range is symmetric (+-90)
+  RAnkleRoll: 1       # low

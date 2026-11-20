@@ -12,13 +12,16 @@ hros5_gazebo/
 ├── config
 │   ├── hros5_controllers.yaml
 │   ├── sim_controllers.yaml
+│   ├── sim_joint_map.yaml
 │   └── left_hand_controllers.yaml
 ├── launch
 │   ├── hros5_gazebo.launch.py
+│   ├── hros5_gazebo_teleop.launch.py
 │   └── left_hand_gazebo.launch.py
 ├── package.xml
 ├── scripts
-│   └── reset_world_service.py
+│   ├── reset_world_service.py
+│   └── sim_dxl_bridge.py
 ├── urdf
 │   ├── hros5_gazebo.xacro
 │   └── hands
@@ -42,7 +45,21 @@ ros2 launch hros5_gazebo hros5_gazebo.launch.py launch_rqt_gui:=true # plus join
 ros2 launch hros5_gazebo hros5_gazebo.launch.py headless:=true       # server only, no GUI (SSH/CI)
 ```
 
-Verified on 2026-11-20: the robot stands, both controllers are active, `/imu` publishes, and trajectory goals (arms, squat) succeed. See `docs/STATUS.md` §8.
+Verified on 2026-11-20: the robot stands, both controllers are active, `/imu` publishes, and trajectory goals (arms, legs, a symmetric squat) succeed. See `docs/STATUS.md` §8.
+
+## PS4 teleop in simulation
+
+```bash
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=head        # head, left_arm, right_arm, left_leg, right_leg, hands
+ros2 launch hros5_gazebo hros5_gazebo_teleop.launch.py limb:=left_leg    # legs start on a stand (fixed_base:=auto)
+```
+
+- **The launch:** starts Gazebo, one `joy_node`, the unchanged `hros5_teleop` node for that limb, and `scripts/sim_dxl_bridge.py`.
+- **`sim_dxl_bridge.py`:** replaces the real `*_dxl_node` executables. It subscribes to the same `/hros5/<limb>/target_angles_deg` topics, applies the same servo hard limits and 2°-per-20 ms rate limit, and drives `whole_body_controller`.
+- **`config/sim_joint_map.yaml`:** holds the servo-to-URDF sign per joint, with a confidence rating for each.
+  In the URDF, left and right pitch joints use the same axis, while the servos are mounted mirrored.
+
+See `docs/STATUS.md` §9.
 
 Controllers: `joint_state_broadcaster` and `whole_body_controller` (JointTrajectoryController over all 24 joints,
 topic `/whole_body_controller/joint_trajectory`). The torso IMU is bridged to `/imu`.
