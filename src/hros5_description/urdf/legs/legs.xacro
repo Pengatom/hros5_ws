@@ -14,7 +14,8 @@
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="0.000000 0.000480 0.018437" />
 				<mass value="0.167"/>
-				<inertia ixx="0.12259691"  ixy="0.00071127469"  ixz="0.00081143913" iyx="0.00071127469" iyy="0.11066637" iyz="-0.0071635476" izx="0.00081143913" izy="-0.0071635476" izz="0.041877668" />
+				<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+				<inertia ixx="0.000122597"  ixy="7.11275e-07"  ixz="8.11439e-07" iyx="7.11275e-07" iyy="0.000110666" iyz="-7.16355e-06" izx="8.11439e-07" izy="-7.16355e-06" izz="4.18777e-05" />
 			</inertial>
 		</link>
 		<joint name="${side}HipRoll" type="revolute">
@@ -29,7 +30,8 @@
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="0.000000 0.000480 0.018437" />
 				<mass value="0.167"/>
-				<inertia ixx="0.12259691"  ixy="0.00071127469"  ixz="0.00081143913" iyx="0.00071127469" iyy="0.11066637" iyz="-0.0071635476" izx="0.00081143913" izy="-0.0071635476" izz="0.041877668" />
+				<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+				<inertia ixx="0.000122597"  ixy="7.11275e-07"  ixz="8.11439e-07" iyx="7.11275e-07" iyy="0.000110666" iyz="-7.16355e-06" izx="8.11439e-07" izy="-7.16355e-06" izz="4.18777e-05" />
 			</inertial>
 		</link>
 		<joint name="${side}HipPitch" type="revolute">
@@ -44,7 +46,8 @@
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="0.000079 0.018242 0.013873" />
 				<mass value="0.11904336"/>
-				<inertia ixx="0.097950272"  ixy="0.0012119368"  ixz="-0.00021223016" iyx="0.00122119368" iyy="0.032848287" iyz="-0.0019474021" izx="-0.00021223016" izy="-0.0019474021" izz="0.11493509" />
+				<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+				<inertia ixx="9.79503e-05"  ixy="1.21194e-06"  ixz="-2.1223e-07" iyx="1.22119e-06" iyy="3.28483e-05" iyz="-1.9474e-06" izx="-2.1223e-07" izy="-1.9474e-06" izz="0.000114935" />
 			</inertial>
 		</link>
 		<joint name="${side}KneePitch" type="revolute">
@@ -59,7 +62,8 @@
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="-0.053955 0.006548 -0.000592" />
 				<mass value="0.070309794"/>
-				<inertia ixx="0.093369608"  ixy="-0.00093567395"  ixz="-0.00023992085" iyx="-0.00093567395" iyy="0.046295534" iyz="-0.012858493" izx="-0.00023992085" izy="-0.012858493" izz="0.11351516" />
+				<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+				<inertia ixx="9.33696e-05"  ixy="-9.35674e-07"  ixz="-2.39921e-07" iyx="-9.35674e-07" iyy="4.62955e-05" iyz="-1.28585e-05" izx="-2.39921e-07" izy="-1.28585e-05" izz="0.000113515" />
 			</inertial>
 		</link>
 		<joint name="${side}AnklePitch" type="revolute">
@@ -74,7 +78,8 @@
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="-0.000214 -0.018536 0.013873" />
 				<mass value="0.16710792"/>
-				<inertia ixx="0.12079175"  ixy="-0.00079781067"  ixz="-0.00039322246" iyx="-0.00079781067" iyy="0.10885465" iyz="0.0070770117" izx="-0.00039322246" izy="0.0070770117" izz="0.041871103" />
+				<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+				<inertia ixx="0.000120792"  ixy="-7.97811e-07"  ixz="-3.93222e-07" iyx="-7.97811e-07" iyy="0.000108855" iyz="7.07701e-06" izx="-3.93222e-07" izy="7.07701e-06" izz="4.18711e-05" />
 			</inertial>
 		</link>
 		<joint name="${side}AnkleRoll" type="revolute">
@@ -89,7 +94,8 @@
 			<inertial> <!-- Dummy values from Darwin OP -->
 				<origin xyz="-0.025995 -0.009506 -0.000503" />
 				<mass value="0.0794462"/>
-				<inertia ixx="0.12079175"  ixy="-0.00079781067"  ixz="-0.00039322246" iyx="-0.00079781067" iyy="0.10885465" iyz="0.0070770117" izx="-0.00039322246" izy="0.0070770117" izz="0.041871103" />
+				<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+				<inertia ixx="0.000120792"  ixy="-7.97811e-07"  ixz="-3.93222e-07" iyx="-7.97811e-07" iyy="0.000108855" iyz="7.07701e-06" izx="-3.93222e-07" izy="7.07701e-06" izz="4.18711e-05" />
 			</inertial>
 		</link>
 	</xacro:macro>

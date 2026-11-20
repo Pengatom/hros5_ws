@@ -28,7 +28,8 @@
 		<inertial> <!-- Dummy values from Darwin OP -->
 			<origin xyz="0.000064 -0.018565 -0.007667" />
 			<mass value="0.15804192"/>
-			<inertia ixx="0.1239683"  ixy="0.000078494368"  ixz="0.000007645979" iyy="0.11783781" iyz="0.0012199205" izz="0.1583601" />
+			<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+			<inertia ixx="0.000123968"  ixy="7.84944e-08"  ixz="7.64598e-09" iyy="0.000117838" iyz="1.21992e-06" izz="0.00015836" />
 	    </inertial>
 	</link>
 	<!-- Gazebo Harmonic does not support mimic constraints; keep the dummy links fixed to avoid physics errors. -->

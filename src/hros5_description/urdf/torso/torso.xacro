@@ -12,7 +12,8 @@
 		<inertial> <!-- Dummy values from Darwin OP -->
 			<origin xyz="-0.003053 -0.038651 -0.019268" />
 			<mass value="0.97559947"/>
-			<inertia ixx="3.1081800"  ixy="-0.25460189"  ixz="2.0318174" iyy="6.3787776" iyz="0.16417863" izz="5.3316425" />
+			<!-- Darwin-OP inertia scaled to kg*m^2 (source values were 1000x too large). Real HR-OS5 values: issue #32 -->
+			<inertia ixx="0.00310818"  ixy="-0.000254602"  ixz="0.00203182" iyy="0.00637878" iyz="0.000164179" izz="0.00533164" />
 		</inertial>
 	</link>
 </robot>
