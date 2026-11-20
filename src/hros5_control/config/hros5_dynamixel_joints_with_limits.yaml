@@ -1,4 +1,20 @@
 # HR-OS5 Dynamixel Joint Config with Limits
+#
+# !!! WARNING: ABSOLUTE HARD LIMITS FOR SERVO MOVEMENT !!!
+#
+# cw_limit / ccw_limit are the absolute mechanical limits of each joint, in raw
+# Dynamixel ticks (0-4095). They must match the Min/Max Position Limit stored in
+# each servo's EEPROM (Protocol 2.0, addresses 52/48). Check with
+# hros5_utils/scripts/dxl_read_limits.py --all. Driving a joint past these limits
+# can make it collide with the frame and damage servos or brackets.
+#
+# - Do NOT widen these values unless you have checked the mechanical clearance
+#   on the real robot.
+# - Every software limit (URDF, ros2_control, MoveIt, teleop, gait) must stay
+#   INSIDE these values, never outside them.
+# - This file is the source of truth. config/joints/*.yaml are generated from it
+#   by hros5_utils/scripts/generate_joint_yamls.py, so re-run the generator after
+#   editing it.
 
 joints:
   - name: RShoulderPitch
