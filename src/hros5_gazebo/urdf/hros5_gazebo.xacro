@@ -206,4 +206,65 @@
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
   </gazebo>
+
+  <!-- Link colours for Gazebo. Gazebo loads the STL meshes, which have no colour, so everything
+       was white. These blocks only affect Gazebo; RViz keeps the DAE mesh colours.
+       Scheme: left side red, right side green (port/starboard). Links alternate dark/light
+       along each limb, and servo/motor parts are near-black so the joints stand out. -->
+  <xacro:macro name="gz_colour" params="link rgb">
+    <gazebo reference="${link}">
+      <visual>
+        <material>
+          <ambient>${rgb} 1</ambient>
+          <diffuse>${rgb} 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:property name="c_torso" value="0.25 0.25 0.28"/>
+  <xacro:property name="c_servo" value="0.12 0.12 0.12"/>
+  <xacro:property name="c_head" value="0.20 0.45 0.85"/>
+  <xacro:property name="c_head_light" value="0.85 0.85 0.85"/>
+  <xacro:property name="c_left" value="0.80 0.12 0.12"/>
+  <xacro:property name="c_left_light" value="0.95 0.55 0.55"/>
+  <xacro:property name="c_left_dark" value="0.45 0.06 0.06"/>
+  <xacro:property name="c_right" value="0.12 0.62 0.22"/>
+  <xacro:property name="c_right_light" value="0.55 0.90 0.60"/>
+  <xacro:property name="c_right_dark" value="0.05 0.35 0.12"/>
+
+  <xacro:gz_colour link="torso" rgb="${c_torso}"/>
+  <xacro:gz_colour link="LowerHead" rgb="${c_head_light}"/>
+  <xacro:gz_colour link="UpperHeadBase" rgb="${c_head}"/>
+  <xacro:gz_colour link="UpperHeadMotor" rgb="${c_servo}"/>
+  <xacro:gz_colour link="UpperHeadBack" rgb="${c_head}"/>
+
+  <!-- Arms: shoulder (servo) / upper arm / lower arm / forearm / hand / gripper -->
+  <xacro:gz_colour link="LShoulder" rgb="${c_servo}"/>
+  <xacro:gz_colour link="LUpperArm" rgb="${c_left}"/>
+  <xacro:gz_colour link="LLowerArm" rgb="${c_left_light}"/>
+  <xacro:gz_colour link="LForearm" rgb="${c_left}"/>
+  <xacro:gz_colour link="LHand" rgb="${c_left_light}"/>
+  <xacro:gz_colour link="LGripper" rgb="${c_servo}"/>
+  <xacro:gz_colour link="RShoulder" rgb="${c_servo}"/>
+  <xacro:gz_colour link="RUpperArm" rgb="${c_right}"/>
+  <xacro:gz_colour link="RLowerArm" rgb="${c_right_light}"/>
+  <xacro:gz_colour link="RForearm" rgb="${c_right}"/>
+  <xacro:gz_colour link="RHand" rgb="${c_right_light}"/>
+  <xacro:gz_colour link="RGripper" rgb="${c_servo}"/>
+
+  <!-- Legs: hip (yaw) / hip motors (roll) / thigh / tibia / ankle / foot -->
+  <xacro:gz_colour link="LHip" rgb="${c_left_dark}"/>
+  <xacro:gz_colour link="LHipMotors" rgb="${c_servo}"/>
+  <xacro:gz_colour link="LThigh" rgb="${c_left}"/>
+  <xacro:gz_colour link="LTibia" rgb="${c_left_light}"/>
+  <xacro:gz_colour link="LAnkle" rgb="${c_servo}"/>
+  <xacro:gz_colour link="LFoot" rgb="${c_left_dark}"/>
+  <xacro:gz_colour link="RHip" rgb="${c_right_dark}"/>
+  <xacro:gz_colour link="RHipMotors" rgb="${c_servo}"/>
+  <xacro:gz_colour link="RThigh" rgb="${c_right}"/>
+  <xacro:gz_colour link="RTibia" rgb="${c_right_light}"/>
+  <xacro:gz_colour link="RAnkle" rgb="${c_servo}"/>
+  <xacro:gz_colour link="RFoot" rgb="${c_right_dark}"/>
 </robot>
