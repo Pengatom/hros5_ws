@@ -5,13 +5,27 @@
   <!-- Allow overriding the mesh bundle used for visuals/collisions -->
   <xacro:arg name="meshes_xacro_filename" default="$(find hros5_description)/urdf/hros5_visuals_collisions_endoskeleton.xacro"/>
   <xacro:arg name="controller_config" default="$(find hros5_gazebo)/config/hros5_controllers.yaml"/>
+  <!-- fixed_base:=true pins base_link to the world (robot "on a stand"), useful for testing joints/controllers
+       without balance. fixed_base:=false lets the robot stand freely on its feet. -->
+  <xacro:arg name="fixed_base" default="false"/>
 
   <xacro:include filename="$(find hros5_description)/urdf/robot/robot.xacro"/>
+
+  <xacro:if value="$(arg fixed_base)">
+    <link name="world"/>
+    <joint name="world_to_base" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+    </joint>
+  </xacro:if>
 
   <!-- Bind Gazebo ros2_control to the simulated joints -->
   <ros2_control name="Hros5GazeboSystem" type="system">
     <hardware>
       <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      <!-- Keep joints at their current position until a controller claims them,
+           so the robot doesn't collapse between spawn and controller activation. -->
+      <param name="hold_joints">true</param>
     </hardware>
 
     <joint name="HeadYaw">
@@ -172,18 +186,24 @@
     </plugin>
   </gazebo>
 
-  <!-- IMU sensor on torso for balance/state estimation -->
+  <!-- IMU sensor on torso for balance/state estimation.
+       The gz-sim Imu system that drives it is loaded in the world file (worlds/empty.world). -->
   <gazebo reference="torso">
     <sensor name="imu_sensor" type="imu">
       <pose>0 0 0 0 0 0</pose>
       <always_on>true</always_on>
       <update_rate>400</update_rate>
       <topic>imu</topic>
-      <plugin name="gz::sim::systems::Imu" filename="libgz-sim-imu-system.so">
-        <orientation_enabled>true</orientation_enabled>
-        <angular_velocity_enabled>true</angular_velocity_enabled>
-        <linear_acceleration_enabled>true</linear_acceleration_enabled>
-      </plugin>
     </sensor>
+  </gazebo>
+
+  <!-- Foot contact surfaces: high friction so the feet don't slide while standing -->
+  <gazebo reference="LFoot">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
+  <gazebo reference="RFoot">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
   </gazebo>
 </robot>

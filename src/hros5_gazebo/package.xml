@@ -6,7 +6,7 @@
   <maintainer email="Pengatom@example.com">Pengatom</maintainer>
   <license>Apache-2.0</license>
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <depend>gazebo_ros</depend>
+  <!-- Gazebo Harmonic (Jazzy). gazebo_ros is Gazebo Classic and doesn't exist in Jazzy, so rosdep failed on it. -->
   <depend>hros5_description</depend>
   <depend>hros5_control</depend>
   <depend>controller_manager</depend>
@@ -14,6 +14,10 @@
   <depend>robot_state_publisher</depend>
   <depend>ros_gz_sim</depend>
   <depend>xacro</depend>
+  <exec_depend>gz_ros2_control</exec_depend>
+  <exec_depend>joint_state_broadcaster</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>effort_controllers</exec_depend>
   <exec_depend>rqt_joint_trajectory_controller</exec_depend>
   <exec_depend>rqt_service_caller</exec_depend>
   <exec_depend>rclpy</exec_depend>

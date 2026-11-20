@@ -2,7 +2,9 @@ import os
 
 from ament_index_python.packages import get_package_share_directory, get_package_prefix
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, SetEnvironmentVariable, TimerAction
+from launch.actions import (DeclareLaunchArgument, ExecuteProcess, RegisterEventHandler,
+                            SetEnvironmentVariable, TimerAction)
+from launch.event_handlers import OnProcessExit
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
@@ -36,6 +38,8 @@ def generate_launch_description():
     launch_rqt_gui = LaunchConfiguration('launch_rqt_gui')
     reset_to_stand = LaunchConfiguration('reset_to_stand')
     start_reset_service = LaunchConfiguration('start_reset_service')
+    fixed_base = LaunchConfiguration('fixed_base')
+    headless = LaunchConfiguration('headless')
     visual_mesh_ext = PythonExpression([
         "'dae' if '", use_dae_meshes, "' == 'true' else 'stl'"
     ])
@@ -45,7 +49,8 @@ def generate_launch_description():
             'xacro ', xacro_file,
             ' controller_config:=', controller_config,
             ' meshes_xacro_filename:=', meshes_xacro_file,
-            ' visual_mesh_ext:=', visual_mesh_ext
+            ' visual_mesh_ext:=', visual_mesh_ext,
+            ' fixed_base:=', fixed_base
         ]),
         value_type=str
     )
@@ -142,9 +147,18 @@ def generate_launch_description():
             default_value='0.0',
             description='Initial spawn Y position in Gazebo'),
         DeclareLaunchArgument(
+            'fixed_base',
+            default_value='false',
+            description='true = pin base_link to the world (robot on a stand); false = free standing'),
+        DeclareLaunchArgument(
+            'headless',
+            default_value='false',
+            description='true = run the Gazebo server only, without the GUI window'),
+        DeclareLaunchArgument(
             'spawn_z',
-            default_value='0.5',
-            description='Initial spawn Z position (raise robot above ground)'),
+            default_value='0.40',
+            description='Initial base_link height. The soles are 0.389 m below base_link in the zero pose, '
+                        'so 0.40 drops the robot ~1 cm onto its feet. Use ~0.6 with fixed_base:=true'),
         DeclareLaunchArgument(
             'spawn_roll',
             default_value='0.0',
@@ -187,13 +201,21 @@ def generate_launch_description():
         ),
 
         ExecuteProcess(
-            condition=IfCondition(PythonExpression(["'", gui_config, "' != ''"])),
+            condition=IfCondition(PythonExpression(
+                ["'", gui_config, "' != '' and '", headless, "' != 'true'"])),
             cmd=['gz', 'sim', '-r', '--gui-config', gui_config, world],
             output='screen'
         ),
         ExecuteProcess(
-            condition=UnlessCondition(PythonExpression(["'", gui_config, "' != ''"])),
+            condition=IfCondition(PythonExpression(
+                ["'", gui_config, "' == '' and '", headless, "' != 'true'"])),
             cmd=['gz', 'sim', '-r', world],
+            output='screen'
+        ),
+        # Server only (no GUI window): for SSH sessions, CI and machines without a GPU.
+        ExecuteProcess(
+            condition=IfCondition(headless),
+            cmd=['gz', 'sim', '-r', '-s', world],
             output='screen'
         ),
 
@@ -220,8 +242,13 @@ def generate_launch_description():
         ),
 
         TimerAction(period=2.0, actions=[spawn_entity]),
-        TimerAction(period=4.0, actions=[spawn_joint_state_broadcaster]),
-        TimerAction(period=4.5, actions=[spawn_whole_body_controller]),
+        # Start controllers as soon as the robot exists in Gazebo, in order.
+        RegisterEventHandler(OnProcessExit(
+            target_action=spawn_entity,
+            on_exit=[spawn_joint_state_broadcaster])),
+        RegisterEventHandler(OnProcessExit(
+            target_action=spawn_joint_state_broadcaster,
+            on_exit=[spawn_whole_body_controller])),
 
         TimerAction(
             period=6.0,
