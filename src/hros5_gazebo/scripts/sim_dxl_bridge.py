@@ -151,12 +151,13 @@ class SimDxlBridge(Node):
         for name, (lo, hi) in limits.items():
             s, d = self.servo[name], self.direction[name]
             servo_urdf = sorted((math.radians(d * s['min']), math.radians(d * s['max'])))
-            if lo > servo_urdf[0] + 1e-3 or hi < servo_urdf[1] - 1e-3:
+            # URDF limits sit >= 2 deg inside the servo limits by design; only report real gaps.
+            if lo > servo_urdf[0] + math.radians(5) or hi < servo_urdf[1] - math.radians(5):
                 narrower.append(f"{name} (URDF {math.degrees(lo):+.0f}..{math.degrees(hi):+.0f} vs servo "
                                 f"{math.degrees(servo_urdf[0]):+.0f}..{math.degrees(servo_urdf[1]):+.0f} deg)")
         self.get_logger().info(f'URDF limits loaded for {len(limits)} joints.')
         if narrower:
-            self.get_logger().info('URDF range narrower than the servo range (#66), sim stops at the URDF limit: '
+            self.get_logger().info('URDF range more than 5 deg narrower than the servo range (#66), sim stops at the URDF limit: '
                                    + '; '.join(narrower))
 
     def _on_joint_states(self, msg):

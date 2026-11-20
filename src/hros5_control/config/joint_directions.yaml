@@ -44,3 +44,32 @@ direction:
   RAnklePitch: 1      # high: servo -18..+90
   LAnkleRoll: 1       # low: servo range is symmetric (+-90)
   RAnkleRoll: 1       # low
+
+# Machine-readable copy of the confidence notes above. check_joint_limits.py uses it:
+# for low-confidence joints a limit must be safe with EITHER sign, so it only allows the
+# part of the servo range that is valid both ways.
+confidence:
+  HeadYaw: low
+  HeadPitch: medium
+  LShoulderPitch: medium
+  RShoulderPitch: medium
+  LShoulderRoll: medium
+  RShoulderRoll: medium
+  LElbowPitch: medium
+  RElbowPitch: medium
+  LWrist: low
+  RWrist: low
+  LGrip: low
+  RGrip: low
+  LHipYaw: low
+  RHipYaw: low
+  LHipRoll: high
+  RHipRoll: high
+  LHipPitch: high
+  RHipPitch: high
+  LKneePitch: high
+  RKneePitch: high
+  LAnklePitch: high
+  RAnklePitch: high
+  LAnkleRoll: low
+  RAnkleRoll: low

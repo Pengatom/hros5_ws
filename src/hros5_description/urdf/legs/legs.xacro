@@ -7,7 +7,8 @@
 			<child link="${side}Hip"/>
 			<origin xyz="0.0175 ${reflect*0.048} -0.063" rpy="0 0 0"/>
 			<axis xyz="0 0 1"/>
-			<limit lower="-0.523598776" upper="0.523598776" effort="8.4" velocity="4.712388975"/>
+			<!-- Servo hard limit minus 2 deg, inside BOTH sides' servo ranges (check_joint_limits.py). Was +-30 deg. -->
+			<limit lower="-0.3455" upper="0.3455" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}Hip">
 			<xacro:visuals_collisions_hip side="${side}"/>
@@ -23,7 +24,9 @@
 			<child link="${side}HipMotors"/>
 			<origin xyz="-0.0675 0 -0.034" rpy="0 0 0"/>
 			<axis xyz="1 0 0"/>
-			<limit lower="-0.785398163" upper="0.785398163" effort="8.4" velocity="4.712388975"/>
+			<!-- Servo hard limit minus 2 deg. Outward is + on the left and - on the right; inward the servos allow
+			     only ~5 deg, so -2.9..+45 deg (L) and -45..+2.9 deg (R). Was +-45 deg. -->
+			<limit lower="${-0.785398163 if reflect == -1 else -0.0506}" upper="${0.785398163 if reflect == 1 else 0.0506}" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}HipMotors">
 			<xacro:visuals_collisions_hip_motors side="${side}"/>
@@ -39,7 +42,8 @@
 			<child link="${side}Thigh"/>
 			<origin xyz="0.0705 0 0" rpy="0 0 0"/>
 			<axis xyz="0 1 0"/>
-			<limit lower="-1.57079633" upper="1.57079633" effort="8.4" velocity="4.712388975"/>
+			<!-- Servo hard limit minus 2 deg, inside BOTH sides' servo ranges (check_joint_limits.py). Was +-90 deg. -->
+			<limit lower="-1.5359" upper="0.5541" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}Thigh">
 			<xacro:visuals_collisions_thigh side="${side}"/>
@@ -55,7 +59,8 @@
 			<child link="${side}Tibia"/>
 			<origin xyz="0.0017 0 -0.127" rpy="0 0 0"/>
 			<axis xyz="0 1 0"/>
-			<limit lower="-2.7925268" upper="2.7925268" effort="8.4" velocity="4.712388975"/>
+			<!-- Servo hard limit minus 2 deg, inside BOTH sides' servo ranges (check_joint_limits.py). Was +-160 deg. -->
+			<limit lower="-0.3133" upper="2.1924" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}Tibia">
 			<xacro:visuals_collisions_tibia side="${side}"/>
@@ -71,7 +76,8 @@
 			<child link="${side}Ankle"/>
 			<origin xyz="-0.002 0 -0.125" rpy="0 0 0"/>
 			<axis xyz="0 1 0"/>
-			<limit lower="-1.57079633" upper="1.57079633" effort="8.4" velocity="4.712388975"/>
+			<!-- Servo hard limit minus 2 deg, inside BOTH sides' servo ranges (check_joint_limits.py). Was +-90 deg. -->
+			<limit lower="-0.2796" upper="1.5359" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}Ankle">
 			<xacro:visuals_collisions_ankle side="${side}"/>

@@ -11,8 +11,9 @@ head_teleop_node:
     invert_tilt: false
 
     # TODO: replace with your actual joint limits (deg)
-    pan_max_deg: 90.0
-    tilt_max_deg: 30.0
+    # Limits: servo hard limit minus 2 deg (hros5_dynamixel_joints_with_limits.yaml); checked by check_joint_limits.py
+    pan_max_deg: 88.0     # servo -90..+90
+    tilt_max_deg: 19.8    # +-max; servo -21.8..+35.3, so the down side (-21.8) limits it
 
     deadzone: 0.05
     center_button: 3      # triangle on PS4

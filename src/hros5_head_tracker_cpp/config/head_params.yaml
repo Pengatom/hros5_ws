@@ -5,11 +5,11 @@ tracker_node:
     fov_h_deg: 69.0
     fov_v_deg: 42.0
     kp: 0.6
-    # Tracker limits (degrees)
-    pan_min_deg: -90.0
-    pan_max_deg: 90.0
-    tilt_min_deg: -22.0
-    tilt_max_deg: 36.0
+    # Tracker limits (degrees): servo hard limit minus 2 deg (pan -90..+90, tilt -21.8..+35.3)
+    pan_min_deg: -88.0
+    pan_max_deg: 88.0
+    tilt_min_deg: -19.8
+    tilt_max_deg: 33.3
 
 head_dxl_node:
   ros__parameters:
@@ -27,8 +27,8 @@ head_dxl_node:
     invert_tilt: false
     pan_offset_deg: 0.0
     tilt_offset_deg: 0.0
-    # Safety limits (deg); defaults mirror hros5_control limits
-    pan_min_deg: -90.0
-    pan_max_deg: 90.0
-    tilt_min_deg: -22.0
-    tilt_max_deg: 36.0
+    # Safety limits (deg): servo hard limit minus 2 deg (hros5_control/config/hros5_dynamixel_joints_with_limits.yaml)
+    pan_min_deg: -88.0
+    pan_max_deg: 88.0
+    tilt_min_deg: -19.8
+    tilt_max_deg: 33.3

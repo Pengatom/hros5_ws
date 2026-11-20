@@ -23,11 +23,13 @@ left_leg_teleop_node:
     invert_ankle_pitch: true
     invert_ankle_roll: false
 
-    hip_yaw_max_deg: 45.0
-    hip_roll_max_deg: 30.0
-    hip_pitch_max_deg: 50.0
-    knee_pitch_max_deg: 70.0
-    ankle_pitch_max_deg: 45.0
+    # Limits: servo hard limit minus 2 deg (hros5_dynamixel_joints_with_limits.yaml); checked by check_joint_limits.py
+    # These are +-max, so the smaller side of each (mirrored) servo range limits them.
+    hip_yaw_max_deg: 19.8
+    hip_roll_max_deg: 2.9
+    hip_pitch_max_deg: 31.8
+    knee_pitch_max_deg: 18.0
+    ankle_pitch_max_deg: 18.0
     ankle_roll_max_deg: 25.0
 
     preset_forward_deg: [0.0, 0.0, 15.0, 30.0, -15.0, 0.0]

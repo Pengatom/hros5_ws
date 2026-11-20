@@ -28,7 +28,7 @@ right_arm_teleop_node:
     grip_close_button: 5   # R1
     grip_open_button: 7    # R2 (digital)
     grip_step_deg: 2.0
-    grip_min_deg: -56.0
+    grip_min_deg: -33.9    # RGrip servo -35.9..+66.1
     grip_max_deg: 30.0
 
     debug_toggle_button: 1   # Circle toggles debug mode
@@ -37,8 +37,9 @@ right_arm_teleop_node:
     echo_request_topic: /hros5/right_arm/echo_positions
 
     # Joint limits derived from hros5_dynamixel_joints_with_limits.yaml (guarded a bit)
-    joint_min_deg: [-178.0, -140.0, -144.0, -130.0, -58.0]  # pitch, roll, elbow, wrist, grip
-    joint_max_deg: [178.0, 140.0, 100.0, 130.0, 32.0]
+    # Limits: servo hard limit minus 2 deg (hros5_dynamixel_joints_with_limits.yaml); checked by check_joint_limits.py
+    joint_min_deg: [-177.9, -140.0, -99.2, -129.8, -33.9]  # pitch, roll, elbow, wrist, grip
+    joint_max_deg: [177.9, 140.0, 100.0, 129.8, 32.0]
 
     # Preset poses (D-pad left/right)
     preset_home_deg: [-7.0, -40.0, 0.0, 0.0, 0.0]

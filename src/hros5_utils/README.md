@@ -2,7 +2,7 @@
 
 All Dynamixel utilities live in `src/hros5_utils/scripts`. Run any tool with `--help` for arguments.
 
-- `check_joint_limits.py` — Compare hardware (hros5_control), URDF, teleop, and MoveIt joint limits; prints a table and exits non-zero on mismatches.
+- `check_joint_limits.py` — Check that every limit (URDF, MoveIt, teleop, head tracker) is at least 2° inside the servo hard limits; prints a table and exits non-zero otherwise.
 - `generate_joint_yamls.py` — Generate per-limb joint YAMLs from `hros5_dynamixel_joints_with_limits.yaml`; use `--check` to guard against stale files in CI.
 - `dxl_scan.py` — Sweep an ID range across baudrates/protocols to see which servos respond.
 - `dxl_ping.py` — Quick ping to verify comms and read the model number for a single ID.
@@ -19,18 +19,26 @@ All Dynamixel utilities live in `src/hros5_utils/scripts`. Run any tool with `--
 - `dxl_common.py` — Shared helpers (default port `/dev/dxl`).
 
 > Stop all `*_dxl_node` processes before running these scripts. They open `/dev/dxl` directly.
-> As of 2026-11-11, `check_joint_limits.py` reports 22 of 24 joints mismatched (see `docs/STATUS.md` §4).
+> Since 2026-11-20, `check_joint_limits.py` passes: all limits are inside the servo hard limits (see `docs/STATUS.md` §4).
 > `generate_joint_yamls.py --check` gives a false "stale" result on Windows because of path separators, so run it on Linux.
 
 ### Joint limit consistency
 
-Run the checker from the workspace root (tweak `--tolerance-deg` if needed):
+The servo EEPROM limits (`hros5_control/config/hros5_dynamixel_joints_with_limits.yaml`) are the absolute maximum.
+Run the checker from the workspace root with the workspace sourced (it expands `hros5.xacro`):
 
 ```
-python3 src/hros5_utils/scripts/check_joint_limits.py --tolerance-deg 0.5
+source install/setup.bash
+python3 src/hros5_utils/scripts/check_joint_limits.py            # --propose prints tightened URDF limits
 ```
 
-It will print a per-joint summary (hardware vs URDF vs teleop vs MoveIt) and return 1 when any mismatches are found so CI can gate on it.
+**How it compares limits:**
+- **Teleop and head tracker configs** are in servo degrees and are compared directly with "servo limit minus `--guard-deg`" (default 2°).
+- **URDF and MoveIt** are converted to servo degrees with `hros5_control/config/joint_directions.yaml` first.
+  For joints whose direction has confidence `low`, only the part of the range that is valid with either sign is allowed.
+- **MoveIt** limits must also equal the URDF.
+
+Limits that are narrower than needed are listed as info. The checker returns 1 when any limit is outside, so CI can gate on it.
 
 ### Generate per-limb joint YAMLs
 

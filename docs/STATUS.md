@@ -101,15 +101,42 @@ Ordered by impact:
 
 ## 4. Joint limit consistency
 
-Results from `python3 src/hros5_utils/scripts/check_joint_limits.py --tolerance-deg 0.5` on 2026-11-11: **22 of 24 joints mismatch**.
-Only the shoulder pitch joints agree across hardware, URDF, teleop and MoveIt.
+**Rule (2026-11-20):** the servo EEPROM limits in `hros5_control/config/hros5_dynamixel_joints_with_limits.yaml` are the absolute
+maximum. Every other limit must be at least **2° inside** them. Limits that are narrower are allowed.
 
-- MoveIt copies the URDF limits, so it differs from hardware on every joint where the URDF does.
-- Leg URDF limits are generic and symmetric (for example, knee ±160°), but hardware ranges are asymmetric (for example, LKneePitch −131.6°..+20°).
-- Head URDF is ±70° yaw / −14°..+23° pitch. Head teleop allows ±90° / ±30°.
+```bash
+source install/setup.bash && python3 src/hros5_utils/scripts/check_joint_limits.py [--propose]
+```
 
-This is tracked by #66 and its children #68–#73. These issues block MoveIt/Gazebo parity, but **not** basic PS4 teleop,
-because the DXL nodes clamp to hardware limits.
+**How the checker compares limits:**
+- **Teleop and head tracker configs** are in servo degrees and are compared directly.
+- **URDF (from the xacro) and MoveIt** are compared after converting with `hros5_control/config/joint_directions.yaml`.
+- **Low-confidence directions** (head yaw, wrists, grips, hip yaw, ankle roll) only get the part of the range that is valid with either sign.
+- **MoveIt** must also equal the URDF. The checker exits non-zero on any violation.
+
+**Before (2026-11-20):** 21 joints had a limit outside, for example:
+- **URDF knees** ±160°, hip pitch ±90°, hip roll ±45° (the servos allow only ~5° inwards) and shoulder pitch ±180°.
+- **Head teleop** ±90° / ±30°, and **head tracker** tilt up to +36° (servo +35.3°).
+- **Leg teleop:** knee ±70°.
+- **Right arm/hand teleop:** used the left grip's range (−58°, but the RGrip servo stops at −35.9°).
+
+**Now:** the checker passes ("All limits are inside the servo hard limits (minus 2 deg)"). Changed:
+- **URDF** (`legs.xacro`, `arms.xacro`, `hands.xacro`, `left_hand.xacro`): hip yaw ±19.8°, hip roll −2.9..+45° (L) / −45..+2.9° (R),
+  hip pitch −88..+31.8°, knee −18..+125.6°, ankle pitch −16..+88°, shoulder pitch ±177.9°, wrist ±129.8°,
+  grip −30.7..+28.6° (L) / −33.9..+28.6° (R). Leg pitch joints use one range that is inside both the left and the right servo.
+- **MoveIt `joint_limits.yaml`:** same as the URDF.
+- **Static `hros5_description/urdf/hros5.urdf`** (used by `hros5_bringup`'s rviz/gazebo launches): only its `<limit>` values were updated.
+  It's an older export with mimic head-linkage joints that the current xacro no longer has, so it was not regenerated.
+- **Teleop:** head ±88° / ±19.8°, legs ±(smaller side of each servo range), arm and hand wrist/grip ranges per side.
+- **Head tracker:** pan ±88°, tilt −19.8..+33.3°.
+
+**Consequences:**
+- **Legs:** per-limb leg teleop (symmetric ±max) now only reaches knee ±18–20° and hip roll ±3°.
+  `ps4_teleop_node` uses the real asymmetric servo ranges and isn't limited this way.
+- **Grips:** the grip ranges are conservative until the grip directions are verified on the robot.
+- **Real EEPROM limits:** whether these are the true mechanical limits is #68.
+
+Tracked by #66 and its children #68–#73.
 
 Note: `generate_joint_yamls.py --check` reports the joint YAMLs as stale on Windows. That's only because the `# Source:` header
 is written with `\` separators there. Run it on Linux.

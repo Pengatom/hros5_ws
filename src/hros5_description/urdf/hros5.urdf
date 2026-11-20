@@ -459,7 +459,7 @@
     <child link="LShoulder"/>
     <origin rpy="0 0 0" xyz="0.003 0.0675 0.084"/>
     <axis xyz="0 1 0"/>
-    <limit effort="6.0" lower="-3.14159265" upper="3.14159265" velocity="6.597344565"/>
+    <limit effort="6.0" lower="-3.1050" upper="3.1050" velocity="6.597344565"/>
   </joint>
   <link name="LShoulder">
     <visual>
@@ -526,7 +526,7 @@
     <child link="RShoulder"/>
     <origin rpy="0 0 0" xyz="0.003 -0.0675 0.084"/>
     <axis xyz="0 1 0"/>
-    <limit effort="6.0" lower="-3.14159265" upper="3.14159265" velocity="6.597344565"/>
+    <limit effort="6.0" lower="-3.1050" upper="3.1050" velocity="6.597344565"/>
   </joint>
   <link name="RShoulder">
     <visual>
@@ -758,35 +758,35 @@
     <child link="LHand"/>
     <origin rpy="-3.0949 0 -1.5708" xyz="0 -0.0205 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="1.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="1.0" lower="-2.2654" upper="2.2654" velocity="1.0"/>
   </joint>
   <joint name="RWrist" type="revolute">
     <parent link="RForearm"/>
     <child link="RHand"/>
     <origin rpy="-3.0949 0 -1.5708" xyz="0 -0.0205 0"/>
     <axis xyz="1 0 0"/>
-    <limit effort="1.0" lower="-3.14" upper="3.14" velocity="1.0"/>
+    <limit effort="1.0" lower="-2.2654" upper="2.2654" velocity="1.0"/>
   </joint>
   <joint name="LGrip" type="revolute">
     <parent link="LHand"/>
     <child link="LGripper"/>
     <origin rpy="-1.5708 -1.5708 1.5708" xyz="0.021 0.008 -0.0205"/>
     <axis xyz="1 0 0"/>
-    <limit effort="1.0" lower="-1.0" upper="0.5" velocity="1.0"/>
+    <limit effort="1.0" lower="-0.5357" upper="0.5" velocity="1.0"/>
   </joint>
   <joint name="RGrip" type="revolute">
     <parent link="RHand"/>
     <child link="RGripper"/>
     <origin rpy="-1.5708 -1.5708 1.5708" xyz="0.021 0.008 -0.0205"/>
     <axis xyz="1 0 0"/>
-    <limit effort="1.0" lower="-1.0" upper="0.5" velocity="1.0"/>
+    <limit effort="1.0" lower="-0.5910" upper="0.5" velocity="1.0"/>
   </joint>
   <joint name="LHipYaw" type="revolute">
     <parent link="torso"/>
     <child link="LHip"/>
     <origin rpy="0 0 0" xyz="0.0175 0.048 -0.063"/>
     <axis xyz="0 0 1"/>
-    <limit effort="8.4" lower="-0.523598776" upper="0.523598776" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.3455" upper="0.3455" velocity="4.712388975"/>
   </joint>
   <link name="LHip">
     <visual>
@@ -813,7 +813,7 @@
     <child link="LHipMotors"/>
     <origin rpy="0 0 0" xyz="-0.0675 0 -0.034"/>
     <axis xyz="1 0 0"/>
-    <limit effort="8.4" lower="-0.785398163" upper="0.785398163" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.0506" upper="0.785398163" velocity="4.712388975"/>
   </joint>
   <link name="LHipMotors">
     <visual>
@@ -840,7 +840,7 @@
     <child link="LThigh"/>
     <origin rpy="0 0 0" xyz="0.0705 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="8.4" lower="-1.57079633" upper="1.57079633" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-1.5359" upper="0.5541" velocity="4.712388975"/>
   </joint>
   <link name="LThigh">
     <visual>
@@ -867,7 +867,7 @@
     <child link="LTibia"/>
     <origin rpy="0 0 0" xyz="0.0017 0 -0.127"/>
     <axis xyz="0 1 0"/>
-    <limit effort="8.4" lower="-2.7925268" upper="2.7925268" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.3133" upper="2.1924" velocity="4.712388975"/>
   </joint>
   <link name="LTibia">
     <visual>
@@ -894,7 +894,7 @@
     <child link="LAnkle"/>
     <origin rpy="0 0 0" xyz="-0.002 0 -0.125"/>
     <axis xyz="0 1 0"/>
-    <limit effort="8.4" lower="-1.57079633" upper="1.57079633" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.2796" upper="1.5359" velocity="4.712388975"/>
   </joint>
   <link name="LAnkle">
     <visual>
@@ -948,7 +948,7 @@
     <child link="RHip"/>
     <origin rpy="0 0 0" xyz="0.0175 -0.048 -0.063"/>
     <axis xyz="0 0 1"/>
-    <limit effort="8.4" lower="-0.523598776" upper="0.523598776" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.3455" upper="0.3455" velocity="4.712388975"/>
   </joint>
   <link name="RHip">
     <visual>
@@ -975,7 +975,7 @@
     <child link="RHipMotors"/>
     <origin rpy="0 0 0" xyz="-0.0675 0 -0.034"/>
     <axis xyz="1 0 0"/>
-    <limit effort="8.4" lower="-0.785398163" upper="0.785398163" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.785398163" upper="0.0506" velocity="4.712388975"/>
   </joint>
   <link name="RHipMotors">
     <visual>
@@ -1002,7 +1002,7 @@
     <child link="RThigh"/>
     <origin rpy="0 0 0" xyz="0.0705 0 0"/>
     <axis xyz="0 1 0"/>
-    <limit effort="8.4" lower="-1.57079633" upper="1.57079633" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-1.5359" upper="0.5541" velocity="4.712388975"/>
   </joint>
   <link name="RThigh">
     <visual>
@@ -1029,7 +1029,7 @@
     <child link="RTibia"/>
     <origin rpy="0 0 0" xyz="0.0017 0 -0.127"/>
     <axis xyz="0 1 0"/>
-    <limit effort="8.4" lower="-2.7925268" upper="2.7925268" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.3133" upper="2.1924" velocity="4.712388975"/>
   </joint>
   <link name="RTibia">
     <visual>
@@ -1056,7 +1056,7 @@
     <child link="RAnkle"/>
     <origin rpy="0 0 0" xyz="-0.002 0 -0.125"/>
     <axis xyz="0 1 0"/>
-    <limit effort="8.4" lower="-1.57079633" upper="1.57079633" velocity="4.712388975"/>
+    <limit effort="8.4" lower="-0.2796" upper="1.5359" velocity="4.712388975"/>
   </joint>
   <link name="RAnkle">
     <visual>

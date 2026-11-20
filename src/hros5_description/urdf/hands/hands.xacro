@@ -46,11 +46,11 @@
     <child link="LHand"/>
     <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
     <axis xyz="1 0 0"/>
-    <!-- Servo hard limit: ticks 548..3548 = +-131.8 deg = +-2.30 rad (hros5_dynamixel_joints_with_limits.yaml, #69).
+    <!-- Servo hard limit: ticks 548..3548 = +-131.8 deg; minus 2 deg = +-129.8 deg = +-2.2654 rad (#69).
          Was +-3.14, and Gazebo could take the "short way" round through +-180 deg.
          velocity was 1.0 rad/s: far below a Dynamixel's speed, and in Gazebo it made the wrist overshoot
          into its limit and stick there. 6.597 rad/s matches the other joints. -->
-    <limit lower="-2.30" upper="2.30" effort="1.0" velocity="6.597344565"/>
+    <limit lower="-2.2654" upper="2.2654" effort="1.0" velocity="6.597344565"/>
   </joint>
 
   <joint name="RWrist" type="revolute">
@@ -58,8 +58,8 @@
     <child link="RHand"/>
     <origin xyz="0 -0.0205 0" rpy="-3.0949 0 -1.5708" />
     <axis xyz="1 0 0"/>
-    <!-- Servo hard limit +-131.8 deg = +-2.30 rad (#69); velocity as LWrist. -->
-    <limit lower="-2.30" upper="2.30" effort="1.0" velocity="6.597344565"/>
+    <!-- Servo hard limit +-131.8 deg minus 2 deg = +-2.2654 rad (#69); velocity as LWrist. -->
+    <limit lower="-2.2654" upper="2.2654" effort="1.0" velocity="6.597344565"/>
   </joint>
 
   <joint name="LGrip" type="revolute">
@@ -67,7 +67,8 @@
     <child link="LGripper"/>
     <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
     <axis xyz="1 0 0"/>
-    <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
+    <!-- Servo hard limit minus 2 deg; grip direction is unverified, so only the part valid with either sign. Was -57.3..+28.6 deg. -->
+    <limit lower="-0.5357" upper="0.5" effort="1.0" velocity="1.0"/>
   </joint>
 
   <joint name="RGrip" type="revolute">
@@ -75,7 +76,8 @@
     <child link="RGripper"/>
     <origin xyz="0.021 0.008 -0.0205" rpy="-1.5708 -1.5708 1.5708" />
     <axis xyz="1 0 0"/>
-    <limit lower="-1.0" upper="0.5" effort="1.0" velocity="1.0"/>
+    <!-- Servo hard limit minus 2 deg; grip direction is unverified, so only the part valid with either sign. Was -57.3..+28.6 deg. -->
+    <limit lower="-0.5910" upper="0.5" effort="1.0" velocity="1.0"/>
   </joint>
 
 </robot>
