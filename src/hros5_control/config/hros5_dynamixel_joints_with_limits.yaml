@@ -49,6 +49,10 @@ joints:
     id: 8
     cw_limit: 1296
     ccw_limit: 2296
+  # HARDWARE TODO before walking (docs/STATUS.md section 10): hip roll allows ~90 deg outward but only ~5 deg
+  # inward. 5 deg is a foot-collision guard for ONE leg (the feet touch at ~6.6 deg), but it also blocks the
+  # sideways hip shift walking needs (both legs tilt the same way, the feet stay apart). Measure the real
+  # mechanical inward stop; if larger, raise these limits and use a software foot-clearance rule instead.
   - name: RHipRoll
     id: 9
     cw_limit: 1024
@@ -73,6 +77,9 @@ joints:
     id: 14
     cw_limit: 550
     ccw_limit: 2275
+  # HARDWARE TODO before walking (docs/STATUS.md section 10): the ankle wiring limits toe DOWN to ~18-20 deg
+  # (toe up is ~90 deg). A human-like ankle needs more toe down (push-off when walking). Re-route the
+  # wiring, then re-read the limits with dxl_read_limits.py --all and update the ticks below.
   - name: RAnklePitch
     id: 15
     cw_limit: 1843

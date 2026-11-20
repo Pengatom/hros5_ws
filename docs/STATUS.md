@@ -308,3 +308,30 @@ ros2 launch hros5_teleop ps4_teleop.launch.py               # against the real D
 - **Still open:**
   - `ps4_teleop_node` hasn't been run on the real robot yet.
   - Hardware still needs the single bus owner (§6 step 3) and the safety items (step 5).
+
+---
+
+## 10. Hardware changes needed before walking (2026-11-20)
+
+Found while testing the squat and sideways shift in Gazebo. Both come from the servo EEPROM limits, which are the absolute maximum
+for all software (§4), so they have to be fixed on the robot first.
+
+1. **Ankle pitch: toe down is limited by the wiring.**
+   - **Range now:** toe up about 90°, toe down only about 18–20° (L servo −90…+20°, R −18…+90°). The robot owner confirmed the wiring is the limiting factor.
+   - **Why it matters:** a human-like ankle needs more toe down (plantarflexion), for example for push-off in walking.
+   - **To do:**
+     - Re-route the ankle wiring.
+     - Re-read the limits with `hros5_utils/scripts/dxl_read_limits.py --all`, apply them with `dxl_apply_limits.py`, and update
+       `hros5_dynamixel_joints_with_limits.yaml` (then `generate_joint_yamls.py`).
+     - Rerun `check_joint_limits.py --propose` to pull the URDF/MoveIt/teleop limits along.
+2. **Hip roll: only ~5° inward.**
+   - **Range now:** each hip rolls about 90° outward but only about 5° inward (L −4.9…+90°, R −90…+5°).
+   - **What the 5° is:** from the foot collision meshes, the feet are 33 mm apart when standing, and rolling *one* leg inward closes
+     the gap by ~5 mm per degree. They touch at ~6.6°, so 5° is a one-leg foot-collision guard.
+   - **Why it matters:** a sideways hip shift (weight shift, which walking needs) tilts *both* legs the same way, so the feet stay apart.
+     The fixed per-servo limit can't tell the two cases apart, and the shift stops at ~3° in "legs" mode.
+   - **To do:**
+     - Measure the real mechanical inward stop of each hip roll.
+     - If it's larger, raise the EEPROM limits to it (minus margin).
+     - Add a software foot-clearance rule in `ps4_teleop_node` and the gait (combined inward roll of both hips < ~5°, or a self-collision check), so one leg can still never kick the other.
+3. **Check the other leg limits at the same time** (#68): hip yaw (L −66…+22°, R −22…+66°) and hip pitch backwards (+34°) are also small.

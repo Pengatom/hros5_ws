@@ -105,6 +105,7 @@ modes:
 
   # Both legs together: right stick down = squat (feet stay flat),
   # left stick left/right = shift the hips sideways over the feet (feet stay flat).
+  # The sideways shift only reaches ~3 deg: the hip roll servos allow only ~5 deg inward (docs/STATUS.md section 10).
   - name: legs
     speed: leg
     bindings:

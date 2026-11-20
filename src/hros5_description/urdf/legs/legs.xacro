@@ -25,7 +25,9 @@
 			<origin xyz="-0.0675 0 -0.034" rpy="0 0 0"/>
 			<axis xyz="1 0 0"/>
 			<!-- Servo hard limit minus 2 deg. Outward is + on the left and - on the right; inward the servos allow
-			     only ~5 deg, so -2.9..+45 deg (L) and -45..+2.9 deg (R). Was +-45 deg. -->
+			     only ~5 deg, so -2.9..+45 deg (L) and -45..+2.9 deg (R). Was +-45 deg.
+			     HARDWARE TODO before walking: the 5 deg is a one-leg foot-collision guard that also blocks sideways
+			     hip shift; measure the real inward stop (docs/STATUS.md section 10). -->
 			<limit lower="${-0.785398163 if reflect == -1 else -0.0506}" upper="${0.785398163 if reflect == 1 else 0.0506}" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}HipMotors">
@@ -76,7 +78,8 @@
 			<child link="${side}Ankle"/>
 			<origin xyz="-0.002 0 -0.125" rpy="0 0 0"/>
 			<axis xyz="0 1 0"/>
-			<!-- Toe up (negative) -88 deg, toe down only +16 deg (wiring). Servo hard limit minus 2 deg, inside both sides. Was +-90 deg. -->
+			<!-- Toe up (negative) -88 deg, toe down only +16 deg (wiring). Servo hard limit minus 2 deg, inside both sides. Was +-90 deg.
+			     HARDWARE TODO before walking: re-route the ankle wiring for more toe down (docs/STATUS.md section 10). -->
 			<limit lower="-1.5359" upper="0.2793" effort="8.4" velocity="4.712388975"/>
 		</joint>
 		<link name="${side}Ankle">

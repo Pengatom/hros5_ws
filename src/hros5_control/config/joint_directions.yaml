@@ -44,6 +44,7 @@ direction:
   LAnklePitch: 1      # confirmed by the robot owner 2026-11-20: the large side (-90) is toe UP, only a little toe
                       # down (wiring). URDF toe up is negative (FK). Was -1 (wrongly assumed the small side was toe up).
   RAnklePitch: -1     # confirmed: servo -18..+90, +90 is toe UP. Was +1.
+                      # Toe down is limited by the ankle wiring; to be re-routed before walking (STATUS.md section 10).
   LAnkleRoll: 1       # low: servo range is symmetric (+-90)
   RAnkleRoll: 1       # low
 
